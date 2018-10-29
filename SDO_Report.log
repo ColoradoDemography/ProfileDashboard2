@@ -1,0 +1,924 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.3.30)  29 OCT 2018 16:06
+entering extended mode
+**C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex
+(C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex
+LaTeX2e <2017-04-15>
+Babel <3.18> and hyphenation patterns for 75 language(s) loaded.
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\article.cls"
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\size12.clo"
+File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\graphics.cfg"
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 99.
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-def\pdftex.def"
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\color.sty"
+Package: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\color.cfg"
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 147.
+) (C:\Users\TBleess\AppData\Roaming\MiKTeX\2.9\tex\latex\framed\framed.sty
+Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
+\OuterFrameSep=\skip43
+\fb@frw=\dimen105
+\fb@frh=\dimen106
+\FrameRule=\dimen107
+\FrameSep=\dimen108
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\base\alltt.sty"
+Package: alltt 1997/06/16 v2.0g defines alltt environment
+)
+(C:\Users\TBleess\AppData\Roaming\MiKTeX\2.9\tex\latex\fullminipage\fullminipag
+e.sty
+Package: fullminipage 2014/07/06 v0.1.1 fullpage minipage environment
+) (C:\Users\TBleess\AppData\Roaming\MiKTeX\2.9\tex\latex\wrapfig\wrapfig.sty
+\wrapoverhang=\dimen109
+\WF@size=\dimen110
+\c@WF@wrappedlines=\count87
+\WF@box=\box26
+\WF@everypar=\toks15
+Package: wrapfig 2003/01/31  v 3.6
+) (C:\Users\TBleess\AppData\Roaming\MiKTeX\2.9\tex\latex\titlesec\titlesec.sty
+Package: titlesec 2016/03/21 v2.10.2 Sectioning titles
+\ttl@box=\box27
+\beforetitleunit=\skip44
+\aftertitleunit=\skip45
+\ttl@plus=\dimen111
+\ttl@minus=\dimen112
+\ttl@toksa=\toks16
+\titlewidth=\dimen113
+\titlewidthlast=\dimen114
+\titlewidthfirst=\dimen115
+) (C:\Users\TBleess\AppData\Roaming\MiKTeX\2.9\tex\latex\booktabs\booktabs.sty
+Package: booktabs 2005/04/14 v1.61803 publication quality tables
+\heavyrulewidth=\dimen116
+\lightrulewidth=\dimen117
+\cmidrulewidth=\dimen118
+\belowrulesep=\dimen119
+\belowbottomsep=\dimen120
+\aboverulesep=\dimen121
+\abovetopsep=\dimen122
+\cmidrulesep=\dimen123
+\cmidrulekern=\dimen124
+\defaultaddspace=\dimen125
+\@cmidla=\count88
+\@cmidlb=\count89
+\@aboverulesep=\dimen126
+\@belowrulesep=\dimen127
+\@thisruleclass=\count90
+\@lastruleclass=\count91
+\@thisrulewidth=\dimen128
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\tools\array.sty"
+Package: array 2016/10/06 v2.4d Tabular extension package (FMi)
+\col@sep=\dimen129
+\extrarowheight=\dimen130
+\NC@list=\toks17
+\extratabsurround=\skip46
+\backup@length=\skip47
+) (C:\Users\TBleess\AppData\Roaming\MiKTeX\2.9\tex\latex\placeins\placeins.sty
+Package: placeins 2005/04/18  v 2.2
+) (C:\Users\TBleess\AppData\Roaming\MiKTeX\2.9\tex\latex\xcolor\xcolor.sty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\color.cfg"
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+LaTeX Info: Redefining \color on input line 709.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+) (C:\Users\TBleess\AppData\Roaming\MiKTeX\2.9\tex\latex\etoolbox\etoolbox.sty
+Package: etoolbox 2018/02/11 v2.5e e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count92
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\float\float.sty"
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count93
+\float@exts=\toks18
+\float@box=\box28
+\@float@everytoks=\toks19
+\@floatcapt=\box29
+) (C:\Users\TBleess\AppData\Roaming\MiKTeX\2.9\tex\latex\titlesec\ttlkeys.def
+File: ttlkeys.def 2016/03/15
+) (C:\Users\TBleess\AppData\Roaming\MiKTeX\2.9\tex\latex\titlesec\block.tss
+File: block.tss 2016/03/15
+) (C:\Users\TBleess\AppData\Roaming\MiKTeX\2.9\tex\latex\upquote\upquote.sty
+Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
+tim
+)
+No file SDO_Report.aux.
+\openout1 = `SDO_Report.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+(C:\Users\TBleess\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count94
+\scratchdimen=\dimen131
+\scratchbox=\box30
+\nofMPsegments=\count95
+\nofMParguments=\count96
+\everyMPshowfont=\toks20
+\MPscratchCnt=\count97
+\MPscratchDim=\dimen132
+\MPnumerator=\count98
+\makeMPintoPDFobject=\count99
+\everyMPtoPDFconversion=\toks21
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\epstopdf-base.sty"
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\grfext.sty"
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\kvdefinekeys.sty"
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+))) ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\kvoptions.sty"
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\kvsetkeys.sty"
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\etexcmds.sty"
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifluatex.sty"
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+))) ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\pdftexcmds.sty"
+Package: pdftexcmds 2018/01/21 v0.26 Utility functions of pdfTeX for LuaTeX (HO
+)
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
+Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+)
+<www/ShieldOnly_LRG.png, id=1, 2032.59375pt x 2032.59375pt>
+File: www/ShieldOnly_LRG.png Graphic file (type png)
+<use www/ShieldOnly_LRG.png>
+Package pdftex.def Info: www/ShieldOnly_LRG.png  used on input line 103.
+(pdftex.def)             Requested size: 56.88121pt x 56.88121pt.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 104.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 104.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 104.
+
+Underfull \hbox (badness 1888) in paragraph at lines 106--107
+[]\OT1/cmr/m/n/12 State De-mog-ra-phy Of-fice Col-orado
+ []
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <14.4> on input line 111.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 111.
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8052e719d7.png, id=3, 546.
+3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8052e719d7.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8052e719d7.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+52e719d7.png  used on input line 113.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 113--113
+ [][] 
+ []
+
+[1
+
+{C:/Users/TBleess/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <./www/Shi
+eldOnly_LRG.png>]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 134.
+[2 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8052e719d7.png>]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9> on input line 143.
+
+Overfull \hbox (1.37865pt too wide) in paragraph at lines 149--149
+ []|\OT1/cmr/m/n/9 3,304,042|
+ []
+
+
+Overfull \hbox (1.37865pt too wide) in paragraph at lines 150--150
+ []|\OT1/cmr/m/n/9 3,811,074|
+ []
+
+
+Overfull \hbox (1.37865pt too wide) in paragraph at lines 151--151
+ []|\OT1/cmr/m/n/9 4,338,801|
+ []
+
+
+Overfull \hbox (1.37865pt too wide) in paragraph at lines 152--152
+ []|\OT1/cmr/m/n/9 4,662,534|
+ []
+
+
+Overfull \hbox (1.37865pt too wide) in paragraph at lines 153--153
+ []|\OT1/cmr/m/n/9 5,050,332|
+ []
+
+
+Overfull \hbox (1.37865pt too wide) in paragraph at lines 155--155
+ []|\OT1/cmr/m/n/9 5,444,871|
+ []
+
+
+Overfull \hbox (1.37865pt too wide) in paragraph at lines 156--156
+ []|\OT1/cmr/m/n/9 5,534,240|
+ []
+
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea802fea2eaf.png, id=16, 546
+.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea802fea2eaf.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea802fea2eaf.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+2fea2eaf.png  used on input line 161.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 161--161
+ [][] 
+ []
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:161: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+ [3] [4 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea802fea2eaf.png>]
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801a453e15.png, id=27, 546
+.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801a453e15.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801a453e15.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+1a453e15.png  used on input line 161.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 161--161
+ [][] 
+ []
+
+ [5 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801a453e15.png>]
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea803d3a16f6.png, id=32, 546
+.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea803d3a16f6.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea803d3a16f6.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+3d3a16f6.png  used on input line 161.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 161--161
+ [][] 
+ []
+
+ [6 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea803d3a16f6.png>]
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801315662d.png, id=37, 546
+.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801315662d.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801315662d.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+1315662d.png  used on input line 163.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 163--163
+ [][] 
+ []
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:163: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea807bef4d48.png, id=38, 546
+.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea807bef4d48.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea807bef4d48.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+7bef4d48.png  used on input line 163.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 163--163
+ [][] 
+ []
+
+ [7 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801315662d.png>] [8 <C
+:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea807bef4d48.png>]
+Overfull \hbox (37.66753pt too wide) in paragraph at lines 168--181
+ [][] 
+ []
+
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80761350a8.png, id=48, 546
+.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80761350a8.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80761350a8.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+761350a8.png  used on input line 181.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 181--181
+ [][] 
+ []
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:181: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+ [9 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80761350a8.png>]
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8048a47d74.png, id=54, 546
+.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8048a47d74.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8048a47d74.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+48a47d74.png  used on input line 181.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 181--181
+ [][] 
+ []
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:181: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80461c1914.png, id=55, 546
+.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80461c1914.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80461c1914.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+461c1914.png  used on input line 183.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 183--183
+ [][] 
+ []
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:183: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+Overfull \hbox (14.38747pt too wide) in paragraph at lines 183--183
+[]\OT1/cmr/m/n/12 household in-come dis-tri-bu-tion plot com-pares Adams County
+ to the statewide
+ []
+
+ [10 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8048a47d74.png>] [11 
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80461c1914.png>]
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea804e6a3495.png, id=64, 546
+.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea804e6a3495.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea804e6a3495.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+4e6a3495.png  used on input line 183.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 183--183
+ [][] 
+ []
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:183: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+ [12 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea804e6a3495.png>] [13]
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8071095734.png, id=73, 546
+.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8071095734.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8071095734.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+71095734.png  used on input line 242.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 242--242
+ [][] 
+ []
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:242: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+ [14] [15 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8071095734.png>]
+
+Overfull \hbox (3.87033pt too wide) in paragraph at lines 268--268
+ []|\OT1/cmr/m/n/10 306,813|
+ []
+
+
+Overfull \hbox (2.20366pt too wide) in paragraph at lines 268--268
+ []|\OT1/cmr/m/n/10 100.0%|
+ []
+
+
+Overfull \hbox (3.87033pt too wide) in paragraph at lines 268--268
+ []|\OT1/cmr/m/n/10 102,279|
+ []
+
+
+Overfull \hbox (2.20366pt too wide) in paragraph at lines 268--268
+ []|\OT1/cmr/m/n/10 100.0%|
+ []
+
+
+Overfull \hbox (3.87033pt too wide) in paragraph at lines 268--268
+ []|\OT1/cmr/m/n/10 276,257|
+ []
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:274: You can't use `macro
+ parameter character #' in horizontal mode
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:275: You can't use `macro
+ parameter character #' in horizontal mode
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+
+Overfull \hbox (32.20811pt too wide) in paragraph at lines 269--318
+\OT1/cmr/m/n/12 Val-ues</caption> <thead> <tr> <th style="border-bottom:hidden"
+ colspan="1"></th>
+ []
+
+
+Overfull \hbox (14.34811pt too wide) in paragraph at lines 269--318
+\OT1/cmr/m/n/12 <th style="border-bottom:hidden; padding-bottom:0; padding-left
+:3px;padding-
+ []
+
+
+Overfull \hbox (13.38655pt too wide) in paragraph at lines 269--318
+\OT1/cmr/m/n/12 solid ddd; padding-bottom: 5px;">Adams County</div></th> <th st
+yle="border-
+ []
+
+
+Overfull \hbox (13.15137pt too wide) in paragraph at lines 269--318
+\OT1/cmr/m/n/12 padding-bottom: 5px;">Colorado</div></th> <th style="border-bot
+tom:hidden"
+ []
+
+
+Overfull \hbox (36.26138pt too wide) in paragraph at lines 269--318
+\OT1/cmr/m/n/12 "\OML/cmm/m/it/12 text \OMS/cmsy/m/n/12   \OML/cmm/m/it/12 alig
+n \OT1/cmr/m/n/12 : \OML/cmm/m/it/12 right\OT1/cmr/m/n/12 ; \OML/cmm/m/it/12 wi
+dth \OT1/cmr/m/n/12 : 0\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 33\OML/cmm/m/it/12 in\
+OT1/cmr/m/n/12 ; " \OML/cmm/m/it/12 >$\OT1/cmr/m/n/12 2,009 </td> <td style="te
+xt-align:right;width:
+ []
+
+
+Overfull \hbox (14.07405pt too wide) in paragraph at lines 269--318
+\OT1/cmr/m/n/12 </tr> <tr> <td style="text-align:left;width: 3in; "> Per-cent-a
+ge of Owner-Occupied
+ []
+
+
+Overfull \hbox (0.5964pt too wide) in paragraph at lines 269--318
+\OT1/cmr/m/n/12 style="text-align:right;width: 0.33in; "> 0.9<td style="text-al
+ign:right;width:
+ []
+
+
+Overfull \hbox (1.03159pt too wide) in paragraph at lines 269--318
+\OT1/cmr/m/n/12 0.33in; "> 14.8<td style="text-align:right;width: 0.33in; "> 0.
+2<td style="text-
+ []
+
+
+Overfull \hbox (10.3838pt too wide) in paragraph at lines 269--318
+\OT1/cmr/m/n/12 align:right;width: 0.33in; "> Yes </td> </tr> <tr> <td style="t
+ext-align:left;width:
+ []
+
+
+Overfull \hbox (32.58218pt too wide) in paragraph at lines 269--318
+\OT1/cmr/m/n/12 0.7<td style="text-align:right;width: 0.33in; "> 9.2<td style="
+text-align:right;width:
+ []
+
+
+Overfull \hbox (50.12045pt too wide) in paragraph at lines 269--318
+\OT1/cmr/m/n/12 sus Bu-reau, 2012-2016 Amer-i-can Com-mu-nity Sur-vey, Print Da
+te: 10/29/2018</td></tr>
+ []
+
+
+[16]
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:323: You can't use `macro
+ parameter character #' in horizontal mode
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:324: You can't use `macro
+ parameter character #' in horizontal mode
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+
+Overfull \hbox (36.02058pt too wide) in paragraph at lines 318--368
+\OT1/cmr/m/n/12 style="font-size: ini-tial !im-por-tant;">Comparative Rental Ho
+us-ing Val-ues</caption>
+ []
+
+
+Overfull \hbox (39.39276pt too wide) in paragraph at lines 318--368
+\OT1/cmr/m/n/12 <thead> <tr> <th style="border-bottom:hidden" colspan="1"></th>
+ <th style="border-
+ []
+
+
+Overfull \hbox (39.97609pt too wide) in paragraph at lines 318--368
+\OT1/cmr/m/n/12 padding-bottom: 5px;">Adams County</div></th> <th style="border
+-bottom:hidden;
+ []
+
+
+Overfull \hbox (21.37628pt too wide) in paragraph at lines 318--368
+\OT1/cmr/m/n/12 5px;">Colorado</div></th> <th style="border-bottom:hidden" cols
+pan="1"></th>
+ []
+
+
+Overfull \hbox (54.33705pt too wide) in paragraph at lines 318--368
+\OT1/cmr/m/n/12 style="text-align:right;text-align: cen-ter;"> Value </th> <th 
+style="text-align:right;text-
+ []
+
+
+Overfull \hbox (9.82318pt too wide) in paragraph at lines 318--368
+\OT1/cmr/m/n/12 0.33in; "> $1\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 098 \OML/cmm/m/
+it/12 < =td >< tdstyle \OT1/cmr/m/n/12 = "\OML/cmm/m/it/12 text \OMS/cmsy/m/n/1
+2   \OML/cmm/m/it/12 align \OT1/cmr/m/n/12 : \OML/cmm/m/it/12 right\OT1/cmr/m/n
+/12 ; \OML/cmm/m/it/12 width \OT1/cmr/m/n/12 : 0\OML/cmm/m/it/12 :\OT1/cmr/m/n/
+12 33\OML/cmm/m/it/12 in\OT1/cmr/m/n/12 ; " \OML/cmm/m/it/12 >$\OT1/cmr/m/n/12 
+11
+ []
+
+
+Overfull \hbox (15.37271pt too wide) in paragraph at lines 318--368
+\OT1/cmr/m/n/12 "\OML/cmm/m/it/12 text \OMS/cmsy/m/n/12   \OML/cmm/m/it/12 alig
+n \OT1/cmr/m/n/12 : \OML/cmm/m/it/12 right\OT1/cmr/m/n/12 ; \OML/cmm/m/it/12 wi
+dth \OT1/cmr/m/n/12 : 0\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 33\OML/cmm/m/it/12 in\
+OT1/cmr/m/n/12 ; " \OML/cmm/m/it/12 >$\OT1/cmr/m/n/12 4 </td> <td style="text-a
+lign:right;width:
+ []
+
+
+Overfull \hbox (1.03159pt too wide) in paragraph at lines 318--368
+\OT1/cmr/m/n/12 0.33in; "> 27.6<td style="text-align:right;width: 0.33in; "> 1.
+7<td style="text-
+ []
+
+
+Overfull \hbox (35.19327pt too wide) in paragraph at lines 318--368
+\OT1/cmr/m/n/12 50<td style="text-align:right;width: 0.33in; "> 22.6<td style="
+text-align:right;width:
+ []
+
+
+Overfull \hbox (1.03159pt too wide) in paragraph at lines 318--368
+\OT1/cmr/m/n/12 0.33in; "> 1.4<td style="text-align:right;width: 0.33in; "> 23.
+7<td style="text-
+ []
+
+
+Overfull \hbox (62.60548pt too wide) in paragraph at lines 318--368
+\OT1/cmr/m/n/12 No </td> </tr> </tbody> <tfoot> <tr><td style="padding: 0; bor-
+der: 0;" colspan="100<tr><td
+ []
+
+
+Overfull \hbox (50.12045pt too wide) in paragraph at lines 318--368
+\OT1/cmr/m/n/12 sus Bu-reau, 2012-2016 Amer-i-can Com-mu-nity Sur-vey, Print Da
+te: 10/29/2018</td></tr>
+ []
+
+
+[17]
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:369: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 369.
+
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 369.
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8022552594.png, id=89, 546
+.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8022552594.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8022552594.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+22552594.png  used on input line 369.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 369--369
+ [][] 
+ []
+
+ [18] [19 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8022552594.png>]
+ [20] [21
+
+]
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801a2b7392.png, id=104, 54
+6.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801a2b7392.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801a2b7392.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+1a2b7392.png  used on input line 423.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 423--423
+ [][] 
+ []
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:423: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+ [22] [23 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801a2b7392.png>]
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80200af60.png, id=112, 546
+.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80200af60.png Graphic
+ file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80200af60.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+200af60.png  used on input line 425.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 425--425
+ [][] 
+ []
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:425: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+ [24 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80200af60.png>]
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8066941a0a.png, id=117, 54
+6.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8066941a0a.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8066941a0a.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+66941a0a.png  used on input line 425.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 425--425
+ [][] 
+ []
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:425: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8050a45b71.png, id=118, 54
+6.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8050a45b71.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8050a45b71.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+50a45b71.png  used on input line 425.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 425--425
+ [][] 
+ []
+
+ [25 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8066941a0a.png>] [26 
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8050a45b71.png>]
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea806d0a5d0c.png, id=128, 54
+6.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea806d0a5d0c.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea806d0a5d0c.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+6d0a5d0c.png  used on input line 428.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 428--428
+ [][] 
+ []
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:428: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no – in font cmr12!
+ [27 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea806d0a5d0c.png>]
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801e426626.png, id=133, 54
+6.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801e426626.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801e426626.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+1e426626.png  used on input line 428.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 428--428
+ [][] 
+ []
+
+Missing character: There is no ’ in font cmr12!
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8028c97170.png, id=134, 54
+6.3612pt x 362.0727pt>
+File: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8028c97170.png Graphi
+c file (type png)
+<use C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8028c97170.png>
+Package pdftex.def Info: C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80
+28c97170.png  used on input line 428.
+(pdftex.def)             Requested size: 464.40921pt x 307.76324pt.
+
+Overfull \hbox (74.40921pt too wide) in paragraph at lines 428--428
+ [][] 
+ []
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:428: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+ [28 <C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801e426626.png>] [29 
+<C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8028c97170.png>]
+Overfull \hbox (110.22552pt too wide) in paragraph at lines 432--452
+ [][] 
+ []
+
+
+C:/Scripts/RProjects/ProfileDashboard2/SDO_Report.tex:452: Undefined control se
+quence
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+ [30] (SDO_Report.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 3006 strings out of 493305
+ 45591 string characters out of 3138868
+ 132833 words of memory out of 3000000
+ 6479 multiletter control sequences out of 15000+200000
+ 9853 words of font info for 34 fonts, out of 3000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 41i,12n,39p,2740b,301s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Pr
+ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Fil
+es/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX
+ 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files/MiKTeX 2.9/fonts
+/type1/public/amsfonts/cm/cmss12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/p
+ublic/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/am
+sfonts/cm/cmti10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/c
+m/cmti12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti9.
+pfb>
+Output written on SDO_Report.pdf (30 pages, 1040914 bytes).
+PDF statistics:
+ 175 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 101 words of extra memory for PDF output out of 10000 (max. 10000000)
+

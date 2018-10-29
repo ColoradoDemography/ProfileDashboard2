@@ -1,0 +1,455 @@
+\documentclass[12pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}         % the type of document and font size (default 10pt)
+%\usepackage[margin=1.0in]{geometry}
+\usepackage{fullminipage}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{titlesec}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{placeins}
+\usepackage{xcolor}
+\usepackage{etoolbox}
+\usepackage{float}
+%Setting Colors
+
+%defining dolagreen color
+\definecolor{dolagreen}{RGB}{0,149,58}
+
+%Suppressing the section numbers
+
+\renewcommand\thesection{}
+\makeatletter
+\renewcommand\thesection{}
+\renewcommand\thesubsection{\@arabic\c@section.\@arabic\c@subsection}
+\makeatother
+
+% defining section command
+\titleformat{name=\section}[block]
+{\sffamily\large}
+{}
+{0pt}
+{\colorsection}
+\titlespacing*{\section}{0pt}{\baselineskip}{\baselineskip}
+\newcommand{\colorsection}[1]{%
+	\colorbox{dolagreen}{\parbox{\dimexpr\textwidth-2\fboxsep}{\color{white}\thesection\ #1}}}
+	
+
+
+\title{Colorado State Demography Office}  % to specify title
+\author{Community Profile}          % to specify author(s)
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}                      % document begins here
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Where everything else goes
+
+
+
+% Logo on top of first page
+
+\begin{figure}[htp]
+\begin{minipage}{0.40\textwidth}
+\includegraphics[height=2cm, width=2cm]{www/ShieldOnly_LRG.png}
+\end{minipage}
+\begin{minipage}{0.50\textwidth}
+  State Demography Office Colorado Demographic Profile \newline \textit{Print Date 10/29/2018}
+\end{minipage}
+\end{figure}
+
+
+\section*{Community Profile for Adams County}Demographic information is critical for making informed decisions at the local, state and national level.  This demographic profile is a summary of trends in a community.  The dashboard provides charts, text, data and additional links to assist  in the exploration and understanding  of demographic trends for counties and municipalities in Colorado.  The following collection of tables and charts establishes the context for assessing potential impacts and for decision-making.
+
+\section*{Basic Statistics}\FloatBarrier\begin{figure}[ht!]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8052e719d7.png}}\end{figure}\FloatBarrier\begin{flushleft} The population base and trends of an area determine the needs for housing, schools, roads and other services.  The age, income, race and ethnicity, and migration of the population of a community are all vital in planning for service provision.  The most significant demographic transitions for Colorado and its communities are related to disparate growth, aging, downward pressure on income, and growing racial and ethnic diversity.\end{flushleft}\FloatBarrier\begin{table}[H]
+
+\caption{\label{tab:}Community Quick Facts}
+\centering
+\resizebox{\linewidth}{!}{
+\fontsize{10}{12}\selectfont
+\begin{tabular}[t]{>{\raggedright\arraybackslash}p{5in}rrrlrrrlrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{1}{c}{Adams County} & \multicolumn{1}{c}{Colorado}\\
+\midrule
+Population (2016)+ & 497,419 & 5,534,240\\
+Population Change (2010 to 2016)+ & 53,708 & 483,908\\
+Total Employment (2016)+ & 244,722 & 3,231,769\\
+Median Household Income\textasciicircum{} & \$61,444 & \$62,520\\
+Median House Value\textasciicircum{} & \$216,700 & \$264,600\\
+\addlinespace
+Percentage of Population with Incomes lower than the Poverty Line\textasciicircum{} & 12.9\% & 12.2\%\\
+Percentage of Population Born in Colorado\textasciicircum{} & 52.0\% & 42.8\%\\
++Source: State Demography Office &  & \\
+\textasciicircum{}Source: U.S. Census Bureau, 2012-2016 American Community Survey, Print Date: 10/29/2018 &  & \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+
+\section*{Population Trends}The tables and plots in this section highlight trends and forecasts for the total population in Adams County.  The table shows the overall population growth rate for Adams County and the State of Colorado. Additional plots show the overall population trends, forecasts for along with the overall components of change for Adams County.\FloatBarrier\begin{table}[H]
+
+\caption{\label{tab:}Population Growth Rate}
+\centering
+\fontsize{9}{11}\selectfont
+\begin{tabular}[t]{>{\raggedright\arraybackslash}p{0.5in}>{\raggedleft\arraybackslash}p{0.5in}>{\raggedleft\arraybackslash}p{0.5in}>{\raggedleft\arraybackslash}p{0.5in}>{\raggedleft\arraybackslash}p{0.5in}lrrrrlrrrrlrrrrlrrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Adams County} & \multicolumn{2}{c}{Colorado} \\
+\cmidrule(l{2pt}r{2pt}){2-3} \cmidrule(l{2pt}r{2pt}){4-5}
+\multicolumn{1}{c}{Year} & \multicolumn{1}{c}{Population} & \multicolumn{1}{c}{Growth Rate} & \multicolumn{1}{c}{Population} & \multicolumn{1}{c}{Growth Rate}\\
+\midrule
+1990 & 265,708 &  & 3,304,042 & \\
+1995 & 312,593 & 3.3\% & 3,811,074 & 2.9\%\\
+2000 & 351,735 & 2.4\% & 4,338,801 & 2.6\%\\
+2005 & 395,384 & 2.4\% & 4,662,534 & 1.4\%\\
+2010 & 443,711 & 2.3\% & 5,050,332 & 1.6\%\\
+\addlinespace
+2015 & 489,774 & 2.0\% & 5,444,871 & 1.5\%\\
+2016 & 497,419 & 1.6\% & 5,534,240 & 1.6\%\\
+\bottomrule
+\multicolumn{25}{l}{\textit{Note: }}\\
+\multicolumn{25}{l}{Source: State Demography Office, Print Date: 10/29/2018}\\
+\end{tabular}
+\end{table}\FloatBarrier  At the end of 2016 the estimated population of Adams County was 497,419, an increase of 7,645 over the population in 2015.  The growth rate for Adams County between 2015 and 2016 was 1.6 percent compared to 1.6 percent for the State of Colorado.\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea802fea2eaf.png}}\end{figure}\FloatBarrierThe population of Adams County is forecast to reach 542,609 by 2020 and 774,542 by 2040. Overall, the growth rate for Adams County is expected to decrease between 2020 and 2040.  Between 2010 and 2020 the forecast growth rate was 2.0 percent, between 2020 and 2030 the forecast growth rate is 2.0 percent,  while the forecast growth rate between 2030 and 2040 is 1.6 percent.  The change is due in part to population aging and changes in the proportion of the population in childbearing ages.  Note: Population forecasts are only provided for Colorado counties.\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801a453e15.png}}\end{figure}\FloatBarrier\textit{Components of Population Change} \begin{flushleft} Births, deaths and net migration are the main components of population change. Net migration is the difference between the number of people moving into an area and the number of people moving out. Change in net migration typically causes most of the changes in population trends because migration is more likely to experience short-term fluctuations than births and deaths. Migration also tends to be highly correlated to job growth or decline in communities where most of the residents work where they live. For many counties with negative natural increase (more deaths than births), this makes migration especially important for population stability and growth. \end{flushleft}\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea803d3a16f6.png}}\end{figure}Over the past five years, between 2012 and  2016, the population of Adams County has increased by 37,598 people. The total natural increase (births - deaths) over this period was 21,503 and the total net migration (new residents who moved in minus those who moved out) was 44,812.  Note: Components of Change data are only available for Colorado counties.\FloatBarrier
+
+\section*{Age Characteristics}Every community has a different age profile and is aging differently.  People in different age groups work, live, shop, and use resources differently  and these differences will impact the economy,  labor force, housing, school districts, day care facilities, health services,  disability services, transportation, household income, and public finance.  An aging population may put downward pressure on local government tax revenue  due to changes in spending on taxable goods.\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801315662d.png}}\end{figure}\FloatBarrierThe age distribution of the population of Adams County and Colorado are shown here.\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea807bef4d48.png}}\end{figure}\FloatBarrier\begin{table}[H]
+
+\caption{\label{tab:}Median Age by Gender Comparison}
+\centering
+\fontsize{10}{12}\selectfont
+\begin{tabular}[t]{lrrrrrrlrrrrrrlrrrrrrlrrrrrrlrrrrrrlrrrrrrlrrrrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Adams County} & \multicolumn{2}{c}{Colorado} & \multicolumn{2}{c}{ } \\
+\cmidrule(l{2pt}r{2pt}){2-3} \cmidrule(l{2pt}r{2pt}){4-5}
+\multicolumn{1}{c}{Gender} & \multicolumn{1}{c}{Median Age} & \multicolumn{1}{c}{MOE} & \multicolumn{1}{c}{Median Age} & \multicolumn{1}{c}{MOE} & \multicolumn{1}{c}{Signficant Difference?} & \multicolumn{1}{c}{Difference from State}\\
+\midrule
+Female & 33.7 & 0.1 & 37.4 & 0.1 & Yes & Younger\\
+Male & 32.8 & 0.2 & 35.5 & 0.1 & Yes & Younger\\
+Total & 33.3 & 0.2 & 36.4 & 0.1 & Yes & Younger\\
+\bottomrule
+\multicolumn{49}{l}{\textit{Note: }}\\
+\multicolumn{49}{l}{Source: U.S. Census Bureau, 2012-2016 American Community Survey, Print Date: 10/29/2018}\\
+\end{tabular}
+\end{table}\FloatBarrier The median age of Adams County is 3.1 years younger than the state. Women in Adams County are significantly younger than women in the state and men in Adams County are significantly younger than men in the state.\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80761350a8.png}}\end{figure}\FloatBarrierThe changing age distribution of the population of Adams County for the period from 2010 through 2025 is shown here.  The changes in proporion of different groups can highligh the need for future planning and service provision. Many areas have a larger share of older adults, indicating the need to evaluate housing, transportation and other needs of the senior population.\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8048a47d74.png}}\end{figure}\FloatBarrierThis plot shows the net migration by age in Adams County.  Colorado typically draws many young adults as migrants. Areas with colleges and resorts draw a number of 18 to 24 year olds. Areas with a growing economy tend to account mostly 25 to 35 year olds and areas attractive to retirees tend to draw both workers and older adults.\FloatBarrier
+
+\section*{Population Characteristics: Income, Education and Race}The plots and tables in this section describe the general population characteristics of Adams County.  The bars on the plots show the width of the 90 percent confidence interval.  Categories where the bars do not overlap are significantly different.\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80461c1914.png}}\end{figure}\FloatBarrierThe household income distribution plot compares Adams County to the statewide household incomes.  Household income comes primarily from earnings at work, but government transfer payments  such as Social Security and TANF and unearned income from dividends, interest and rent  are also included. Income and education levels are highly correlated; areas that have lower  educational attainment than the state will typically have lower household incomes.\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea804e6a3495.png}}\end{figure}\FloatBarrierThe education attainment plot is provided for persons older than Age 25, i.e.,  those who have likely completed their education.\FloatBarrier\begin{table}
+
+\caption{\label{tab:}Race Trend}
+\centering
+\resizebox{\linewidth}{!}{
+\fontsize{10}{12}\selectfont
+\begin{tabular}[t]{lrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{3}{c}{Adams County} \\
+\cmidrule(l{2pt}r{2pt}){2-4}
+\multicolumn{1}{c}{Race} & \multicolumn{1}{c}{2000[note]} & \multicolumn{1}{c}{2010[note]} & \multicolumn{1}{c}{2016[note]}\\
+\midrule
+Hispanic & 28.2\% & 38.0\% & 38.9\%\\
+Non-Hispanic & 71.8\% & 62.0\% & 61.1\%\\
+\hspace{1em}Non-Hispanic White & 63.3\% & 53.2\% & 51.7\%\\
+\hspace{1em}Non-Hispanic Black & 2.8\% & 2.8\% & 3.0\%\\
+\hspace{1em}Non-Hispanic Asian & 3.1\% & 3.5\% & 3.7\%\\
+\addlinespace
+\hspace{1em}Non-Hispanic Native American/Alaska Native & 0.6\% & 0.6\% & 0.5\%\\
+\hspace{1em}Non-Hispanic Native Hawaiian/Pacific Islander & 0.1\% & 0.1\% & 0.1\%\\
+\hspace{1em}Non-Hispanic Other & 0.1\% & 0.2\% & 0.2\%\\
+\hspace{1em}Non-Hispanic, Two Races & 1.7\% & 1.7\% & 1.9\%\\
+Total Population & 100.00\% & 100.00\% & 100.00\%\\
+\bottomrule
+\multicolumn{4}{l}{\textit{Note: }}\\
+\multicolumn{4}{l}{Source; 2000 Census}\\
+\multicolumn{4}{l}{Source: 2010 Census}\\
+\multicolumn{4}{l}{Source: U.S. Census Bureau, 2012-2016 American Community Survey, Print Date: 10/29/2018}\\
+\end{tabular}}
+\end{table}\FloatBarrier  The Race Trend table shows the changing racial and ethnic composition of Adams County beginning in 2000 and continuing to the present.\FloatBarrier\begin{table}
+
+\caption{\label{tab:}Race Comparison}
+\centering
+\resizebox{\linewidth}{!}{
+\fontsize{10}{12}\selectfont
+\begin{tabular}[t]{lrrrrrlrrrrrlrrrrrlrrrrrlrrrrrlrrrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Adams County} & \multicolumn{2}{c}{Colorado} & \multicolumn{1}{c}{ } \\
+\cmidrule(l{2pt}r{2pt}){2-3} \cmidrule(l{2pt}r{2pt}){4-5}
+\multicolumn{1}{c}{Race} & \multicolumn{1}{c}{Percentage} & \multicolumn{1}{c}{MOE} & \multicolumn{1}{c}{Percentage} & \multicolumn{1}{c}{MOE} & \multicolumn{1}{c}{Sig. Diff.?}\\
+\midrule
+Hispanic & 38.9\% & 0.0\% & 21.1\% & 0.0\% & Yes\\
+Non-Hispanic & 61.1\% & 0.0\% & 78.9\% & 0.0\% & Yes\\
+\hspace{1em}Non-Hispanic White & 51.7\% & 0.1\% & 69.0\% & 0.0\% & Yes\\
+\hspace{1em}Non-Hispanic Black & 3.0\% & 0.1\% & 3.9\% & 0.0\% & Yes\\
+\hspace{1em}Non-Hispanic Asian & 3.7\% & 0.1\% & 2.9\% & 0.0\% & Yes\\
+\addlinespace
+\hspace{1em}Non-Hispanic Native American/Alaska Native & 0.5\% & 0.1\% & 0.5\% & 0.0\% & No\\
+\hspace{1em}Non-Hispanic Native Hawaiian/Pacific Islander & 0.1\% & 0.0\% & 0.1\% & 0.0\% & No\\
+\hspace{1em}Non-Hispanic Other & 0.2\% & 0.1\% & 0.2\% & 0.0\% & No\\
+\hspace{1em}Non-Hispanic, Two Races & 1.9\% & 0.2\% & 2.3\% & 0.0\% & Yes\\
+Total Population & 100.0\% & 0.0\% & 100.0\% & 0.0\% & \\
+\bottomrule
+\multicolumn{36}{l}{\textit{Note: }}\\
+\multicolumn{36}{l}{Source: U.S. Census Bureau, 2012-2016 American Community Survey, Print Date: 10/29/2018}\\
+\end{tabular}}
+\end{table}\FloatBarrier  The Race Comparison table compares the distriburion of ethnic and racial groups in Adams County to the state.\FloatBarrier
+
+
+\section*{Housing and Households}Understanding the current housing stock is critical for understanding how the community can best address current and future demands.  This section begins with a projection of households. The projection of households is derived by county specific headship rates for the population by age.  Beyond the numbers and characteristics, understanding the value and affordability of housing units is vital.  Are the housing prices prohibitive to new families?   Are the housing prices at such a high price that  once the current work force ages and sells, those housing units will most likely go into the vacation seasonal market?  Or are housing prices reasonable and suddenly the community is experiencing growth in families with children?  How many total housing units are there? What types of new units are being built - multi-family vs single family?\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8071095734.png}}\end{figure}\FloatBarrierThe Household Estimates plot shows the current and projected number of households in Adams County between 2010 and 2050.\FloatBarrier\begin{flushleft}  The next several tables provide an overview of the housing stock in an area.  The availability of land and the cost of land can dictate whether housing is less dense, with a greater number of single family units or more dense with a number of multifamily apartments and condos.  Median home values and median gross rents are often considerably lower than current market prices as the  values are computed from a 5-year average that runs through 2016. The number of people per household can  offer insights as to the composition of the households .  Areas with a larger number of people per household  often have more families with children under 18 or a number of roommates living together to share housing costs. Those with a smaller number of persons per household, likely have a larger share of single-person households. \end{flushleft}\FloatBarrier\FloatBarrier\begin{table}[H]
+
+\caption{\label{tab:}Characteristics of Owner-Occupied Housing}
+\centering
+\resizebox{\linewidth}{!}{
+\fontsize{10}{12}\selectfont
+\begin{tabular}[t]{>{\raggedright\arraybackslash}p{3.5in}>{\raggedleft\arraybackslash}p{0.4in}>{\raggedleft\arraybackslash}p{0.4in}>{\raggedleft\arraybackslash}p{0.4in}>{\raggedleft\arraybackslash}p{0.4in}lrrrrlrrrrlrrrrlrrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{4}{c}{Adams County} \\
+\cmidrule(l{2pt}r{2pt}){2-5}
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{People} & \multicolumn{2}{c}{Units} \\
+\cmidrule(l{2pt}r{2pt}){2-3} \cmidrule(l{2pt}r{2pt}){4-5}
+\multicolumn{1}{c}{Variable} & \multicolumn{1}{c}{Value} & \multicolumn{1}{c}{Percent} & \multicolumn{1}{c}{Value} & \multicolumn{1}{c}{Percent}\\
+\midrule
+Owner-Occupied Housing & 306,813 & 100.0\% & 102,279 & 100.0\%\\
+\hspace{1em}Single Unit Buildings & 276,257 & 90.0\% & 91,345 & 89.3\%\\
+\hspace{1em}Buildings with 2 to 4 Units & 2,615 & 0.9\% & 1,174 & 1.1\%\\
+\hspace{1em}Buildings with 5 or More Units & 4,474 & 1.5\% & 2,494 & 2.4\%\\
+\hspace{1em}Mobile Homes & 23,278 & 7.6\% & 7,205 & 7.0\%\\
+\addlinespace
+\hspace{1em}RVs, Boats, Vans, Etc. & 189 & 0.1\% & 61 & 0.1\%\\
+Median Year of Construction &  &  & 1987 & \\
+Average Number of Persons Per Household & 3.00 &  &  & \\
+\bottomrule
+\multicolumn{25}{l}{\textit{Note: }}\\
+\multicolumn{25}{l}{Source: U.S. Census Bureau, 2012-2016 American Community Survey, Print Date: 10/29/2018}\\
+\end{tabular}}
+\end{table}\FloatBarrier<table class="cleanTable table table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">Comparative Owner-Occupied Housing Values</caption>
+ <thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1"></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">Adams County</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">Colorado</div></th>
+<th style="border-bottom:hidden" colspan="1"></th>
+</tr>
+  <tr>
+   <th style="text-align:left;text-align: center;"> Variable </th>
+   <th style="text-align:right;text-align: center;"> Value </th>
+   <th style="text-align:right;text-align: center;"> MOE </th>
+   <th style="text-align:right;text-align: center;"> Value </th>
+   <th style="text-align:right;text-align: center;"> MOE </th>
+   <th style="text-align:right;text-align: center;"> Sig. Diff.? </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;width: 3in; "> Median Value of Owner-Occupied Households (Current Dollars) </td>
+   <td style="text-align:right;width: 0.33in; "> $216,700 </td>
+   <td style="text-align:right;width: 0.33in; "> $2,009 </td>
+   <td style="text-align:right;width: 0.33in; "> $264,600 </td>
+   <td style="text-align:right;width: 0.33in; "> $925 </td>
+   <td style="text-align:right;width: 0.33in; "> Yes </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3in; "> Percentage of Owner-Occupied Households paying 30-49% of income on housing </td>
+   <td style="text-align:right;width: 0.33in; "> 17.5% </td>
+   <td style="text-align:right;width: 0.33in; "> 0.9% </td>
+   <td style="text-align:right;width: 0.33in; "> 14.8% </td>
+   <td style="text-align:right;width: 0.33in; "> 0.2% </td>
+   <td style="text-align:right;width: 0.33in; "> Yes </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3in; "> Percentage of Owner-Occupied Households paying 50% or more of income on housing </td>
+   <td style="text-align:right;width: 0.33in; "> 9.2% </td>
+   <td style="text-align:right;width: 0.33in; "> 0.7% </td>
+   <td style="text-align:right;width: 0.33in; "> 9.2% </td>
+   <td style="text-align:right;width: 0.33in; "> 0.2% </td>
+   <td style="text-align:right;width: 0.33in; "> No </td>
+  </tr>
+</tbody>
+<tfoot>
+<tr><td style="padding: 0; border: 0;" colspan="100%"><span style="font-style: italic;">Note: </span></td></tr>
+<tr><td style="padding: 0; border: 0;" colspan="100%">
+<sup></sup> Source: U.S. Census Bureau, 2012-2016 American Community Survey, Print Date: 10/29/2018</td></tr>
+</tfoot>
+</table>\FloatBarrier\FloatBarrier<table class="cleanTable table table-condensed" style="font-size: 11px; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">Comparative Rental Housing Values</caption>
+ <thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1"></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">Adams County</div></th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">Colorado</div></th>
+<th style="border-bottom:hidden" colspan="1"></th>
+</tr>
+  <tr>
+   <th style="text-align:left;text-align: center;"> Variable </th>
+   <th style="text-align:right;text-align: center;"> Value </th>
+   <th style="text-align:right;text-align: center;"> MOE </th>
+   <th style="text-align:right;text-align: center;"> Value </th>
+   <th style="text-align:right;text-align: center;"> MOE </th>
+   <th style="text-align:right;text-align: center;"> Sig. Diff.? </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;width: 3in; "> Median Gross Rent of Rental Households (Current Dollars) </td>
+   <td style="text-align:right;width: 0.33in; "> $1,098 </td>
+   <td style="text-align:right;width: 0.33in; "> $11 </td>
+   <td style="text-align:right;width: 0.33in; "> $1,057 </td>
+   <td style="text-align:right;width: 0.33in; "> $4 </td>
+   <td style="text-align:right;width: 0.33in; "> Yes </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3in; "> Percentage of Rental Households paying 30-49% of income on housing </td>
+   <td style="text-align:right;width: 0.33in; "> 27.6% </td>
+   <td style="text-align:right;width: 0.33in; "> 1.7% </td>
+   <td style="text-align:right;width: 0.33in; "> 24.8% </td>
+   <td style="text-align:right;width: 0.33in; "> 0.4% </td>
+   <td style="text-align:right;width: 0.33in; "> Yes </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3in; "> Percentage of Rental Households paying 50% or more of income on housing </td>
+   <td style="text-align:right;width: 0.33in; "> 22.6% </td>
+   <td style="text-align:right;width: 0.33in; "> 1.4% </td>
+   <td style="text-align:right;width: 0.33in; "> 23.7% </td>
+   <td style="text-align:right;width: 0.33in; "> 0.4% </td>
+   <td style="text-align:right;width: 0.33in; "> No </td>
+  </tr>
+</tbody>
+<tfoot>
+<tr><td style="padding: 0; border: 0;" colspan="100%"><span style="font-style: italic;">Note: </span></td></tr>
+<tr><td style="padding: 0; border: 0;" colspan="100%">
+<sup></sup> Source: U.S. Census Bureau, 2012-2016 American Community Survey, Print Date: 10/29/2018</td></tr>
+</tfoot>
+</table>
+
+\section*{Commuting}Commuting plays an important role in the economy of an area because not all workers live where they work. Commuting impacts local job growth, access to employees, and transportation infrastructure.\FloatBarrierThe Commuting diagram identifies three groups of people: \begin{itemize} \item People who work in Adams County, but live elsewhere. \item People who live in Adams County, but work elsewhere. \item People who live and work in Adams County. \end{itemize}\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8022552594.png}}\end{figure}\FloatBarrier\begin{table}
+
+\caption{\label{tab:}Employees in Adams County living elsewhere}
+\centering
+\fontsize{10}{12}\selectfont
+\begin{tabular}[t]{lrrlrrlrr}
+\toprule
+\multicolumn{1}{c}{Location} & \multicolumn{1}{c}{Count} & \multicolumn{1}{c}{Percent}\\
+\midrule
+Denver County, CO & 31,076 & 23.2\%\\
+Arapahoe County, CO & 27,260 & 20.4\%\\
+Jefferson County, CO & 25,368 & 19.0\%\\
+Weld County, CO & 10,784 & 8.1\%\\
+Douglas County, CO & 7,345 & 5.5\%\\
+\addlinespace
+Boulder County, CO & 6,885 & 5.1\%\\
+El Paso County, CO & 5,652 & 4.2\%\\
+Broomfield County, CO & 5,088 & 3.8\%\\
+Larimer County, CO & 4,784 & 3.6\%\\
+Pueblo County, CO & 1,237 & 0.9\%\\
+\addlinespace
+Other Counties & 8,372 & 6.3\%\\
+Total & 133,851 & 100.0\%\\
+\bottomrule
+\multicolumn{9}{l}{\textit{Note: }}\\
+\multicolumn{9}{l}{Source: U.S. Census Bureau On the Map, Print Date: 10/29/2018}\\
+\end{tabular}
+\end{table}\FloatBarrier\begin{flushleft}This table shows the top 10 places where people who live in Adams County work.\end{flushleft}\FloatBarrier\begin{table}
+
+\caption{\label{tab:}Residents of Adams County working elsewhere}
+\centering
+\fontsize{10}{12}\selectfont
+\begin{tabular}[t]{lrrlrrlrr}
+\toprule
+\multicolumn{1}{c}{Location} & \multicolumn{1}{c}{Count} & \multicolumn{1}{c}{Percent}\\
+\midrule
+Denver County, CO & 60,151 & 37.7\%\\
+Jefferson County, CO & 27,358 & 17.1\%\\
+Arapahoe County, CO & 23,623 & 14.8\%\\
+Boulder County, CO & 14,763 & 9.3\%\\
+Broomfield County, CO & 7,625 & 4.8\%\\
+\addlinespace
+Weld County, CO & 6,968 & 4.4\%\\
+Douglas County, CO & 5,257 & 3.3\%\\
+El Paso County, CO & 3,457 & 2.2\%\\
+Larimer County, CO & 3,168 & 2.0\%\\
+Gilpin County, CO & 714 & 0.4\%\\
+\addlinespace
+Other Counties & 6,458 & 4.0\%\\
+Total & 159,542 & 100.0\%\\
+\bottomrule
+\multicolumn{9}{l}{\textit{Note: }}\\
+\multicolumn{9}{l}{Source: U.S. Census Bureau On the Map, Print Date: 10/29/2018}\\
+\end{tabular}
+\end{table}\FloatBarrier\begin{flushleft}This table shows the top 10 places where people who work in Adams County live.\end{flushleft}\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801a2b7392.png}}\end{figure}\FloatBarrierThe Job Growth and Net Migration plot shows the relationship between job gowth and migration in Adams County. Generally, migration patterns follow changes in job growth demand.
+
+\section*{Employment by Industry}Identifying the industries which may be driving the growth and change within a community is a vital part of understanding community dynamics. Growth in jobs often results in growth in residents from migration within a community. Identifying the trends of growth or decline of jobs and the types of jobs available within the community is important.\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea80200af60.png}}\end{figure}\FloatBarrierThe Estimated Jobs is a series created by the SDO to give a comprehensive look at the number of jobs located within Adams County. It is broad in scope, capturing both wage and salary workers as well as most proprietors and agricultural workers.  A more diverse economy is typically more resilient too; when looking at the employment trends recently  and after a recession (shaded in gray) it is also important to look at the current share of employment by industry. Areas dependent on a single industry such as agriculture, mining or tourism can suffer from prolonged downturns due to drought, shifting demand for commodities, and the health of the national economy. \FloatBarrier The total estimated jobs are subdivided into 3 categories: \begin{itemize} \item \textit{Direct Basic:} jobs that bring outside dollars into the community by selling goods or services outside the county, such as manufacturing or engineering services,\item \textit{Indirect Basic:} jobs that are created as the result of goods and services purchased by direct basic such as accounting services or raw material inputs, and \item \textit{Local (Resident) Services:}  jobs that are supported when income earned from the base industries is spent locally at retailers or are supported by local tax dollars to provide services like education and public safety.\end{itemize}\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8066941a0a.png}}\end{figure}\FloatBarrierThis plot shows the jobs by industry profile for Adams County.  The relative rank of high-paying sectors, such as mining, information and finacial and insurance services versus mid-range jobs (e.g., contsruction, health casre and government)  and lower-paying industrices such as retail trade and accomodation and food services,  will have an impact on a counties' overall economic health.\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8050a45b71.png}}\end{figure}\FloatBarrier\FloatBarrier
+
+
+\section*{Employment Forecast and Wage Information}Understanding the types of jobs forecast to grow in a community, if jobs are forecast to increase, will aid in further understanding potential changes in population, labor force, housing demand, and household income. Important questions to ask include;  What is the current forecast for job growth based on the current industry mix?   What types of jobs are forecast to grow?  What are the wages for those jobs? What are the labor force trends for the community? Is the labor force expected to grow or slow down?\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea806d0a5d0c.png}}\end{figure}\FloatBarrierThe total jobs forecast and population forecast are for Denver-Boulder MSA shown here.  The two lines diverge over time due to the aging of our population and continued growth in our under 18 population – two segments of the population that are less likely to be employed. Growth in the 65 plus population in the labor force through 2040 compared to the universe population of those over the age of 16 since labor force participation declines with age, especially among those eligible for pensions or social security. Note: Statistics for the counties in the Denver Metropolitan Statistical Area (Adams, Arapahoe, Boulder, Broomfield, Denver, Douglas and Jefferson) are combined in this section.\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea801e426626.png}}\end{figure}The inflation adjusted (real) average weekly wages for Adams County and Colorado are shown here. In 2016 dollars, wages in Colorado have been essentially unchanged since 2010. The gain or loss of a major employer such as a mine or a hospital can have a significant impact on a county’s average weekly wage. These wages are shown only for jobs located within that county and do not include most proprietors. Household income can be influenced by the average weekly wage, but in areas that have considerable amounts commuting or unearned income this relationship is not particularly strong.\FloatBarrier\begin{figure}[htp]\centering\includegraphics[scale=0.85]{{C:/Users/TBleess/AppData/Local/Temp/RtmpwlgVYC/filea8028c97170.png}}\end{figure}\FloatBarrierThis plot compares the forecast residential labor force to the forecast population of person age 16 and older for Adams County.\FloatBarrier\begin{table}[H]
+
+\caption{\label{tab:}Household Income Source(s)}
+\centering
+\begin{tabular}[t]{>{\raggedright\arraybackslash}p{3in}>{\raggedleft\arraybackslash}p{0.75in}>{\raggedleft\arraybackslash}p{0.75in}>{\raggedleft\arraybackslash}p{0.75in}>{\raggedleft\arraybackslash}p{0.75in}lrrrrlrrrrlrrrrlrrrr}
+\toprule
+\multicolumn{5}{c}{Adams County} \\
+\cmidrule(l{2pt}r{2pt}){1-5}
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Total Households} & \multicolumn{2}{c}{Mean Income} \\
+\cmidrule(l{2pt}r{2pt}){2-3} \cmidrule(l{2pt}r{2pt}){4-5}
+\multicolumn{1}{c}{Income Source} & \multicolumn{1}{c}{Estimate} & \multicolumn{1}{c}{MOE} & \multicolumn{1}{c}{Estimate} & \multicolumn{1}{c}{MOE}\\
+\midrule
+All Households & 158,748 & 614 & \$66,915 & \$  885\\
+\hspace{1em}With earnings & 85.9\% & 0.6\% & \$74,620 & \$  970\\
+\hspace{1em}With interest, dividends or net rental income & 15.1\% & 0.6\% & \$12,903 & \$1,562\\
+\hspace{1em}With Social Security income & 21.8\% & 0.5\% & \$17,866 & \$  432\\
+\hspace{1em}With Supplemental Security Income (SSI) & 4.3\% & 0.4\% & \$10,375 & \$1,084\\
+\addlinespace
+\hspace{1em}With cash public assistance income & 2.1\% & 0.2\% & \$ 3,196 & \$  535\\
+\hspace{1em}With retirement income & 14.3\% & 0.5\% & \$24,114 & \$2,020\\
+\bottomrule
+\multicolumn{25}{l}{\textit{Note: }}\\
+\multicolumn{25}{l}{Source: U.S. Census Bureau, 2012-2016 American Community Survey, Print Date: 10/29/2018}\\
+\end{tabular}
+\end{table}\FloatBarrierThe Houselold Income Source(s) Table shows household income sources and amounts for housholds in Adams County.  Households will have multiple sources of income, so this table is not mutually exclusive.  Mean income values reflect values from the cited source.
+
+\end{document}
+

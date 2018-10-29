@@ -38,7 +38,20 @@ if (!require("flextable"))
 }
 library(flextable)
 
-
+source("R/popPlace.R")
+source("R/statsTable1.R")
+source("R/dashboardMAP.R")
+source("R/popTable.R")
+source("R/pop_timeseries.R")
+source("R/medianAgeTab.R")
+source("R/raceTab1.R")
+source("R/raceTab2.R")
+source("R/OOHouse.R")
+source("R/RTHouse.R")
+source("R/HouseVal.R")
+source("R/GenerateVenn.R")
+source("R/baseIndustries.R")
+source("R/incomeSrc.R")
 
 
 
