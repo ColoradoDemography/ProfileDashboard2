@@ -1,6 +1,6 @@
 #' Colorado Demographic Profiles
 #' @author  Adam Bickford, Colorado State Demography Office, November 2017-March 2018
-#' Release Version 1.0 4/13/2018
+#' Release Version 2.0 10/31/2018
 
 rm(list = ls())
 
@@ -38,20 +38,7 @@ if (!require("flextable"))
 }
 library(flextable)
 
-source("R/popPlace.R")
-source("R/statsTable1.R")
-source("R/dashboardMAP.R")
-source("R/popTable.R")
-source("R/pop_timeseries.R")
-source("R/medianAgeTab.R")
-source("R/raceTab1.R")
-source("R/raceTab2.R")
-source("R/OOHouse.R")
-source("R/RTHouse.R")
-source("R/HouseVal.R")
-source("R/GenerateVenn.R")
-source("R/baseIndustries.R")
-source("R/incomeSrc.R")
+
 
 
 
@@ -124,7 +111,7 @@ ui <-
                  dashboardSidebar( width = 300,  useShinyjs(),
                                    # data level Drop down
                                    selectInput("level", "Select Data Level" ,
-                                               choices=c("Select a Data Level","Counties","Municipalities","Region")  #Enabled in V1
+                                               choices=c("Select a Data Level","Counties","Municipalities")  #Enabled in V1
                                    ),
                                    
                                    # profile Unit dropdown
@@ -288,7 +275,7 @@ server <- function(input, output, session) {
   # updates Dropdown boxes and selects data level and unit
   CountyList <- popPlace("Counties",curYr)
   PlaceList <- popPlace("Municipalities",curYr)
-  RegionList <- popPlace("Region",curYr)
+  #RegionList <- popPlace("Region",curYr)
 
   observeEvent(input$level, ({
     shinyjs::hide("outputPDF")
@@ -299,16 +286,16 @@ server <- function(input, output, session) {
       outUnit <- ""
       outComp <- ""
     }
-    if(input$level == "Region") {  # Added 9/18
-             outUnit <-  RegionList
-          }
+  #  if(input$level == "Region") {  # Added 9/18
+  #           outUnit <-  RegionList
+  #        }
     if(input$level == "Counties") {
       outUnit <- unique(as.list(CountyList[,3]))
-      outComp <- c("Selected County Only", "Counties in Planning Region", "Custom List of Counties (Select Below)","State")
+  #    outComp <- c("Selected County Only", "Counties in Planning Region", "Custom List of Counties (Select Below)","State")
     }
     if(input$level == "Municipalities") {  
       outUnit <- unique(as.list(PlaceList[,3]))
-      outComp <- c("Selected Municipality Only", "Similar Municipalities", "County", "Custom List of Municipalities (Select Below)", "State")
+  #    outComp <- c("Selected Municipality Only", "Similar Municipalities", "County", "Custom List of Municipalities (Select Below)", "State")
     }
     
     updateSelectInput(session, "unit", choices = outUnit)
@@ -376,20 +363,18 @@ server <- function(input, output, session) {
           # creating output files
           #HTML table
           dput(stat_List$Htable,fileMat[1])
-          # Flextable table
-          doc1 <- read_docx()
-          doc1 <- body_add_flextable(doc1, value = stat_List$FlexTable)
-          print(doc1, target = fileMat[2])
-  
+
           #Latex File
-          dput(stat_List$Ltable, fileMat[3])
-          #Plain Text
-          dput(stat_List$text,fileMat[4])
-          #Images
-          ggsave(fileMat[5],stat_map, device="png")
-          ggsave(fileMat[6],stat_map, device="png")
+          dput(stat_List$Ltable, fileMat[2])
           
-          img_List1 <- list(src = fileMat[5], contentType = 'image/png', width = 500, height = 300)
+          #Plain Text
+          dput(stat_List$text,fileMat[3])
+          
+          #Images
+          ggsave(fileMat[4],stat_map, device="png")
+          ggsave(fileMat[5],stat_map, device="png")
+          
+          img_List1 <- list(src = fileMat[4], contentType = 'image/png', width = 500, height = 300)
           
           Stats.info <- tags$div(class="dInfo","Individual plots and data may be downloaded by selecting the 'Sources and Downloads' tabl in each display box.",tags$br(),
                                  "Note: County data is displayed for municipalities and places with fewer than 200 people.",tags$br(), tags$br(),
@@ -424,30 +409,29 @@ server <- function(input, output, session) {
           
           # creating output files
           #HTML table
-          dput(popf1$Htable,fileMat[7])
-          # Flextable table
-          docP1 <- read_docx()
-          docP1 <- body_add_flextable(docP1, value = popf1$FlexTable)
-          print(docP1, target = fileMat[8])
-          
+          dput(popf1$Htable,fileMat[6])
+
           #Latex File
-          dput(popf1$Ltable, fileMat[9])
-          #Plain Text
-          dput(popf1$text,fileMat[10])
-          ggsave(fileMat[11],popf2$plot, device="png")
-          ggsave(fileMat[12],popf2$plot, device="png")
-          ggsave(fileMat[13],popf3$plot, device="png")
-          ggsave(fileMat[14],popf3$plot, device="png")
+          dput(popf1$Ltable, fileMat[7])
           
-          dput(popf3$text,fileMat[15])
-          ggsave(fileMat[16],popf4$plot, device="png")
-          ggsave(fileMat[17],popf4$plot, device="png")
-          dput(popf4$text,fileMat[18])
+          #Plain Text
+          dput(popf1$text,fileMat[8])
+          
+          #Images
+          ggsave(fileMat[9],popf2$plot, device="png")
+          ggsave(fileMat[10],popf2$plot, device="png")
+          ggsave(fileMat[11],popf3$plot, device="png")
+          ggsave(fileMat[12],popf3$plot, device="png")
+          
+          dput(popf3$text,fileMat[13])
+          ggsave(fileMat[14],popf4$plot, device="png")
+          ggsave(fileMat[15],popf4$plot, device="png")
+          dput(popf4$text,fileMat[16])
         
           
-          img_List2 <- list(src = fileMat[11], contentType = 'image/png', width = 500, height = 300)
-          img_List3 <- list(src = fileMat[13], contentType = 'image/png', width = 500, height = 300)
-          img_List4 <- list(src = fileMat[16], contentType = 'image/png', width = 500, height = 300)
+          img_List2 <- list(src = fileMat[9], contentType = 'image/png', width = 500, height = 300)
+          img_List3 <- list(src = fileMat[11], contentType = 'image/png', width = 500, height = 300)
+          img_List4 <- list(src = fileMat[14], contentType = 'image/png', width = 500, height = 300)
           
           
           #infobox Objects
@@ -506,7 +490,7 @@ server <- function(input, output, session) {
           }
           # Bind to boxes
           popf1.box <- tabBox(width=6, height=400,
-                              tabPanel("Table",tags$div(class="cleanTab", HTML(dget(fileMat[7])))),
+                              tabPanel("Table",tags$div(class="cleanTab", HTML(dget(fileMat[6])))),
                               tabPanel("Sources and Downloads",popf1.info))
           popf2.box <- tabBox(width=6, height=400,
                               tabPanel("Plot", renderImage({img_List2})),
@@ -534,34 +518,30 @@ server <- function(input, output, session) {
           popa3 <<- ageForecastPRO(listID=idList,sYr=2010,mYr=2015,eYr=2025,base=12)
           popa4 <<- migbyagePRO(listID=idList)
           
-          ggsave(fileMat[19],popa1$plot, device="png")
-          ggsave(fileMat[20],popa1$plot, device="png")
-          dput(popa1$text,fileMat[21])
+          ggsave(fileMat[17],popa1$plot, device="png")
+          ggsave(fileMat[18],popa1$plot, device="png")
+          dput(popa1$text,fileMat[19])
           
-          ggsave(fileMat[22],popa2$plot, device="png")
-          ggsave(fileMat[23],popa2$plot, device="png")
+          ggsave(fileMat[20],popa2$plot, device="png")
+          ggsave(fileMat[21],popa2$plot, device="png")
           
-          dput(popa2$Htable,fileMat[24])
-          # Flextable table
-          docP2 <- read_docx()
-          docP2 <- body_add_flextable(docP2, value = popa2$FlexTable)
-          print(docP2, target = fileMat[25])
+          dput(popa2$Htable,fileMat[22])
+
+          dput(popa2$Ltable, fileMat[23])
+          dput(popa2$text, fileMat[24])
           
-          dput(popa2$Ltable, fileMat[26])
-          dput(popa2$text, fileMat[27])
+          ggsave(fileMat[25],popa3$plot, device="png")
+          ggsave(fileMat[26],popa3$plot, device="png")
+          dput(popa3$text,fileMat[27])
           
-          ggsave(fileMat[28],popa3$plot, device="png")
-          ggsave(fileMat[29],popa3$plot, device="png")
-          dput(popa3$text,fileMat[30])
+          ggsave(fileMat[28],popa4$plot, device="png")
+          ggsave(fileMat[29],popa4$plot, device="png")
+          dput(popa4$text,fileMat[30])
           
-          ggsave(fileMat[31],popa4$plot, device="png")
-          ggsave(fileMat[32],popa4$plot, device="png")
-          dput(popa4$text,fileMat[33])
-          
-          img_List5 <- list(src = fileMat[19], contentType = 'image/png', width = 500, height = 300)
-          img_List6 <- list(src = fileMat[22], contentType = 'image/png', width = 500, height = 300)
-          img_List7 <- list(src = fileMat[28], contentType = 'image/png', width = 500, height = 300)
-          img_List8 <- list(src = fileMat[31], contentType = 'image.png', width = 500, height = 300)
+          img_List5 <- list(src = fileMat[17], contentType = 'image/png', width = 500, height = 300)
+          img_List6 <- list(src = fileMat[20], contentType = 'image/png', width = 500, height = 300)
+          img_List7 <- list(src = fileMat[25], contentType = 'image/png', width = 500, height = 300)
+          img_List8 <- list(src = fileMat[28], contentType = 'image.png', width = 500, height = 300)
           
           
           #Info Boxes
@@ -657,34 +637,28 @@ server <- function(input, output, session) {
           popc4 <<- raceTab2(listID=idList, ACS=curACS)
           
           #Income
-          ggsave(fileMat[34],popc1$plot, device="png")
-          ggsave(fileMat[35],popc1$plot, device="png")
-          dput(popc1$text,fileMat[36])
+          ggsave(fileMat[31],popc1$plot, device="png")
+          ggsave(fileMat[32],popc1$plot, device="png")
+          dput(popc1$text,fileMat[33])
           
           # Education
-          ggsave(fileMat[37],popc2$plot, device="png")
-          ggsave(fileMat[38],popc2$plot, device="png")
+          ggsave(fileMat[34],popc2$plot, device="png")
+          ggsave(fileMat[35],popc2$plot, device="png")
           
           #Race 1
-          dput(popc3$Htable,fileMat[39])
-          # Flextable table
-          docP3 <- read_docx()
-          docP3 <- body_add_flextable(docP3, value = popc3$FlexTable)
-          print(docP3, target = fileMat[40])
-          dput(popc3$Ltable, fileMat[41])
-          dput(popc3$text, fileMat[42])
+          dput(popc3$Htable,fileMat[36])
+
+          dput(popc3$Ltable, fileMat[37])
+          dput(popc3$text, fileMat[38])
           
           #Race 2
-          dput(popc4$Htable,fileMat[43])
-          # Flextable table
-          docP4 <- read_docx()
-          docP4 <- body_add_flextable(docP4, value = popc4$FlexTable)
-          print(docP4, target = fileMat[44])
-          dput(popc4$Ltable, fileMat[45])
-          dput(popc4$text, fileMat[46])
+          dput(popc4$Htable,fileMat[39])
+
+          dput(popc4$Ltable, fileMat[40])
+          dput(popc4$text, fileMat[41])
           
-          img_List9 <- list(src = fileMat[34], contentType = 'image/png', width = 500, height = 300)
-          img_List10 <- list(src = fileMat[37], contentType = 'image/png', width = 500, height = 300)
+          img_List9 <- list(src = fileMat[31], contentType = 'image/png', width = 500, height = 300)
+          img_List10 <- list(src = fileMat[34], contentType = 'image/png', width = 500, height = 300)
           
           #Contents of Information Tabs
           popc1.info <- tags$div(boxContent(title= "Household Income",
@@ -729,10 +703,10 @@ server <- function(input, output, session) {
                               tabPanel("Plot",renderImage({img_List10})),
                               tabPanel("Sources and Downloads",popc2.info))
           popc3.box <- tabBox(width=6, height=500,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[39])))),
+                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[36])))),
                               tabPanel("Sources and Downloads",popc3.info))
           popc4.box <- tabBox(width=6, height=500,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[43])))),
+                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[39])))),
                               tabPanel("Sources and Downloads",popc4.info))
           
           
@@ -751,51 +725,36 @@ server <- function(input, output, session) {
           poph5 <<- HouseVal(listID=idList,ACS=curACS) # Comparative Value of Housing both OO and Rental
 
           #Housing Estimate
-          ggsave(fileMat[47],poph1$plot, device="png")
-          ggsave(fileMat[48],poph1$plot, device="png")
-          dput(poph1$text,fileMat[49])
+          ggsave(fileMat[42],poph1$plot, device="png")
+          ggsave(fileMat[43],poph1$plot, device="png")
+          dput(poph1$text,fileMat[44])
           
-          img_List11 <- list(src = fileMat[47], contentType = 'image/png', width = 500, height = 300)
+          img_List11 <- list(src = fileMat[42], contentType = 'image/png', width = 500, height = 300)
           
           #Housing Unit Table
-          dput(poph2$Htable,fileMat[50])
-          # Flextable table
-          docH1 <- read_docx()
-          docH1 <- body_add_flextable(docH1, value = poph2$FlexTable)
-          print(docH1, target = fileMat[51])
-          dput(poph2$Ltable, fileMat[52])
+          dput(poph2$Htable,fileMat[45])
+
+          dput(poph2$Ltable, fileMat[46])
           
           #Housing Value Owner Occupied
-          dput(poph5$HtableOO,fileMat[53])
-          # Flextable table
-          docH2 <- read_docx()
-          docH2 <- body_add_flextable(docH2, value = poph5$FlexTableOO)
-          print(docH2, target = fileMat[54])
-          dput(poph5$LtableOO, fileMat[55])
-          
+          dput(poph5$HtableOO,fileMat[47])
+
+          dput(poph5$LtableOO, fileMat[48])
+   
           #Housing Value Rental
-          dput(poph5$HtableRT,fileMat[56])
-          # Flextable table
-          docH3 <- read_docx()
-          docH3 <- body_add_flextable(docH3, value = poph5$FlexTableRT)
-          print(docH3, target = fileMat[57])
-          dput(poph5$LtableRT, fileMat[58])
+          dput(poph5$HtableRT,fileMat[49])
+
+          dput(poph5$LtableRT, fileMat[50])
           
           #Housing Characteristics Owner Occupied
-          dput(poph3$Htable,fileMat[59])
-          # Flextable table
-          docH4 <- read_docx()
-          docH4 <- body_add_flextable(docH4, value = poph3$FlexTable)
-          print(docH4, target = fileMat[60])
-          dput(poph3$Ltable, fileMat[61])
+          dput(poph3$Htable,fileMat[51])
+
+          dput(poph3$Ltable, fileMat[52])
           
           #Housing Value Rental
-          dput(poph4$Htable,fileMat[62])
-          # Flextable table
-          docH5 <- read_docx()
-          docH5 <- body_add_flextable(docH5, value = poph4$FlexTable)
-          print(docH5, target = fileMat[63])
-          dput(poph4$LtableRT, fileMat[64])
+          dput(poph4$Htable,fileMat[53])
+
+          dput(poph4$Ltable, fileMat[54])
           
           #Contents of Information Tabs
           poph1.info <- tags$div(boxContent(title= "Household Projection",
@@ -847,19 +806,19 @@ server <- function(input, output, session) {
                               tabPanel("Plot",renderImage({img_List11})),
                               tabPanel("Sources and Downloads",poph1.info))
           poph2.box <- tabBox(width=6, height=400,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[50])))),
+                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[45])))),
                               tabPanel("Sources and Downloads",poph2.info))
           poph5.box <- tabBox(width=6, height = 325,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[53])))),
+                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[47])))),
                               tabPanel("Sources and Downloads",poph5.info))
           poph6.box <- tabBox(width=6, height = 325,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[56])))),
+                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[49])))),
                               tabPanel("Sources and Downloads",poph6.info))
           poph3.box <- tabBox(width=6, height=350,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[59])))),
+                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[51])))),
                               tabPanel("Sources and Downloads",poph3.info))
           poph4.box <- tabBox(width=6, height=350,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[62])))),
+                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[53])))),
                               tabPanel("Sources and Downloads",poph4.info))
           
           
@@ -877,37 +836,31 @@ server <- function(input, output, session) {
           popt2 <<- jobMigration(listID=idList,maxyr = curYr)
           
           #Venn Diagram
-          ggsave(fileMat[65],popt1$plot, device="png")
-          ggsave(fileMat[66],popt1$plot, device="png")
-          img_List12 <- list(src = fileMat[65], contentType = 'image/png', width = 500, height = 300)
+          ggsave(fileMat[55],popt1$plot, device="png")
+          ggsave(fileMat[56],popt1$plot, device="png")
+          img_List12 <- list(src = fileMat[55], contentType = 'image/png', width = 500, height = 300)
           
           
           #Live table HTML, Flex Table and Latex table
           #HTML Table
       
-          dput(popt1$liveTabH,fileMat[67])
-          # Flextable table
-          docH6 <- read_docx()
-          docH6 <- body_add_flextable(docH6, value = popt1$FlexLive)
-          print(docH6, target = fileMat[68])
+          dput(popt1$liveTabH,fileMat[57])
+
           #Latex Table
-          dput(popt1$liveTabL, fileMat[69])
+          dput(popt1$liveTabL, fileMat[58])
           
           #Work table HTML, Flex Table and Latex table
           #HTML Table
-          dput(popt1$workTabH,fileMat[70])
-          # Flextable table
-          docH7 <- read_docx()
-          docH7 <- body_add_flextable(docH7, value = popt1$FlexWork)
-          print(docH7, target = fileMat[71])
+          dput(popt1$workTabH,fileMat[59])
+
           #Latex Table
-          dput(popt1$workTabL, fileMat[72])
+          dput(popt1$workTabL, fileMat[60])
           
           #Jobs and Migration
-          ggsave(fileMat[73],popt2$plot, device="png")
-          ggsave(fileMat[74],popt2$plot, device="png")
-          dput(popt2$text, fileMat[75])
-          img_List13 <- list(src = fileMat[73], contentType = 'image/png', width = 500, height = 300)
+          ggsave(fileMat[61],popt2$plot, device="png")
+          ggsave(fileMat[62],popt2$plot, device="png")
+          dput(popt2$text, fileMat[63])
+          img_List13 <- list(src = fileMat[61], contentType = 'image/png', width = 500, height = 300)
           
           #Contents of Information Tabs
           popt1.info <- tags$div(boxContent(title= "Commuting Patterns Plot",
@@ -946,10 +899,10 @@ server <- function(input, output, session) {
                               tabPanel("Plot",renderImage({img_List12})),
                               tabPanel("Sources and Downloads",popt1.info))
           popt2.box <- tabBox(width=6, height=400,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[67])))),
+                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[57])))),
                               tabPanel("Sources and Downloads",popt3.info))
           popt3.box <- tabBox(width=6, height=400,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[70])))),
+                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[59])))),
                               tabPanel("Sources and Downloads",popt2.info))
           popt4.box <- tabBox(width=6, height=400,
                               tabPanel("Plot",renderImage({img_List13})),
@@ -968,36 +921,31 @@ server <- function(input, output, session) {
           popei3 <<- baseIndustries(listID=idList, curyr = curYr)
           
           #JobsPlot
-          ggsave(fileMat[76],popei1$plot, device="png")
-          ggsave(fileMat[77],popei1$plot, device="png")
-          dput(popei1$text, fileMat[78])
-          img_List14 <- list(src = fileMat[76], contentType = 'image/png', width = 500, height = 300)
+          ggsave(fileMat[64],popei1$plot, device="png")
+          ggsave(fileMat[65],popei1$plot, device="png")
+          dput(popei1$text, fileMat[66])
+          img_List14 <- list(src = fileMat[64], contentType = 'image/png', width = 500, height = 300)
           
           #Jobs by Industry
-          ggsave(fileMat[79],popei2$plot, device="png")
-          ggsave(fileMat[80],popei2$plot, device="png")
-          dput(popei2$text1, fileMat[81])
-          dput(popei2$text2, fileMat[82])
-          img_List15 <- list(src = fileMat[79], contentType = 'image/png', width = 500, height = 300)
+          ggsave(fileMat[67],popei2$plot, device="png")
+          ggsave(fileMat[68],popei2$plot, device="png")
+          dput(popei2$text1, fileMat[69])
+          dput(popei2$text2, fileMat[70])
+          img_List15 <- list(src = fileMat[67], contentType = 'image/png', width = 500, height = 300)
           
           #base Industries
           #Plot
-          ggsave(fileMat[83],popei3$plot, device="png")
-          ggsave(fileMat[84],popei3$plot, device="png")
-          img_List16 <- list(src = fileMat[83], contentType = 'image/png', width = 500, height = 300)
+          ggsave(fileMat[71],popei3$plot, device="png")
+          ggsave(fileMat[72],popei3$plot, device="png")
+          img_List16 <- list(src = fileMat[71], contentType = 'image/png', width = 500, height = 300)
           
           # HTML Table
-          dput(popei3$Htable, fileMat[85])
-          
-          # Flextable table
-          docH8 <- read_docx()
-          docH8 <- body_add_flextable(docH8, value = popei3$FlexTable)
-          print(docH8, target = fileMat[86])
+          dput(popei3$Htable, fileMat[73])
           
           #latex Table
-          dput(popei2$Ltable, fileMat[87])
+          dput(popei2$Ltable, fileMat[74])
           #Text
-          dput(popei2$text, fileMat[88])
+          dput(popei2$text, fileMat[75])
           
           
           
@@ -1046,7 +994,7 @@ server <- function(input, output, session) {
                                tabPanel("Plot",renderImage({img_List16})),
                                tabPanel("Sources and Downloads",popei3.info))
           popei4.box <- tabBox(width=6, height=400,
-                               tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[85])))),
+                               tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[73])))),
                                tabPanel("Sources and Downloads",popei4.info))
           
           #Append to List
@@ -1063,36 +1011,31 @@ server <- function(input, output, session) {
           popem4 <<- incomeSrc(level=input$level,listID=idList,ACS=curACS)  
 
           #JobsPopForecast
-          ggsave(fileMat[89],popem1$plot, device="png")
-          ggsave(fileMat[90],popem1$plot, device="png")
-          dput(popem1$text, fileMat[91])
-          img_List17 <- list(src = fileMat[89], contentType = 'image/png', width = 500, height = 300)
+          ggsave(fileMat[76],popem1$plot, device="png")
+          ggsave(fileMat[77],popem1$plot, device="png")
+          dput(popem1$text, fileMat[78])
+          img_List17 <- list(src = fileMat[76], contentType = 'image/png', width = 500, height = 300)
           
           #weeklyWages
-          ggsave(fileMat[92],popem2$plot, device="png")
-          ggsave(fileMat[93],popem2$plot, device="png")
-          dput(popem2$text, fileMat[94])
-          img_List18 <- list(src = fileMat[92], contentType = 'image/png', width = 500, height = 300)
+          ggsave(fileMat[79],popem2$plot, device="png")
+          ggsave(fileMat[80],popem2$plot, device="png")
+          dput(popem2$text, fileMat[81])
+          img_List18 <- list(src = fileMat[79], contentType = 'image/png', width = 500, height = 300)
           
           #residentialLF
-          ggsave(fileMat[95],popem3$plot, device="png")
-          ggsave(fileMat[96],popem3$plot, device="png")
-          dput(popem3$text, fileMat[97])
-          img_List19 <- list(src = fileMat[95], contentType = 'image/png', width = 500, height = 300)
+          ggsave(fileMat[82],popem3$plot, device="png")
+          ggsave(fileMat[83],popem3$plot, device="png")
+          dput(popem3$text, fileMat[84])
+          img_List19 <- list(src = fileMat[82], contentType = 'image/png', width = 500, height = 300)
           
           #incomeSrc
           # HTML Table
-          dput(popem4$Htable, fileMat[98])
-          
-          # Flextable table
-          docH9 <- read_docx()
-          docH9 <- body_add_flextable(docH9, value = popem4$FlexTable)
-          print(docH9, target = fileMat[99])
+          dput(popem4$Htable, fileMat[85])
           
           #latex Table
-          dput(popem4$Ltable, fileMat[100])
+          dput(popem4$Ltable, fileMat[86])
           #Text
-          dput(popem4$text, fileMat[101])
+          dput(popem4$text, fileMat[87])
           
           
           
@@ -1140,7 +1083,7 @@ server <- function(input, output, session) {
                                tabPanel("Plot",renderImage({img_List19})),
                                tabPanel("Sources and Downloads",popem3.info))
           popem4.box <- tabBox(width=6, height=400,
-                               tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[98])))),
+                               tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[85])))),
                                tabPanel("Sources and Downloads",popem4.info))
           
           
@@ -1213,11 +1156,11 @@ server <- function(input, output, session) {
     
     #Basic Statistics
     # Check this
-    callModule(downloadObj, id = "statstabl", simpleCap(input$unit), "statstabl", fileMat[2])
+    callModule(downloadObj, id = "statstabl", simpleCap(input$unit), "statstabl", stat_List$FlexTable)
     
     #Population Forecast
     
-    callModule(downloadObj, id = "popf1tabl", simpleCap(input$unit), "popf1tabl", fileMat[8])
+    callModule(downloadObj, id = "popf1tabl", simpleCap(input$unit), "popf1tabl", popf1$FlexTable)
     callModule(downloadObj, id = "popf1data", simpleCap(input$unit), "popf1data", popf1$data)
     
     callModule(downloadObj, id = "popf2plot", simpleCap(input$unit),"popf2plot", popf2$plot)
@@ -1234,7 +1177,7 @@ server <- function(input, output, session) {
     callModule(downloadObj, id = "popa1data", simpleCap(input$unit),"popa1data", popa1$data)
     
     callModule(downloadObj, id = "popa2plot", simpleCap(input$unit),"popa2plot", popa2$plot)
-    callModule(downloadObj, id = "popa2tabl", simpleCap(input$unit),"popa2tabl", fileMat[25])
+    callModule(downloadObj, id = "popa2tabl", simpleCap(input$unit),"popa2tabl", popa2$FlexTable)
     callModule(downloadObj, id = "popa2data", simpleCap(input$unit),"popa2data", popa2$data)
     
     callModule(downloadObj, id = "popa3plot", simpleCap(input$unit), "popa3plot", popa3$plot)
@@ -1250,39 +1193,39 @@ server <- function(input, output, session) {
     callModule(downloadObj, id = "popc2plot", simpleCap(input$unit),"popc2plot", popc2$plot)
     callModule(downloadObj, id = "popc2data", simpleCap(input$unit),"popc2data", popc2$data)
     
-    callModule(downloadObj, id = "popc3tabl", simpleCap(input$unit), "popc3tabl", fileMat[40])
+    callModule(downloadObj, id = "popc3tabl", simpleCap(input$unit), "popc3tabl", popc3$FlexTable)
     callModule(downloadObj, id = "popc3data", simpleCap(input$unit), "popc3data", popc3$data)
     
     
-    callModule(downloadObj, id = "popc4tabl", simpleCap(input$unit), "popc4tabl", fileMat[44])
+    callModule(downloadObj, id = "popc4tabl", simpleCap(input$unit), "popc4tabl", popc4$FlexTable)
     callModule(downloadObj, id = "popc4data", simpleCap(input$unit), "popc4data", popc4$data)
     
     #Housing
     callModule(downloadObj, id = "poph1plot", simpleCap(input$unit),"poph1plot", poph1$plot)
     callModule(downloadObj, id = "poph1data", simpleCap(input$unit),"poph1data", poph1$data)
     
-    callModule(downloadObj, id = "poph2tabl", simpleCap(input$unit),"poph2tabl", fileMat[51])
+    callModule(downloadObj, id = "poph2tabl", simpleCap(input$unit),"poph2tabl", poph2$FlexTable)
     callModule(downloadObj, id = "poph2data", simpleCap(input$unit),"poph2data", poph2$data)
     
-    callModule(downloadObj, id = "poph3tabl", simpleCap(input$unit),"poph3tabl", fileMat[60])
+    callModule(downloadObj, id = "poph3tabl", simpleCap(input$unit),"poph3tabl", poph3$FlexTable)
     callModule(downloadObj, id = "poph3data", simpleCap(input$unit), "poph3data", poph3$data)
     
-    callModule(downloadObj, id = "poph4tabl", simpleCap(input$unit),"poph4tabl", fileMat[63])
+    callModule(downloadObj, id = "poph4tabl", simpleCap(input$unit),"poph4tabl", poph4$FlexTable)
     callModule(downloadObj, id = "poph4data", simpleCap(input$unit), "poph4data", poph4$data)
     
-    callModule(downloadObj, id = "poph5tabl", simpleCap(input$unit),"poph5tabl", fileMat[54])
+    callModule(downloadObj, id = "poph5tabl", simpleCap(input$unit),"poph5tabl", poph5$FlexTableOO)
     callModule(downloadObj, id = "poph5data", simpleCap(input$unit), "poph5data", poph5$data)
     
-    callModule(downloadObj, id = "poph6tabl", simpleCap(input$unit),"poph6tabl", fileMat[57])
+    callModule(downloadObj, id = "poph6tabl", simpleCap(input$unit),"poph6tabl", poph5$FlexTableRT)
     callModule(downloadObj, id = "poph6data", simpleCap(input$unit), "poph6data", poph5$data)
     
     #commuting
     callModule(downloadObj, id = "popt1plot", simpleCap(input$unit),"popt1plot", popt1$plot)
     
-    callModule(downloadObj, id = "popt2tabl", simpleCap(input$unit),"popt2tabl", fileMat[68])
+    callModule(downloadObj, id = "popt2tabl", simpleCap(input$unit),"popt2tabl", popt1$FlexLive)
     callModule(downloadObj, id = "popt2data", simpleCap(input$unit),"popt2data", popt1$data1)
     
-    callModule(downloadObj, id = "popt3tabl", simpleCap(input$unit),"popt3tabl", fileMat[71])
+    callModule(downloadObj, id = "popt3tabl", simpleCap(input$unit),"popt3tabl", popt1$FlexWork)
     callModule(downloadObj, id = "popt3data", simpleCap(input$unit),"popt3data", popt1$data2)
     
     callModule(downloadObj, id = "popt4plot", simpleCap(input$unit),"popt4plot", popt2$plot)
@@ -1295,7 +1238,7 @@ server <- function(input, output, session) {
     callModule(downloadObj, id = "popei2data", simpleCap(input$unit),"popei2data", popei2$data)
     callModule(downloadObj, id = "popei3plot", simpleCap(input$unit),"popei3plot", popei3$plot)
     callModule(downloadObj, id = "popei3data", simpleCap(input$unit),"popei3data", popei3$data1)
-    callModule(downloadObj, id = "popei4tabl", simpleCap(input$unit),"popei4tabl", fileMat[86])
+    callModule(downloadObj, id = "popei4tabl", simpleCap(input$unit),"popei4tabl", popei3$FlexTable)
     callModule(downloadObj, id = "popei4data", simpleCap(input$unit),"popei4data", popei3$data2)
     
     #Employment and Demographic Forecast
@@ -1306,7 +1249,7 @@ server <- function(input, output, session) {
     callModule(downloadObj, id = "popem3plot", simpleCap(input$unit),"popem3plot", popem3$plot)
     callModule(downloadObj, id = "popem3data", simpleCap(input$unit),"popem3data", popem3$data)
     
-    callModule(downloadObj, id = "popem4tabl", simpleCap(input$unit),"popem4tabl", fileMat[99])
+    callModule(downloadObj, id = "popem4tabl", simpleCap(input$unit),"popem4tabl", popem4$FlexTable)
     callModule(downloadObj, id = "popem4data", simpleCap(input$unit),"popem4data", popem4$data)
     
   }) #observeEvent input$profile

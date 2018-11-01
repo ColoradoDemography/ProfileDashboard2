@@ -125,9 +125,9 @@ if("stats" %in% unlist(outChk)) {
     OutText <- paste0(OutText,"\\end{flushleft}")
 return(OutText)
 }
-  s5r <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[6]),"}}")  #Images
-  s3r <- dget(filemat[3])  #Latex table
-  s4r <- dget(filemat[4])  #Plain Text
+  s5r <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[5]),"}}")  #Images
+  s3r <- dget(filemat[2])  #Latex table
+  s4r <- dget(filemat[3])  #Plain Text
   cat("\\section*{Basic Statistics}")
   cat("\\FloatBarrier")
   cat("\\begin{figure}[ht!]")
@@ -196,13 +196,13 @@ if("popf" %in% unlist(outChk)) {
  return(OutText)
 }
   
-    popf1r <- dget(filemat[9])  #Latex table
-    popf1t <- dget(filemat[10])  #Plain Text
-    popf2r <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[12]),"}}")  #Images
-    popf3r <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[14]),"}}")  #Images
-    popf3t <- dget(filemat[15])  #Plain Text
-    popf4r <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[17]),"}}")  #Images
-    popf4t <- dget(filemat[18])  #Plain Text
+    popf1r <- dget(filemat[7])  #Latex table
+    popf1t <- dget(filemat[8])  #Plain Text
+    popf2r <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[10]),"}}")  #Images
+    popf3r <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[12]),"}}")  #Images
+    popf3t <- dget(filemat[13])  #Plain Text
+    popf4r <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[15]),"}}")  #Images
+    popf4t <- dget(filemat[16])  #Plain Text
     
    cat("\\section*{Population Trends}")
   cat(popTrendText(olevel,olistID))
@@ -245,19 +245,19 @@ if("pop" %in% unlist(outChk)) {
     OutText <- paste0(OutText,"  due to changes in spending on taxable goods.")
     return(OutText)
 }
-    popa1p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[23]),"}}")  #Median age Image
-    popa1r <- dget(filemat[26])  # Median Age Table
-    popa1t <- dget(filemat[27])  # Median age Text
+    popa1p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[21]),"}}")  #Median age Image
+    popa1r <- dget(filemat[23])  # Median Age Table
+    popa1t <- dget(filemat[24])  # Median age Text
     
     
-    popa2p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[20]),"}}")  #age Plot Plot
-    popa2t <- dget(filemat[21])  # Age Plot Text
+    popa2p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[18]),"}}")  #age Plot Plot
+    popa2t <- dget(filemat[19])  # Age Plot Text
     
-    popa3p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[29]),"}}")  #age Forecast Plot
-    popa3t <- dget(filemat[30])  # Age Forecast Text
+    popa3p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[26]),"}}")  #age Forecast Plot
+    popa3t <- dget(filemat[27])  # Age Forecast Text
 
-    popa4p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[32]),"}}")  #Migration by Age Plot
-    popa4t <- dget(filemat[33])  # Migration by Age Text
+    popa4p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[29]),"}}")  #Migration by Age Plot
+    popa4t <- dget(filemat[30])  # Migration by Age Text
 
 
   cat("\\section*{Age Characteristics}")
@@ -324,16 +324,16 @@ educText <- function() {
    return(OutText)
 }
  
-    popc1p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[35]),"}}")  #Income Plot
-    popc1t <- dget(filemat[36])  # Income Text
+    popc1p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[32]),"}}")  #Income Plot
+    popc1t <- dget(filemat[33])  # Income Text
     
-   popc2p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[38]),"}}")  #Education Plot
+   popc2p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[35]),"}}")  #Education Plot
    
-   popc3r <- dget(filemat[41])  #Race 1 table
-   popc3t <- dget(filemat[42])
+   popc3r <- dget(filemat[37])  #Race 1 table
+   popc3t <- dget(filemat[38])
    
-   popc4r <- dget(filemat[45])  #Race 2 table
-   popc4t <- dget(filemat[46])
+   popc4r <- dget(filemat[40])  #Race 2 table
+   popc4t <- dget(filemat[41])
 
   cat("\\section*{Population Characteristics: Income, Education and Race}")
   cat(popCText(olistID))
@@ -404,13 +404,14 @@ houseText <- function() {
   return(OutText)
 }  
 
-  poph1p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[48]),"}}")  #Housing Forecast Plot  
-  poph1t <- dget(filemat[49])  #Housing Text
-  poph2r <- dget(filemat[52])  #Housing Unit Table
-  poph3r <- dget(filemat[61])  #Housing Characteristics Table Owner Occupied
-  poph4r <- dget(filemat[64])  #Housing Characteristics Table Rental
-  poph5OO <- dget(filemat[55])  #Housing Value Table Owner Occupied
-  poph5RT <- dget(filemat[58])  #Housing Value Table Rental
+  poph1p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[43]),"}}")  #Housing Forecast Plot  
+  poph1t <- dget(filemat[44])  #Housing Text
+  poph2r <- dget(filemat[46])  #Housing Unit Table
+  poph5OO <- dget(filemat[48])  #Housing Value Table Owner Occupied
+  poph5RT <- dget(filemat[50])  #Housing Value Table Rental
+  poph3r <- dget(filemat[52])  #Housing Characteristics Table Owner Occupied
+  poph4r <- dget(filemat[54])  #Housing Characteristics Table Rental
+
 
   cat("\\section*{Housing and Households}")
   cat(houseText())
@@ -468,11 +469,11 @@ liveText <- function() {
    OutText <- paste0(OutText,"\\end{flushleft}")
    return(OutText)
 }
-    popt1p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[66]),"}}")  #Venn Diagram Plot 
-    popt1L <- dget(filemat[69])
-    popt1W <- dget(filemat[72])
-    popt2p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[74]),"}}")  #Jobs Migration Plot 
-    popt2t <- dget(filemat[75])
+    popt1p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[56]),"}}")  #Venn Diagram Plot 
+    popt1L <- dget(filemat[58])
+    popt1W <- dget(filemat[60])
+    popt2p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[62]),"}}")  #Jobs Migration Plot 
+    popt2t <- dget(filemat[63])
 
   cat("\\section*{Commuting}")
   cat(commintroText())
@@ -512,14 +513,14 @@ if("emplind" %in% unlist(outChk)) {
   return(OutText)
 }
 
-  popei1p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[77]),"}}")  #Jobs Plot Plot
-  popei1t <- dget(filemat[78])
-  popei2r <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[80]),"}}")  #Jobs By indiustry Plot
-  popei2t1 <- dget(filemat[81])
-  popei2t2 <- dget(filemat[82])
-  popei3p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[84]),"}}")  #Base Industries Plot
-  popei3t1 <- dget(filemat[87])
-  popei3t2 <- dget(filemat[88])
+  popei1p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[65]),"}}")  #Jobs Plot Plot
+  popei1t <- dget(filemat[66])
+  popei2r <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[68]),"}}")  #Jobs By indiustry Plot
+  popei2t1 <- dget(filemat[69])
+  popei2t2 <- dget(filemat[70])
+  popei3p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[72]),"}}")  #Base Industries Plot
+  popei3t1 <- dget(filemat[74])
+  popei3t2 <- dget(filemat[75])
 
 
   cat("\\section*{Employment by Industry}")
@@ -566,14 +567,14 @@ if("emply" %in% unlist(outChk)) {
     return(OutText)
   }
   
-  popem1p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[90]),"}}")  #JbsPopForecast
-  popem1t <- dget(filemat[91])
-  popem2p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[93]),"}}")  #Weekly Wages Plot
-  popem2t <- dget(filemat[94])
-  popem3p <- paste0("\\includegraphics[scale=0.85]{{",fixPath(filemat[96]),"}}")  #Residential LF
-  popem3t <- dget(filemat[97])
-  popem4r <- dget(filemat[100])
-  popem4t <- dget(filemat[101])
+  popem1p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[77]),"}}")  #JobsPopForecast
+  popem1t <- dget(filemat[78])
+  popem2p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[80]),"}}")  #Weekly Wages Plot
+  popem2t <- dget(filemat[81])
+  popem3p <- paste0("\\includegraphics[scale=0.90]{{",fixPath(filemat[83]),"}}")  #Residential LF
+  popem3t <- dget(filemat[84])
+  popem4r <- dget(filemat[86])
+  popem4t <- dget(filemat[87])
   
 
   cat("\\section*{Employment Forecast and Wage Information}")
