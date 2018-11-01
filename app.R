@@ -1168,11 +1168,10 @@ server <- function(input, output, session) {
       },
       content <- function(file) {
         #Generate Report
-     ## capture all the output to a file.
-     zz <- file("all.Rout", open = "wt")
-     sink(zz)
-    wkdir <- getwd()
-        tempReport   <- "SDO_Report.Rnw" 
+       # capture all the output to a file.  Need to find the workign directory, copy the file to the working directory 
+        #from the absolute directory of the file and go from there.
+
+        tempReport   <- "SDO_Report.Rnw") 
         tempTex   <- "SDO_Report.tex"     
         incProgress()
         
