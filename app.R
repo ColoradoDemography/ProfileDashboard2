@@ -1171,8 +1171,8 @@ server <- function(input, output, session) {
       #  if(file.exists("SDO_Report.tex")) file.remove("SDO_Report.tex")
       #  if(file.exists("SDO_Report.pdf")) file.remove("SDO_Report.pdf")
         
-        tempReport   <- "/srv/shiny-server/ProfileDashboard2/SDO_Report.Rnw" 
-        tempTex   <- "/srv/shiny-server/ProfileDashboard2/SDO_Report.tex"     
+        tempReport   <- "./SDO_Report.Rnw" 
+        tempTex   <- "SDO_Report.tex"     
         incProgress()
         
         # Set up parameters to pass to Rnw document
