@@ -1168,9 +1168,10 @@ server <- function(input, output, session) {
       },
       content <- function(file) {
         #Generate Report
-      #  if(file.exists("SDO_Report.tex")) file.remove("SDO_Report.tex")
-      #  if(file.exists("SDO_Report.pdf")) file.remove("SDO_Report.pdf")
-        setwd("/srv/shiny-server/ProfileDashboard2")
+     ## capture all the output to a file.
+     zz <- file("all.Rout", open = "wt")
+     sink(zz)
+    wkdir <- getwd()
         tempReport   <- "SDO_Report.Rnw" 
         tempTex   <- "SDO_Report.tex"     
         incProgress()
