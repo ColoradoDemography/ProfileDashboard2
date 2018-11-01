@@ -53,7 +53,7 @@ cocPlot <- function(listID,fyr=2000,lyr,base=12) {
          caption = captionSrc("SDO",""),
          x = "Year",
          y= "Population Change") +
-    theme(plot.title = element_text(hjust = 0.5, size=18),
+    theme(plot.title = element_text(hjust = 0.5, size=16),
           panel.background = element_rect(fill = "white", colour = "gray50"),
           panel.grid.major = element_line(colour = "gray80"),
           axis.text = element_text(size=12),

@@ -78,7 +78,7 @@ weeklyWages <- function(listID, base=10){
 
   f.plot$geoname <- factor(f.plot$geoname,levels=c(ctyname,"Colorado"))
 
-  pltTitle <- paste0("Average Weekly Wage, in Real (",max(f.plot$year),") Dollars")
+  pltTitle <- paste0("Average Weekly Wage,\nin Real (",max(f.plot$year),") Dollars")
 
   Plot <- f.plot %>%
     ggplot(aes(x=year, y=wages, colour=geoname))+
@@ -98,7 +98,7 @@ weeklyWages <- function(listID, base=10){
          caption = captionSrc("QCEW",""),
          x = "Year",
          y= "Average Weekly Wage") +
-    theme(plot.title = element_text(hjust = 0.5, size=18),
+    theme(plot.title = element_text(hjust = 0.5, size=16),
           panel.background = element_rect(fill = "white", colour = "gray50"),
           panel.grid.major = element_line(colour = "gray80"),
           panel.grid.major.y = element_blank(),

@@ -108,7 +108,7 @@ jobMigration <- function(listID, maxyr, base=10){
          caption = captionSrc("SDOBEA",""),
          x = "Year",
          y= "Number") +
-    theme(plot.title = element_text(hjust = 0.5, size=18),
+    theme(plot.title = element_text(hjust = 0.5, size=16),
           panel.background = element_rect(fill = "white", colour = "gray50"),
           panel.grid.major = element_line(colour = "gray80"),
           legend.key=element_blank(),

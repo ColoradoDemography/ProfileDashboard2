@@ -504,6 +504,6 @@ HouseVal <- function(listID, ACS, state="08"){
       footnote(captionSrc("ACS",ACS))
     
     outList <- list("HtableOO" = Housing_tab1, "HtableRT" = Housing_tab2, "data" = f.HouseVal_Fin,
-                    "FlexTableOO" = FTOO,"FlexTableRT" = FTRT, "LtableOO" = Housing_tab1, "LtableRT" = Housing_tab2)
+                    "FlexTableOO" = FTOO,"FlexTableRT" = FTRT, "LtableOO" = Housing_tab3, "LtableRT" = Housing_tab4)
     return(outList)
   }

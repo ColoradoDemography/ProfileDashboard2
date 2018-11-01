@@ -17,7 +17,7 @@ setAxis <- function(inValue) {
   maxBrk <- max(yBrk)
   
   if(maxBrk  == maxval){
-    addval <- maxBrk + 5
+    addval <- maxBrk + 20
     maxBrk <- addval
     yBrk <- append(yBrk,addval)
   }

@@ -41,7 +41,7 @@ popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
     scale_y_continuous(limits=c(yaxs$minBrk,yaxs$maxBrk), breaks=yaxs$yBrk, label=comma)+
     scale_x_continuous(limits=c(xaxs$minBrk,xaxs$maxBrk),breaks= xaxs$yBrk) +
     theme_codemog(base_size=base)+
-    theme(plot.title = element_text(hjust = 0.5, size=18),
+    theme(plot.title = element_text(hjust = 0.5, size=16),
           axis.text.x=element_text(angle=90,size=12),
           axis.text.y = element_text(size=12),
           legend.title=element_blank())

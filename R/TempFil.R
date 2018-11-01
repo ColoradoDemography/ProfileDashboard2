@@ -6,27 +6,23 @@
 
 TempFil <- function() {
 
-  oMatrix <- matrix(data=NA,nrow=101)
+  oMatrix <- matrix(data=NA,nrow=87)
   oDir <- tempdir()
-  for(i in 1:101) {
-    if(i %in% c(5, 6, 11, 12, 13, 14, 16, 17, 19, 20, 22, 23, 28, 29, 31, 32, 34, 35, 37, 38,
-                47, 48, 65, 66, 73, 74, 76, 77, 79, 80, 83, 84, 89, 90, 92, 93, 95, 96)) { #PNG files
+  for(i in 1:87) {
+    if(i %in% c(4, 5, 9, 10, 11, 12, 14, 15, 17, 18, 20, 21, 25, 26, 28, 29, 31, 32, 34, 
+                35, 42, 43, 55, 56, 61, 62, 64, 65, 67, 68, 71, 72, 76, 77, 79, 80, 82, 83)) { #PNG files
       oMatrix[i] <- tempfile(tmpdir=oDir,fileext=".png")
     } 
-    if(i %in% c(1, 7, 24, 39, 43, 50, 53, 56, 59, 62, 67, 70, 85, 98)) { #HTML files
+    if(i %in% c(1, 6, 22, 36, 39, 45, 47, 49, 51, 53, 57, 59, 73, 85)) { #HTML files
       oMatrix[i] <- tempfile(tmpdir=oDir,fileext=".htm")
     }
-    if(i %in% c(2, 8, 25, 40, 44, 51, 54, 57, 60, 63, 68, 71, 86, 99)) { # Flextable files
-      oMatrix[i] <- tempfile(tmpdir=oDir,fileext=".docx") 
-    }
-    
-    if(i %in% c(3, 9, 26, 41, 45, 52, 55, 58, 61, 64, 69, 72, 87, 100)) { #Latex files
+    if(i %in% c(2, 7, 23, 37, 40, 46, 48, 50, 52, 54, 58, 60, 74, 86)) { #Latex files
       oMatrix[i] <- tempfile(tmpdir=oDir,fileext=".lat")
     }
-    if(i %in% c(4, 10, 15, 18, 21, 27, 30, 33, 36, 42, 46, 49, 75, 78, 81, 82, 88, 91, 94, 97, 101)) { # Text files
+    if(i %in% c(3, 8, 13, 16, 19, 24, 27, 30, 33, 38, 41, 44, 63, 66, 69, 70, 75, 78, 81, 84, 87)) { # Text files
       oMatrix[i] <- tempfile(tmpdir=oDir,fileext=".txt")
     }
   }
-  
+
 return(oMatrix)  
 }

@@ -45,7 +45,7 @@ jobsPlot=function(listID, maxyr,base=10){
          title= paste0("Total Estimated Jobs, 2001 to ",as.character(maxyr)),
          subtitle = ctyname,
          caption= paste0(captionSrc("SDO","") ,"\nNote: Grey shading represents beginning to bottom of U.S. recessions")) +
-    theme(plot.title = element_text(hjust = 0.5, size=18),
+    theme(plot.title = element_text(hjust = 0.5, size=16),
           axis.text.x = element_text(angle=45,size=12),
           axis.text.y = element_text(size=12))
   

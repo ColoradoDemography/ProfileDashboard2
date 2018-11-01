@@ -112,7 +112,7 @@ baseIndustries <- function(listID, curyr, oType,base=10){
                                    levels=f.jobsBaseFin$industry[order(-f.jobsBaseFin$prop)], ordered=TRUE)
 
 
-  pltTitle <- paste0(curyr," Base Industries (without Indirect)")
+  pltTitle <- paste0(curyr," Base Industries\n(without Indirect)")
   cPallette <- c( "Agriculture"  = "deepskyblue4",
                   "Manufacturing" = 	"deepskyblue3",
                   "Mining" =	"deepskyblue2",
@@ -143,7 +143,7 @@ baseIndustries <- function(listID, curyr, oType,base=10){
          caption = captionSrc("SDO",""),
          x = "Base Indistries",
          y= "Percentage") +
-    theme(plot.title = element_text(hjust = 0.5, size=18),
+    theme(plot.title = element_text(hjust = 0.5, size=16),
           axis.text.x  = element_text(angle=90, vjust=-0.5),
           panel.background = element_rect(fill = "white", colour = "gray50"),
           panel.grid.major = element_line(colour = "gray80"),

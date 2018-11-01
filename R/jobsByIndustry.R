@@ -113,7 +113,7 @@ jobsByIndustry <- function(listID, curyr, base=10){
   f.jobsChart$sector_name <- factor(f.jobsChart$sector_name, levels=f.jobsChart$sector_name[order(f.jobsChart$prop_jobs)], ordered=TRUE)
   
 
-  pltTitle <- paste0(as.character(curyr)," Share of Jobs by Industry")
+  pltTitle <- paste0(as.character(curyr)," Share of Jobs\nby Industry")
   subTitle <- ctyname  #The is the county Name...
   axs <- setAxis(f.jobsChart$prop_jobs)
 
@@ -132,11 +132,11 @@ jobsByIndustry <- function(listID, curyr, base=10){
          caption = captionSrc("SDO",""),
          x = "Job Sector",
          y = "Percentage") +
-    theme(plot.title = element_text(hjust = 0.5, size=18),
+    theme(plot.title = element_text(hjust = 0.5, size=16),
           panel.background = element_rect(fill = "white", colour = "gray50"),
           panel.grid.major.y = element_blank(),
           panel.grid.minor.y = element_blank(),
-          axis.text = element_text(size=12),
+          axis.text = element_text(size=10),
           panel.grid.major = element_line(colour = "gray80"))
 
 

@@ -145,7 +145,7 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
   #Preparing Plot
 
   barCol <- c("#6EC4E8","#00953A")
-  pltTitle <- paste0("Population Distribution by Age for ",yrs)
+  pltTitle <- paste0("Population Distribution by Age\nfor ",yrs)
 
   maxAxis <- round(max(f.AgePlot$age_Prop),digits=0) + 2
   valSeq <- seq(0,maxAxis,4)
@@ -162,7 +162,7 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
          caption = captionSrc(citsrc1,citsrc2),
          x = "Age Group",
          y= "Percentage of Total Population") +
-    theme(plot.title = element_text(hjust = 0.5, size=18),
+    theme(plot.title = element_text(hjust = 0.5, size=16),
           axis.text=element_text(size=12),
           panel.background = element_rect(fill = "white", colour = "gray50"),
           panel.grid.major = element_line(colour = "gray80"),

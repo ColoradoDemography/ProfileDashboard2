@@ -148,7 +148,7 @@ medianAgeTab <- function(listID, ACS, state="08"){
          caption = captionSrc("ACS",ACS),
          x = "Age Group",
          y= "Percentage of Population") +
-    theme(plot.title = element_text(hjust = 0.5, size=18),
+    theme(plot.title = element_text(hjust = 0.5, size=16),
           axis.text=element_text(size=12),
           panel.background = element_rect(fill = "white", colour = "gray50"),
           panel.grid.major = element_line(colour = "gray80"),
