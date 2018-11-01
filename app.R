@@ -1168,8 +1168,8 @@ server <- function(input, output, session) {
       },
       content <- function(file) {
         #Generate Report
-        if(file.exists("SDO_Report.tex")) file.remove("SDO_Report.tex")
-        if(file.exists("SDO_Report.pdf")) file.remove("SDO_Report.pdf")
+      #  if(file.exists("SDO_Report.tex")) file.remove("SDO_Report.tex")
+      #  if(file.exists("SDO_Report.pdf")) file.remove("SDO_Report.pdf")
         
         tempReport   <- "SDO_Report.Rnw" 
         tempTex   <- "SDO_Report.tex"     
