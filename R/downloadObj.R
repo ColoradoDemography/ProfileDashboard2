@@ -76,7 +76,9 @@ downloadObj <- function(input, output, session, place, oname, dobj) {
         ggsave(file, plot = dobj, width =8, height=6, units	="in", device = "png")
       }
       if(suffix == " Table.docx") {
-       file.rename(dobj, file)
+        doc <- read_docx()
+        doc <- body_add_flextable(doc, value = dobj)
+        print(doc, target = file)
       }
     } #content
   ) #DowhloadHandler
