@@ -1170,8 +1170,8 @@ server <- function(input, output, session) {
         #Generate Report
       #  if(file.exists("SDO_Report.tex")) file.remove("SDO_Report.tex")
       #  if(file.exists("SDO_Report.pdf")) file.remove("SDO_Report.pdf")
-        
-        tempReport   <- "R/SDO_Report.Rnw" 
+        setwd("/srv/shiny-server/ProfileDashboard2")
+        tempReport   <- "SDO_Report.Rnw" 
         tempTex   <- "SDO_Report.tex"     
         incProgress()
         
