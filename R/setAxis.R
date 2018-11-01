@@ -12,7 +12,7 @@ setAxis <- function(inValue) {
 
   maxval <- ceiling(max(inValue)) 
   minval <- floor(min(inValue))
-  yBrk <- pretty(minval:maxval,n=5)
+  yBrk <- pretty(minval:maxval)
   minBrk <- min(yBrk)
   maxBrk <- max(yBrk)
   
