@@ -1186,9 +1186,10 @@ server <- function(input, output, session) {
  
         #knitting file and copy to final document
         
-        knit(input=tempReport,output=tempTex)
+       # knit(input=tempReport,output=tempTex)
 
-        tools::texi2pdf(tempTex)
+       # tools::texi2pdf(tempTex)
+        knit2pdf(tempReport)
         tempPDF <- "SDO_Report.pdf"
         file.rename(tempPDF, file) # move pdf to file for downloading
       } #Content
