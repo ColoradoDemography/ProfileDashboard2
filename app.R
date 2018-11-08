@@ -1172,8 +1172,8 @@ server <- function(input, output, session) {
         #from the absolute directory of the file and go from there.
 
         tempReport   <- "SDO_Report.Rnw" 
-        tempTex   <- "SDO_Report.tex"     
-        incProgress()
+        tempTex   <- "/srv/shiny-server/ProfileDashboard2/SDO_Report.tex"     
+       
         
         # Set up parameters to pass to Rnw document
         outChk <- input$outChk
