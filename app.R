@@ -1172,7 +1172,7 @@ server <- function(input, output, session) {
         #from the absolute directory of the file and go from there.
 
         tempReport   <- "SDO_Report.Rnw" 
-        tempTex   <- "/srv/shiny-server/ProfileDashboard2/SDO_Report.tex"     
+        tempTex   <- "SDO_Report.tex"     
        
         
         # Set up parameters to pass to Rnw document
@@ -1191,7 +1191,6 @@ server <- function(input, output, session) {
         tools::texi2pdf(tempTex)
         tempPDF <- "SDO_Report.pdf"
         file.rename(tempPDF, file) # move pdf to file for downloading
-        # unlink(tDir)
       } #Content
     ) #Download Handler
     
