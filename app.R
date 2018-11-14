@@ -416,10 +416,10 @@ server <- function(input, output, session) {
           dput(stat_List$text,fileMat[3])
           
           #Images
-          ggsave(fileMat[4],stat_map, device="png")
-          ggsave(fileMat[5],stat_map, device="png")
+          ggsave(fileMat[4],stat_map, device="png", height = 4 , width = 6, dpi=300)
+          ggsave(fileMat[5],stat_map, device="png", height = 4 , width = 6, dpi=300)
           
-          img_List1 <- list(src = fileMat[4], contentType = 'image/png', width = 500, height = 300)
+          img_List1 <- list(src = fileMat[4], contentType = 'image/png', width = 400, height = 300)
           
           Stats.info <- tags$div(class="dInfo","Individual plots and data may be downloaded by selecting the 'Sources and Downloads' tabl in each display box.",tags$br(),
                                  "Note: County data is displayed for municipalities and places with fewer than 200 people.",tags$br(), tags$br(),
@@ -463,14 +463,14 @@ server <- function(input, output, session) {
           dput(popf1$text,fileMat[8])
           
           #Images
-          ggsave(fileMat[9],popf2$plot, device="png")
-          ggsave(fileMat[10],popf2$plot, device="png")
-          ggsave(fileMat[11],popf3$plot, device="png")
-          ggsave(fileMat[12],popf3$plot, device="png")
+          ggsave(fileMat[9],popf2$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[10],popf2$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[11],popf3$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[12],popf3$plot, device="png", height = 5 , width = 7, dpi=300)
           
           dput(popf3$text,fileMat[13])
-          ggsave(fileMat[14],popf4$plot, device="png")
-          ggsave(fileMat[15],popf4$plot, device="png")
+          ggsave(fileMat[14],popf4$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[15],popf4$plot, device="png", height = 5 , width = 7, dpi=300)
           dput(popf4$text,fileMat[16])
         
           
@@ -563,24 +563,24 @@ server <- function(input, output, session) {
           popa3 <<- ageForecastPRO(listID=idList,sYr=2010,mYr=2015,eYr=2025,base=12)
           popa4 <<- migbyagePRO(listID=idList)
           
-          ggsave(fileMat[17],popa1$plot, device="png")
-          ggsave(fileMat[18],popa1$plot, device="png")
+          ggsave(fileMat[17],popa1$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[18],popa1$plot, device="png", height = 5 , width = 7, dpi=300)
           dput(popa1$text,fileMat[19])
           
-          ggsave(fileMat[20],popa2$plot, device="png")
-          ggsave(fileMat[21],popa2$plot, device="png")
+          ggsave(fileMat[20],popa2$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[21],popa2$plot, device="png", height = 5 , width = 7, dpi=300)
           
           dput(popa2$Htable,fileMat[22])
 
           dput(popa2$Ltable, fileMat[23])
           dput(popa2$text, fileMat[24])
           
-          ggsave(fileMat[25],popa3$plot, device="png")
-          ggsave(fileMat[26],popa3$plot, device="png")
+          ggsave(fileMat[25],popa3$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[26],popa3$plot, device="png", height = 5 , width = 7, dpi=300)
           dput(popa3$text,fileMat[27])
           
-          ggsave(fileMat[28],popa4$plot, device="png")
-          ggsave(fileMat[29],popa4$plot, device="png")
+          ggsave(fileMat[28],popa4$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[29],popa4$plot, device="png", height = 5 , width = 7, dpi=300)
           dput(popa4$text,fileMat[30])
           
           img_List5 <- list(src = fileMat[17], contentType = 'image/png', width = 500, height = 300)
@@ -682,13 +682,13 @@ server <- function(input, output, session) {
           popc4 <<- raceTab2(listID=idList, ACS=curACS)
           
           #Income
-          ggsave(fileMat[31],popc1$plot, device="png")
-          ggsave(fileMat[32],popc1$plot, device="png")
+          ggsave(fileMat[31],popc1$plot, device="png", height = 5 , width = 8, dpi=300)
+          ggsave(fileMat[32],popc1$plot, device="png", height = 5 , width = 7, dpi=300)
           dput(popc1$text,fileMat[33])
           
           # Education
-          ggsave(fileMat[34],popc2$plot, device="png")
-          ggsave(fileMat[35],popc2$plot, device="png")
+          ggsave(fileMat[34],popc2$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[35],popc2$plot, device="png", height = 5 , width = 7, dpi=300)
           
           #Race 1
           dput(popc3$Htable,fileMat[36])
@@ -702,7 +702,7 @@ server <- function(input, output, session) {
           dput(popc4$Ltable, fileMat[40])
           dput(popc4$text, fileMat[41])
           
-          img_List9 <- list(src = fileMat[31], contentType = 'image/png', width = 500, height = 300)
+          img_List9 <- list(src = fileMat[31], contentType = 'image/png', width = 600, height = 300)
           img_List10 <- list(src = fileMat[34], contentType = 'image/png', width = 500, height = 300)
           
           #Contents of Information Tabs
@@ -770,8 +770,8 @@ server <- function(input, output, session) {
           poph5 <<- HouseVal(listID=idList,ACS=curACS) # Comparative Value of Housing both OO and Rental
 
           #Housing Estimate
-          ggsave(fileMat[42],poph1$plot, device="png")
-          ggsave(fileMat[43],poph1$plot, device="png")
+          ggsave(fileMat[42],poph1$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[43],poph1$plot, device="png", height = 5 , width = 7, dpi=300)
           dput(poph1$text,fileMat[44])
           
           img_List11 <- list(src = fileMat[42], contentType = 'image/png', width = 500, height = 300)
@@ -881,8 +881,8 @@ server <- function(input, output, session) {
           popt2 <<- jobMigration(listID=idList,maxyr = curYr)
           
           #Venn Diagram
-          ggsave(fileMat[55],popt1$plot, device="png")
-          ggsave(fileMat[56],popt1$plot, device="png")
+          ggsave(fileMat[55],popt1$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[56],popt1$plot, device="png", height = 5 , width = 7, dpi=300)
           img_List12 <- list(src = fileMat[55], contentType = 'image/png', width = 500, height = 300)
           
           
@@ -902,8 +902,8 @@ server <- function(input, output, session) {
           dput(popt1$workTabL, fileMat[60])
           
           #Jobs and Migration
-          ggsave(fileMat[61],popt2$plot, device="png")
-          ggsave(fileMat[62],popt2$plot, device="png")
+          ggsave(fileMat[61],popt2$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[62],popt2$plot, device="png", height = 5 , width = 7, dpi=300)
           dput(popt2$text, fileMat[63])
           img_List13 <- list(src = fileMat[61], contentType = 'image/png', width = 500, height = 300)
           
@@ -966,22 +966,22 @@ server <- function(input, output, session) {
           popei3 <<- baseIndustries(listID=idList, curyr = curYr)
           
           #JobsPlot
-          ggsave(fileMat[64],popei1$plot, device="png")
-          ggsave(fileMat[65],popei1$plot, device="png")
+          ggsave(fileMat[64],popei1$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[65],popei1$plot, device="png", height = 5 , width = 7, dpi=300)
           dput(popei1$text, fileMat[66])
           img_List14 <- list(src = fileMat[64], contentType = 'image/png', width = 500, height = 300)
           
           #Jobs by Industry
-          ggsave(fileMat[67],popei2$plot, device="png")
-          ggsave(fileMat[68],popei2$plot, device="png")
+          ggsave(fileMat[67],popei2$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[68],popei2$plot, device="png", height = 5 , width = 7, dpi=300)
           dput(popei2$text1, fileMat[69])
           dput(popei2$text2, fileMat[70])
           img_List15 <- list(src = fileMat[67], contentType = 'image/png', width = 500, height = 300)
           
           #base Industries
           #Plot
-          ggsave(fileMat[71],popei3$plot, device="png")
-          ggsave(fileMat[72],popei3$plot, device="png")
+          ggsave(fileMat[71],popei3$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[72],popei3$plot, device="png", height = 5 , width = 7, dpi=300)
           img_List16 <- list(src = fileMat[71], contentType = 'image/png', width = 500, height = 300)
           
           # HTML Table
@@ -1056,20 +1056,20 @@ server <- function(input, output, session) {
           popem4 <<- incomeSrc(level=input$level,listID=idList,ACS=curACS)  
 
           #JobsPopForecast
-          ggsave(fileMat[76],popem1$plot, device="png")
-          ggsave(fileMat[77],popem1$plot, device="png")
+          ggsave(fileMat[76],popem1$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[77],popem1$plot, device="png", height = 5 , width = 7, dpi=300)
           dput(popem1$text, fileMat[78])
           img_List17 <- list(src = fileMat[76], contentType = 'image/png', width = 500, height = 300)
           
           #weeklyWages
-          ggsave(fileMat[79],popem2$plot, device="png")
-          ggsave(fileMat[80],popem2$plot, device="png")
+          ggsave(fileMat[79],popem2$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[80],popem2$plot, device="png", height = 5 , width = 7, dpi=300)
           dput(popem2$text, fileMat[81])
           img_List18 <- list(src = fileMat[79], contentType = 'image/png', width = 500, height = 300)
           
           #residentialLF
-          ggsave(fileMat[82],popem3$plot, device="png")
-          ggsave(fileMat[83],popem3$plot, device="png")
+          ggsave(fileMat[82],popem3$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[83],popem3$plot, device="png", height = 5 , width = 7, dpi=300)
           dput(popem3$text, fileMat[84])
           img_List19 <- list(src = fileMat[82], contentType = 'image/png', width = 500, height = 300)
           
@@ -1168,29 +1168,34 @@ server <- function(input, output, session) {
       },
       content <- function(file) {
         #Generate Report
-       # capture all the output to a file.  Need to find the workign directory, copy the file to the working directory 
-        #from the absolute directory of the file and go from there.
-
-        tempReport   <- "SDO_Report.Rnw" 
-        tempTex   <- "SDO_Report.tex"     
-       
+        # Check for file location
+ #       wkDir <- getwd()
+ #       fList <-  list.files(path = wkDir, pattern = NULL, all.files = FALSE,
+ #                            full.names = FALSE, recursive = FALSE,
+ #                            ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
+ #       
+ #       if(!("SDO_Report.Rnw" %in% fList)) {
+ #         file.copy("/srv/shiny-server/ProfileDashboard2/SDO_Report.Rnw",wkDir,overwrite = recursive, recursive = FALSE,
+ #                   copy.mode = TRUE, copy.date = FALSE)
+ #        tempReport   <- paste0(wkDir,"SDO_Report.Rnw")
+ #       } else {
+ #         tempReport   <- "/srv/shiny-server/ProfileDashboard2/SDO_Report.Rnw"
+ #       }
         
-        # Set up parameters to pass to Rnw document
-        outChk <- input$outChk
-        olistID <- idList
-        olevel <- input$level
-        ocurACS <- curACS
-        ocurYr <- curYr
-        placelist <- PlaceList
-        filemat <- fileMat
+        
  
         #knitting file and copy to final document
         
        # knit(input=tempReport,output=tempTex)
-
        # tools::texi2pdf(tempTex)
-        knit2pdf(tempReport)
         tempPDF <- "SDO_Report.pdf"
+
+        rmarkdown::render("SDO_Report.Rmd", 
+                          params =  list(outChk = input$outChk,
+                                         olistID = idList,
+                                         olevel = input$level,
+                                         filemat = fileMat))
+
         file.rename(tempPDF, file) # move pdf to file for downloading
       } #Content
     ) #Download Handler

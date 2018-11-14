@@ -1,0 +1,641 @@
+---
+title: ""
+
+header-includes:
+   - \usepackage{caption}
+   - \usepackage{fullminipage}
+   - \usepackage{graphicx}
+   - \usepackage{wrapfig}
+   - \usepackage{booktabs}
+   - \usepackage{array}
+   - \usepackage{placeins}
+   - \usepackage{xcolor}
+   - \usepackage{etoolbox}
+   - \usepackage{float}
+   
+output: pdf_document
+fontsize: 11
+documentclass: article
+
+params:
+  outChk:  outChk
+  olistID: olistID
+  olevel:  olevel
+  filemat: fileMat
+---
+
+```{r setup,results="asis",include = FALSE} 
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      results='asis',
+                      fig.align='center',
+                      out.width='80%',
+                      out.height='80%') 
+
+library(tidyverse, quietly=TRUE)
+library(readxl, quietly=TRUE)
+library(scales, quietly=TRUE)
+library(codemogAPI, quietly=TRUE)
+library(codemogProfile, quietly=TRUE)
+library(codemogLib)
+library(knitr, quietly=TRUE)
+library(kableExtra, quietly=TRUE)
+library(RPostgreSQL, quietly=TRUE)
+library(rmarkdown)
+library(shiny, quietly=TRUE)
+library(shinydashboard, quietly=TRUE)
+library(shinyjs, quietly=TRUE)
+library(VennDiagram)
+library(rgdal)
+library(geojsonio)
+library(gridExtra)
+library(ggthemes)
+library(maptools)
+
+muffleError <- function(x,options) {}
+knit_hooks$set(error=muffleError)
+
+fixPath <- function(inPath){
+  outPath <- gsub("ABICKF~1","ABickford",inPath)
+  outPath <-gsub("\\\\","/",outPath)
+  return(outPath)
+}
+
+
+ outChk <- params$outChk  # List of topical areas
+ olistID <- params$olistID # Place List
+ olevel <- params$olevel # Output Level
+ filemat <- params$filemat # File locations
+ 
+ if(olevel == "Municipalities") {
+   placename = olistID$plName
+ } else {
+   placename = olistID$ctyName
+ }
+
+
+```
+
+
+\includegraphics{www/co_dola_div_localgov_300_rgb.png}
+
+
+# State Demography Office Colorado Demographic Profile
+### Print Date: `r format(Sys.Date(),"%m/%d/%Y")`
+
+
+
+## Community Profile for `r placename`
+
+Demographic information is critical for making informed decisions at the local, state and national level. This demographic profile is a summary of trends in a community.  The dashboard provides charts, text, data and additional links to assist in the exploration and understanding of demographic trends for counties and municipalities in Colorado.  The following collection of tables and charts establishes the context for assessing potential impacts and for decision-making.
+
+
+```{r statsMap}
+if("stats" %in% unlist(outChk)) {
+ smapx <- fixPath(filemat[5])
+ include_graphics(smapx)
+}
+
+```
+
+```{r statsTab}
+if("stats" %in% unlist(outChk)) {
+   statsText <- function() {
+      OutText <- paste0(" The population base and trends of an area determine the needs for housing,")
+      OutText <- paste0(OutText," schools, roads and other services.")
+      OutText <- paste0(OutText,"  The age, income, race and ethnicity, and migration of the population of")
+      OutText <- paste0(OutText," a community are all vital in planning for service provision.")
+      OutText <- paste0(OutText,"  The most significant demographic transitions for Colorado and its communities are")
+      OutText <- paste0(OutText," related to disparate growth, aging, downward pressure on income,")
+      OutText <- paste0(OutText," and growing racial and ethnic diversity.")
+   }
+ 
+  
+  cat("### Basic Statistics\n") 
+  cat(statsText())
+  cat(dget(filemat[2]))
+  if(olevel == "Municipalities") {
+    cat(dget(filemat[3]))
+  }
+}
+
+```
+
+```{r poptrend1}
+if("popf" %in% unlist(outChk)) {
+
+  popTrendText <- function(level,idList) {
+    if(level == "Counties") {
+     OutText <- paste0("The tables and plots in this section highlight trends and forecasts")
+     OutText <- paste0(OutText," for the total population in ",idList$ctyName,".")
+     OutText <- paste0(OutText,"  The table shows the overall population growth rate for ",idList$ctyName)
+     OutText <- paste0(OutText," and the State of Colorado.")
+     OutText <- paste0(OutText," Additional plots show the overall population trends, forecasts for along with")
+     OutText <- paste0(OutText," the overall components of change for ",idList$ctyName, "." )
+    } else {
+      if(idList$PlFilter == "F") {
+       OutText <- paste0("The tables and plots in this section highlight trends and forecasts for the")
+       OutText <- paste0(OutText," total population in",idList$plName,".")
+       OutText <- paste0(OutText,"  The table shows the overall population growth rate")
+       OutText <- paste0(OutText," for ", idList$plName, ", ",idList$ctyName)
+       OutText <- paste0(OutText," and  the State of Colorado.")
+       OutText <- paste0(OutText," Additional plots show the overall population trends, forecasts for along with")
+       OutText <- paste0(OutText," the overall components of change for ",idList$plName, "." )
+      } else {
+       OutText <- paste0("The tables and plots in this section highlight trends and forecasts")
+       OutText <- paste0(OutText," for the total population in",idList$ctyName,".")
+       OutText <- paste0(OutText,"  The table shows the overall population growth rate for")
+       OutText <- paste0(OutText,idList$ctyName, " and the State of ")
+       OutText <- paste0(OutText," Colorado as a whole.")
+       OutText <- paste0(OutText," Additional plots show the overall population trends, forecasts for") 
+       OutText <- paste0(OutText," along with the overall components of change for ",idList$ctyName, "." )
+      }
+  }
+ return(OutText)
+}
+ 
+ 
+ cat("### Population Trends\n")
+ cat(popTrendText(olevel,olistID))
+ cat(dget(filemat[7]))
+ cat(dget(filemat[8]))
+} 
+```
+
+```{r poptrend2}
+if("popf" %in% unlist(outChk)) {
+  popf2r <- fixPath(filemat[10])  #Images
+  include_graphics(popf2r)
+}
+```
+
+```{r poptrend3}
+if("popf" %in% unlist(outChk)) {
+  cat(dget(filemat[13]))
+}
+```
+  
+
+```{r poptrend4}
+if("popf" %in% unlist(outChk)) {
+  popf3r <- fixPath(filemat[12])  #Images
+  include_graphics(popf3r)
+}
+```
+
+```{r poptrend5}
+if("popf" %in% unlist(outChk)) {
+    cocText <- function() {
+      OutText <- paste0(" Births, deaths and net migration are the main components of population change.")
+      OutText <- paste0(OutText," Net migration is the difference between the number of people moving into")
+      OutText <- paste0(OutText," an area and the number")
+      OutText <- paste0(OutText," of people moving out. Change in net migration typically causes most of the")
+      OutText <- paste0(OutText," changes in population")
+      OutText <- paste0(OutText," trends because migration is more likely to experience short-term fluctuations")
+      OutText <- paste0(OutText," than births and deaths.")
+      OutText <- paste0(OutText," Migration also tends to be highly correlated to job growth or decline in")
+      OutText <- paste0(OutText," communities where most of the")
+      OutText <- paste0(OutText," residents work where they live. For many counties with negative natural")
+      OutText <- paste0(OutText," increase (more deaths than births),")
+      OutText <- paste0(OutText," this makes migration especially important for population stability and growth.") 
+      OutText <- paste0(OutText," \\end{flushleft}")
+     return(OutText)
+  }
+  
+  cat("### Components of Population Change\n")
+    cat(cocText())
+}
+```
+
+```{r poptrend6}
+if("popf" %in% unlist(outChk)) {
+  popf4r <- fixPath(filemat[15])  #Images
+  include_graphics(popf4r)
+} 
+```
+
+```{r poptrend7}
+if("popf" %in% unlist(outChk)) {
+  cat(dget(filemat[16]))
+}
+```
+
+```{r popage1}
+if("pop" %in% unlist(outChk)) {
+  ageText <- function(){
+    OutText <- paste0("Every community has a different age profile and is aging differently.")
+    OutText <- paste0(OutText,"  People in different age groups work, live, shop, and use resources differently")
+    OutText <- paste0(OutText,"  and these differences will impact the economy,")
+    OutText <- paste0(OutText,"  labor force, housing, school districts, day care facilities, health services,")
+    OutText <- paste0(OutText,"  disability services, transportation, household income, and public finance.") 
+    OutText <- paste0(OutText,"  An aging population may put downward pressure on local government tax revenue")
+    OutText <- paste0(OutText,"  due to changes in spending on taxable goods.")
+    return(OutText)
+}
+
+  
+  cat("### Age Characteristics\n")
+  cat(ageText())
+}
+```
+
+```{r popage2}
+if("pop" %in% unlist(outChk)) {
+   cat(dget(filemat[19]))  # Age Plot Text
+}
+
+```
+
+```{r popage3}
+if("pop" %in% unlist(outChk)) {
+  popa2p <- fixPath(filemat[18])  #age Plot Plot
+  include_graphics(popa2p)
+}
+```
+
+```{r popage4}
+if("pop" %in% unlist(outChk)) {
+  popa1p <- fixPath(filemat[21])  #age Plot Plot
+  include_graphics(popa1p)
+}
+```
+
+```{r popage5}
+if("pop" %in% unlist(outChk)) {
+  cat(dget(filemat[23]))
+  cat(dget(filemat[24]))
+}
+```
+
+```{r popage6}
+if("pop" %in% unlist(outChk)) {
+  popa3p <- fixPath(filemat[26])  #age Plot Plot
+  include_graphics(popa3p)
+}
+```
+
+```{r popage7}
+if("pop" %in% unlist(outChk)) {
+  cat(dget(filemat[27]))
+}
+```
+
+```{r popage8}
+if("pop" %in% unlist(outChk)) {
+  popa4p <- fixPath(filemat[29])  #age Plot Plot
+  include_graphics(popa4p)
+}
+```
+
+```{r popage9}
+if("pop" %in% unlist(outChk)) {
+  cat(dget(filemat[30]))
+}
+```
+
+```{r popchar1}
+if("popc" %in% unlist(outChk)) {
+  popCText <- function(idList) {
+  if(nchar(idList$plName) != 0) {
+    if(idList$PlFilter == "F") {
+      place <- idList$plName
+    } else {
+      place <- idList$ctyName
+    }
+  } else {
+    place <- idList$ctyName
+  }
+  OutText <- paste0("The plots and tables in this section describe the general population characteristics of ",place,".")
+  OutText <- paste0(OutText,"  The bars on the plots show the width of the 90 percent confidence interval.") 
+  OutText <- paste0(OutText,"  Categories where the bars do not overlap are significantly different.")
+ if(idList$PlFilter == "T") {
+  OutText <- paste0(OutText,"  Note: County data is displayed for Municipalities with fewer than 200 people.")
+ }
+  return(OutText)
+  }
+  
+  
+  cat("### Population Characteristics: Income, Education and Race\n")
+  cat(popCText(olistID))
+}
+```
+
+```{r popchar2}
+if("popc" %in% unlist(outChk)) {
+    cat("#### Household Income\n")
+    cat(dget(filemat[33]))
+}
+
+```
+
+```{r popchar3}
+
+if("popc" %in% unlist(outChk)) {
+  popc1p <- fixPath(filemat[32])  #Income Plot
+  include_graphics(popc1p)
+}
+```
+
+
+```{r popchar4}
+if("popc" %in% unlist(outChk)) {
+    educText <- function() {
+   OutText <- paste0("The education attainment plot is provided for persons older than Age 25, i.e., ")
+   OutText <- paste0(OutText," those who have likely completed their education.") 
+   return(OutText)
+    }
+  cat("#### Educational Attainment\n")  
+  cat(educText())
+  cat("\\FloatBarrier\n")
+}
+```
+
+
+```{r popchar5}
+if("popc" %in% unlist(outChk)) {
+  
+  popc2p <- fixPath(filemat[35])  #Education Plot
+  include_graphics(popc2p)
+}
+```
+
+```{r popchar6}
+if("popc" %in% unlist(outChk)) {
+  cat("\\newpage\n")
+  cat("#### Race and Ethnicity\n")
+  cat(dget(filemat[38]))
+  cat("\\FloatBarrier\n")
+  cat(dget(filemat[37]))
+  cat("\\FloatBarrier\n")
+  cat(dget(filemat[41]))
+  cat("\\FloatBarrier\n")
+  cat(dget(filemat[40]))
+}
+```
+
+```{r housing1}
+if("housing" %in% unlist(outChk)) {
+  houseText <- function() {
+  OutText <- paste0("Understanding the current housing stock is critical for understanding how the community")
+  OutText <- paste0(OutText," can best address current and future demands.")
+  OutText <- paste0(OutText,"  This section begins with a projection of households.")
+  OutText <- paste0(OutText," The projection of households is derived by county specific headship rates for the population by age.") 
+  OutText <- paste0(OutText,"  Beyond the numbers and characteristics, understanding the value and affordability")
+  OutText <- paste0(OutText," of housing units is vital.")
+  OutText <- paste0(OutText,"  Are the housing prices prohibitive to new families?  ")
+  OutText <- paste0(OutText," Are the housing prices at such a high price that ")
+  OutText <- paste0(OutText," once the current work force ages and sells, those housing units will most likely")
+  OutText <- paste0(OutText," go into the vacation seasonal market?")
+  OutText <- paste0(OutText,"  Or are housing prices reasonable and suddenly the community is experiencing")
+  OutText <- paste0(OutText," growth in families with children?")
+  OutText <- paste0(OutText,"  How many total housing units are there?") 
+  OutText <- paste0(OutText," What types of new units are being built - multi-family vs single family?")
+  return(OutText)
+  }  
+  
+  cat("\\newpage\n")
+  cat("### Housing and Households\n")
+  cat(houseText())
+}
+```
+
+```{r housing2}
+if("housing" %in% unlist(outChk)) {
+  poph1p <- fixPath(filemat[43])  #Housing Forecast Plot 
+  include_graphics(poph1p)
+}
+```
+
+
+```{r housing3}
+if("housing" %in% unlist(outChk)) {
+  cat(dget(filemat[44]))  #Housing Text
+}
+```
+
+```{r hoousing4}
+if("housing" %in% unlist(outChk)) {
+   housingText <- function() {
+     OutText <- paste0("\\begin{flushleft}")
+     OutText <- paste0(OutText,"  The next several tables provide an overview of the housing stock in an area.")
+     OutText <- paste0(OutText,"  The availability of land and the cost of land can dictate whether housing is less dense,")
+     OutText <- paste0(OutText," with a greater number of single family units or more dense with a number")
+     OutText <- paste0(OutText," of multifamily apartments and condos.")
+     OutText <- paste0(OutText,"  Median home values and median gross rents are often considerably lower than")
+     OutText <- paste0(OutText," current market prices as the")
+     OutText <- paste0(OutText,"  values are computed from a 5-year average that runs through 2016.")
+     OutText <- paste0(OutText," The number of people per household can")
+     OutText <- paste0(OutText,"  offer insights as to the composition of the households")
+     OutText <- paste0(OutText," .  Areas with a larger number of people per household")
+     OutText <- paste0(OutText,"  often have more families with children under 18 or a number of roommates")
+     OutText <- paste0(OutText," living together to share housing costs.")
+     OutText <- paste0(OutText," Those with a smaller number of persons per household, likely have")
+     OutText <- paste0(OutText," a larger share of single-person households.")  
+     OutText <- paste0(OutText," \\end{flushleft}")
+     return(OutText)
+}
+cat(housingText())
+cat(dget(filemat[46]))  #Housing Unit Table
+cat(dget(filemat[48]))  #Housing Value Table Owner Occupied
+cat(dget(filemat[52]))  #Housing Characteristics Table Owner Occupied
+cat(dget(filemat[50]))  #Housing Value Table Rental
+cat(dget(filemat[54]))  #Housing Characteristics Table Rental
+}  
+```
+
+```{r commute1}
+if("comm" %in% unlist(outChk)) {
+  commintroText <- function() {
+      OutText <- paste0("Commuting plays an important role in the economy of an area because not")
+      OutText <- paste0(OutText," all workers live where they work. Commuting impacts local job growth, access to employees,")
+      OutText <- paste0(OutText," and transportation infrastructure.")
+      return(OutText)
+  }
+  commuteText <- function() {
+  OutText <- paste0("The Commuting diagram identifies three groups of people:")
+  OutText <- paste0(OutText," \\begin{itemize}")
+  OutText <- paste0(OutText," \\item People who work in ",placename,", but live elsewhere.")
+  OutText <- paste0(OutText," \\item People who live in ",placename,", but work elsewhere.")
+  OutText <- paste0(OutText," \\item People who live and work in ",placename,".")
+  OutText <- paste0(OutText," \\end{itemize}")
+  return(OutText)
+}
+  cat("\\newpage\n")
+  cat("### Commuting\n")
+  cat(commintroText())
+  cat(commuteText())
+  cat("\\FloatBarrier\n")
+}
+```
+
+```{r commute2}
+if("comm" %in% unlist(outChk)) {
+  commute1p <- fixPath(filemat[56])  #Venn Diagram Plot 
+  include_graphics(commute1p)
+}
+```
+
+```{r commute3}
+if("comm" %in% unlist(outChk)) {
+  liveText <- function(place) {
+   OutText <- paste0("This table shows the top 10 places where people who live in ",place," work.")
+   return(OutText)
+}
+  cat("\\newpage\n")
+  cat(dget(filemat[58]))
+  cat("\\FloatBarrier\n")
+  cat(liveText(placename))
+  cat("\\FloatBarrier\n")
+  
+
+}
+```
+
+```{r commute4}
+if("comm" %in% unlist(outChk)) {
+  workText <- function(place) {
+   OutText <- paste0("This table shows the top 10 places where people who work in ",place," live.")
+   return(OutText)
+  }
+  
+  cat("\\newpage\n")
+  cat(dget(filemat[60]))
+  cat("\\FloatBarrier\n")
+  cat(workText(placename))  
+  cat("\\FloatBarrier\n")
+}
+```
+
+```{r commute5}
+if("comm" %in% unlist(outChk)) {
+  commute2p <- fixPath(filemat[62])  #Jobs Migration Plot 
+  include_graphics(commute2p)
+}
+```
+
+```{r commute6}
+if("comm" %in% unlist(outChk)) {
+  cat("\\FloatBarrier\n")
+  cat(dget(filemat[63]))
+  cat("\\FloatBarrier\n")
+}
+```
+
+```{r industry1}
+if("emplind" %in% unlist(outChk)) {
+  emplindText <- function(){
+  OutText <- paste0("Identifying the industries which may be driving the growth and change within a community is")
+  OutText <- paste0(OutText," a vital part of understanding community dynamics. Growth in jobs often results in growth")
+  OutText <- paste0(OutText," in residents from migration within a community. Identifying the trends of growth or decline")
+  OutText <- paste0(OutText," of jobs and the types of jobs available within the community is important.")
+  return(OutText)
+  }
+  
+  
+  cat("### Employment by Industry\n")
+  cat(emplindText())
+}
+```
+
+```{r industry2}
+if("emplind" %in% unlist(outChk)) {
+  popei1p <- fixPath(filemat[65])  #Jobs Plot Plot
+  include_graphics(popei1p)
+}
+```
+
+```{r industry3}
+if("emplind" %in% unlist(outChk)) {
+  cat(dget(filemat[66]))
+}
+```
+
+```{r industry4}
+if("emplind" %in% unlist(outChk)) {
+  popei2p <- fixPath(filemat[68])  #Jobs Plot Plot
+  include_graphics(popei2p)
+}
+```
+
+```{r industry5}
+if("emplind" %in% unlist(outChk)) {
+  cat(dget(filemat[69]))
+  cat(dget(filemat[70]))
+}
+```
+
+```{r industry6}
+if("emplind" %in% unlist(outChk)) {
+  popei3p <- fixPath(filemat[72])  #Jobs Plot Plot
+  include_graphics(popei3p)
+}
+```
+
+```{r industry7}
+if("emplind" %in% unlist(outChk)) {
+  cat(dget(filemat[74]))
+  cat(dget(filemat[75]))
+}
+```
+
+```{r employment1}
+if("emply" %in% unlist(outChk)) {
+  
+  emplyText <- function() {
+    OutText <- paste0("Understanding the types of jobs forecast to grow in a community, if jobs are forecast to increase,") 
+    OutText <- paste0(OutText," will aid in further understanding potential changes in population, labor force,")
+    OutText <- paste0(OutText," housing demand, and household income. Important questions to ask include; ")
+    OutText <- paste0(OutText," What is the current forecast for job growth based on the current industry mix?  ")
+    OutText <- paste0(OutText," What types of jobs are forecast to grow?  What are the wages for those jobs?")
+    OutText <- paste0(OutText," What are the labor force trends for the community?")
+    OutText <- paste0(OutText," Is the labor force expected to grow or slow down?")
+    return(OutText)
+  }
+  
+  cat("### Employment Forecast and Wage Information\n")
+  cat(emplyText())
+}
+```
+
+```{r employment2}
+if("emply" %in% unlist(outChk)) {
+  popem1p <- fixPath(filemat[77])   #JobsPopForecast
+  include_graphics(popem1p)
+}
+```
+
+```{r employment3}
+if("emply" %in% unlist(outChk)) {
+  cat(dget(filemat[78]))
+}
+```
+
+```{r employment4}
+if("emply" %in% unlist(outChk)) {
+  popem2p <- fixPath(filemat[80])   #Weekly Wages Plot
+  include_graphics(popem2p)
+}
+```
+
+```{r employment5}
+if("emply" %in% unlist(outChk)) {
+  cat(dget(filemat[81]))
+}
+```
+
+
+```{r employment6}
+if("emply" %in% unlist(outChk)) {
+  popem3p <- fixPath(filemat[83])   #Residential LF
+  include_graphics(popem3p)
+}
+```
+
+```{r employment7}
+if("emply" %in% unlist(outChk)) {
+  cat(dget(filemat[84]))
+  cat(dget(filemat[86]))
+  cat(dget(filemat[87]))
+}
+```
