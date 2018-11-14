@@ -1168,20 +1168,7 @@ server <- function(input, output, session) {
       },
       content <- function(file) {
         #Generate Report
-        # Check for file location
- #       wkDir <- getwd()
- #       fList <-  list.files(path = wkDir, pattern = NULL, all.files = FALSE,
- #                            full.names = FALSE, recursive = FALSE,
- #                            ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
- #       
- #       if(!("SDO_Report.Rnw" %in% fList)) {
- #         file.copy("/srv/shiny-server/ProfileDashboard2/SDO_Report.Rnw",wkDir,overwrite = recursive, recursive = FALSE,
- #                   copy.mode = TRUE, copy.date = FALSE)
- #        tempReport   <- paste0(wkDir,"SDO_Report.Rnw")
- #       } else {
- #         tempReport   <- "/srv/shiny-server/ProfileDashboard2/SDO_Report.Rnw"
- #       }
-        
+        # Check for file locatio       
         
  
         #knitting file and copy to final document
@@ -1190,7 +1177,7 @@ server <- function(input, output, session) {
        # tools::texi2pdf(tempTex)
         tempPDF <- "SDO_Report.pdf"
 
-        rmarkdown::render("SDO_Report.Rmd", 
+        rmarkdown::render("www/SDO_Report.Rmd", 
                           params =  list(outChk = input$outChk,
                                          olistID = idList,
                                          olevel = input$level,
