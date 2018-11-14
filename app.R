@@ -1172,12 +1172,10 @@ server <- function(input, output, session) {
         
  
         #knitting file and copy to final document
-        
-       # knit(input=tempReport,output=tempTex)
-       # tools::texi2pdf(tempTex)
+        inRmd <-  "/srv/shiny-server/ProfileDashboard2/www/SDO_Report.Rmd"
         tempPDF <- "SDO_Report.pdf"
 
-        rmarkdown::render("www/SDO_Report.Rmd", 
+        rmarkdown::render(inRmd, 
                           params =  list(outChk = input$outChk,
                                          olistID = idList,
                                          olevel = input$level,
