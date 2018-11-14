@@ -249,12 +249,12 @@ if(nchar(placefips) == 0) { # output county table
 
 
   #Column Names
-  ACSName <- paste0("20",substr(ACS,6,7),"[note]")
+  ACSName <- paste0("20",substr(ACS,6,7))
   
   if(nrow(p4_00) != 0){
-    names_spaced <- c("Race","2000[note]","2010[note]",ACSName)
+    names_spaced <- c("Race","2000","2010",ACSName)
   } else {
-    names_spaced <- c("Race","2010[note]",ACSName)
+    names_spaced <- c("Race","2010",ACSName)
   }
   
 

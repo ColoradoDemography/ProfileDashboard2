@@ -39,10 +39,7 @@ educPRO <- function(listID, ACS){
     select(geoname:geonum,ed1:ed5)%>%
     gather(EdLevel, value, ed1:ed5, factor_key=TRUE)%>%  #Needed to change this part of the call
     mutate(educcat=ordered(as.factor(EdLevel), levels=c("ed1", "ed2", "ed3", "ed4",
-                                                        "ed5"),
-                           labels=c("Less than\nHigh School",
-                                    "High School Graduate\n(or GED)","Some College or\nAssociate's Degree", "Bachelor's Degree",
-                                    "Graduate or\nProfessional Degree")))
+                                                        "ed5")))
   
   
   # Place Education MOE
@@ -61,10 +58,7 @@ educPRO <- function(listID, ACS){
     select(geoname:geonum,ed1:ed5)%>%
     gather(EdLevel, value, ed1:ed5, factor_key=TRUE)%>%  #Needed to change this part of the call
     mutate(educcat=ordered(as.factor(EdLevel), levels=c("ed1", "ed2", "ed3", "ed4",
-                                                        "ed5"),
-                           labels=c("Less than\nHigh School",
-                                    "High School Graduate\n(or GED)","Some College or\nAssociate's Degree", "Bachelor's Degree",
-                                    "Graduate or\nProfessional Degree")))
+                                                        "ed5")))
   
   
   #Preparing data
@@ -101,10 +95,7 @@ educPRO <- function(listID, ACS){
     select(geoname:geonum,ed1:ed5)%>%
     gather(EdLevel, value, ed1:ed5, factor_key=TRUE)%>%  #Needed to change this part of the call
     mutate(educcat=ordered(as.factor(EdLevel), levels=c("ed1", "ed2", "ed3", "ed4",
-                                                        "ed5"),
-                           labels=c("Less than\nHigh School",
-                                    "High School Graduate\n(or GED)","Some College or\nAssociate's Degree", "Bachelor's Degree",
-                                    "Graduate or\nProfessional Degree")))%>%
+                                                        "ed5")))%>%
     mutate(geoname=stri_replace_all_charclass(geoname, "\\p{WHITE_SPACE}", ""))
   
   
@@ -124,10 +115,7 @@ educPRO <- function(listID, ACS){
     select(geoname:geonum,ed1:ed5) %>%
     gather(EdLevel, value, ed1:ed5, factor_key=TRUE)%>%  #Needed to change this part of the call
     mutate(educcat=ordered(as.factor(EdLevel), levels=c("ed1", "ed2", "ed3", "ed4",
-                                                        "ed5"),
-                           labels=c("Less than\nHigh School",
-                                    "High School Graduate\n(or GED)","Some College or\nAssociate's Degree", "Bachelor's Degree",
-                                    "Graduate or\nProfessional Degree"))) 
+                                                        "ed5"))) 
   
   #Preparing data
   names(d13STMOE)[9] <- "MOE"
@@ -165,10 +153,7 @@ educPRO <- function(listID, ACS){
       select(geoname:geonum,ed1:ed5)%>%
       gather(EdLevel, value, ed1:ed5, factor_key=TRUE)%>%  #Needed to change this part of the call
       mutate(educcat=ordered(as.factor(EdLevel), levels=c("ed1", "ed2", "ed3", "ed4",
-                                                          "ed5"),
-                             labels=c("Less than\nHigh School",
-                                      "High School Graduate\n(or GED)","Some College or\nAssociate's Degree", "Bachelor's Degree",
-                                      "Graduate or\nProfessional Degree")))
+                                                          "ed5")))
     
     
     # Place Education MOE
@@ -187,10 +172,7 @@ educPRO <- function(listID, ACS){
       select(geoname:geonum,ed1:ed5)%>%
       gather(EdLevel, value, ed1:ed5, factor_key=TRUE)%>%  #Needed to change this part of the call
       mutate(educcat=ordered(as.factor(EdLevel), levels=c("ed1", "ed2", "ed3", "ed4",
-                                                          "ed5"),
-                             labels=c("Less than\nHigh School",
-                                      "High School Graduate\n(or GED)","Some College or\nAssociate's Degree", "Bachelor's Degree",
-                                      "Graduate or\nProfessional Degree")))
+                                                          "ed5")))
     
     #Preparing data
     names(d13plMOE)[9] <- "MOE"
@@ -231,10 +213,12 @@ educPRO <- function(listID, ACS){
   d$propLOW <- d$propLOW * 100
   d$propHIGH <- d$propHIGH * 100
   
-  d$Education_Cat <- factor(d$Education_Cat, levels=c("Less than\nHigh School",
-                                                      "High School Graduate\n(or GED)",
-                                                      "Some College or\nAssociate's Degree", "Bachelor's Degree",
-                                                      "Graduate or\nProfessional Degree"))
+  d$Education_Cat <- factor(d$Education_Cat, levels=c("ed1", "ed2", "ed3", "ed4",
+                                                      "ed5"),
+                            labels=c("Less than\nHigh School",
+                                                      "High School\nGraduate\n(or GED)",
+                                                      "Some College or\nAssociate's\nDegree", "Bachelor's\nDegree",
+                                                      "Graduate or\nProfessional\nDegree"))
   
   # Preparing Plot
   pltTitle <- "Educational Attainment,\nPersons Age 25 and Older "
@@ -263,7 +247,7 @@ educPRO <- function(listID, ACS){
     theme(plot.title = element_text(hjust = 0.5, size=16),
           panel.background = element_rect(fill = "white", colour = "gray50"),
           panel.grid.major = element_line(colour = "gray80"),
-          axis.text.x = element_text(size=7),
+          axis.text.x = element_text(size=10),
           axis.text.y=element_text(size=12),
           legend.position= "bottom")
   
@@ -282,6 +266,7 @@ educPRO <- function(listID, ACS){
     f.dwide$Sig_Diff <- ifelse(is.na(f.dwide$Sig_Diff)," ",f.dwide$Sig_Diff)
     
     # Preparing Final File
+  
     f.dwideo <-  f.dwide[,c(1,4:7,10:13,15)]
     
     names(f.dwideo) <- c("Education_Cat",paste0("Percentage: ",ctyname), paste0("Margin of Error: ",ctyname),
@@ -289,8 +274,7 @@ educPRO <- function(listID, ACS){
                          "Percentage: Colorado", "Margin of Error: Colorado",
                          "Lower 90% Conf Int: Colorado","Upper 90% Conf Int: Colorado","Significant Difference")
     
-    f.dwideo$Education_Cat <- gsub("\\n"," ",f.dwideo$Education_Cat)
-    
+
     f.dwideo <- f.dwideo[c(4,3,5,1,2),]
   } else {
     ed_place <- f.d13plFin[, c(3,6,7,10:13)]
@@ -306,6 +290,13 @@ educPRO <- function(listID, ACS){
     
     # Preparing Final File
     f.dwideo <-  f.dwide[,c(1,4:7,10:13,15)]
+    factor(f.dwideo$educcat, levels=c("ed1", "ed2", "ed3", "ed4",
+                                     "ed5"),
+           labels=c("Less than High School",
+                    "High School Graduate (or GED)",
+                    "Some College or Associate's Degree", "Bachelor's Degree",
+                    "Graduate or Professional Degree"))
+    
     
     names(f.dwideo) <- c("Education_Cat",paste0("Percentage: ",placename), paste0("Margin of Error: ",placename),
                          paste0("Lower 90% Conf Int: ",placename),paste0("Upper 90% Conf Int: ",placename),

@@ -25,7 +25,7 @@ incomePRO=function(listID, ACS){
   
    state="08"
   base=12
-  
+
   hhinc1VAL <- codemog_api(data="b19001",db=ACS, geonum=paste("1", state, ctyfips, sep=""), meta="no") %>%
     select(-b19001001)%>%
     gather(var, value, b19001002:b19001017, -geoname, -state, -county, -place,-tract,-bg,-geonum)%>%
@@ -36,11 +36,7 @@ incomePRO=function(listID, ACS){
                              15=10;16=11;17=12"))%>%
     group_by(geoname,group)%>%
     summarise(value=sum(as.numeric(value)))%>%
-    
-    mutate(cat=ordered(group, levels=1:12, labels=c("Less than $10,000","$10,000 to $19,999","$20,000 to $29,999",
-                                                    "$30,000 to $39,999", "$40,000 to $49,999", "$50,000 to $59,999",
-                                                    "$60,000 to $74,999","$75,000 to $99,999","$100,000 to $124,999",
-                                                    "$125,000 to $149,999","$150,000 to $199,999","$200,000 or more")))
+    mutate(cat=ordered(group, levels=1:12))
   
   
   # Place MOE
@@ -54,11 +50,7 @@ incomePRO=function(listID, ACS){
                              15=10;16=11;17=12"))%>%
     group_by(geoname,group)%>%
     summarise(value=sum(as.numeric(value)))%>%
-    
-    mutate(cat=ordered(group, levels=1:12, labels=c("Less than $10,000","$10,000 to $19,999","$20,000 to $29,999",
-                                                    "$30,000 to $39,999", "$40,000 to $49,999", "$50,000 to $59,999",
-                                                    "$60,000 to $74,999","$75,000 to $99,999","$100,000 to $124,999",
-                                                    "$125,000 to $149,999","$150,000 to $199,999","$200,000 or more")))
+    mutate(cat=ordered(group, levels=1:12))
   
   names(hhinc1MOE)[3] <- "MOE"
   # Combining Place Level Data File; Calculating percentages
@@ -89,11 +81,7 @@ incomePRO=function(listID, ACS){
                              15=10;16=11;17=12"))%>%
     group_by(geoname,group)%>%
     summarise(value=sum(as.numeric(value)))%>%
-    
-    mutate(cat=ordered(group, levels=1:12, labels=c("Less than $10,000","$10,000 to $19,999","$20,000 to $29,999",
-                                                    "$30,000 to $39,999", "$40,000 to $49,999", "$50,000 to $59,999",
-                                                    "$60,000 to $74,999","$75,000 to $99,999","$100,000 to $124,999",
-                                                    "$125,000 to $149,999","$150,000 to $199,999","$200,000 or more")))
+    mutate(cat=ordered(group, levels=1:12))
   
   #State MOE
   hhinc2MOE=codemog_api(data="b19001_moe",db=ACS, geonum=paste("1", state, sep=""), meta="no")%>%
@@ -106,11 +94,7 @@ incomePRO=function(listID, ACS){
                              15=10;16=11;17=12"))%>%
     group_by(geoname,group)%>%
     summarise(value=sum(as.numeric(value)))%>%
-    
-    mutate(cat=ordered(group, levels=1:12, labels=c("Less than $10,000","$10,000 to $19,999","$20,000 to $29,999",
-                                                    "$30,000 to $39,999", "$40,000 to $49,999", "$50,000 to $59,999",
-                                                    "$60,000 to $74,999","$75,000 to $99,999","$100,000 to $124,999",
-                                                    "$125,000 to $149,999","$150,000 to $199,999","$200,000 or more")))
+    mutate(cat=ordered(group, levels=1:12))
   
   names(hhinc2MOE)[3] <- "MOE"
   # Combining Place Level Data File; Calculating percentages
@@ -142,12 +126,7 @@ incomePRO=function(listID, ACS){
                                15=10;16=11;17=12"))%>%
       group_by(geoname,group)%>%
       summarise(value=sum(as.numeric(value)))%>%
-      
-      mutate(cat=ordered(group, levels=1:12, labels=c("Less than $10,000","$10,000 to $19,999","$20,000 to $29,999",
-                                                      "$30,000 to $39,999", "$40,000 to $49,999", "$50,000 to $59,999",
-                                                      "$60,000 to $74,999","$75,000 to $99,999","$100,000 to $124,999",
-                                                      "$125,000 to $149,999","$150,000 to $199,999","$200,000 or more")))
-    
+      mutate(cat=ordered(group, levels=1:12))    
     
     # Place MOE
     hhinc3MOE=codemog_api(data="b19001_moe",db=ACS, geonum=paste("1", state, placefips, sep=""), meta="no")%>%
@@ -160,11 +139,7 @@ incomePRO=function(listID, ACS){
                                15=10;16=11;17=12"))%>%
       group_by(geoname,group)%>%
       summarise(value=sum(as.numeric(value)))%>%
-      
-      mutate(cat=ordered(group, levels=1:12, labels=c("Less than $10,000","$10,000 to $19,999","$20,000 to $29,999",
-                                                      "$30,000 to $39,999", "$40,000 to $49,999", "$50,000 to $59,999",
-                                                      "$60,000 to $74,999","$75,000 to $99,999","$100,000 to $124,999",
-                                                      "$125,000 to $149,999","$150,000 to $199,999","$200,000 or more")))
+      mutate(cat=ordered(group, levels=1:12))
     
     names(hhinc3MOE)[3] <- "MOE"
     # Combining Place Level Data File; Calculating percentages
@@ -206,10 +181,11 @@ incomePRO=function(listID, ACS){
   hhinc$propLOW <- hhinc$propLOW * 100
   hhinc$propHIGH <- hhinc$propHIGH * 100
   
-  hhinc$Income_Cat <- factor(hhinc$Income_Cat, levels=c("Less than $10,000","$10,000 to $19,999","$20,000 to $29,999",
-                                                        "$30,000 to $39,999", "$40,000 to $49,999", "$50,000 to $59,999",
-                                                        "$60,000 to $74,999","$75,000 to $99,999","$100,000 to $124,999",
-                                                        "$125,000 to $149,999","$150,000 to $199,999","$200,000 or more"))
+  hhinc$Income_Cat <- factor(hhinc$Income_Cat, levels = 1:12,
+                               labels=c("Less\nthan\n$10,000","$10,000\nto\n$19,999 ","$20,000\nto\n$29,999 ",
+                                                        "$30,000\nto\n$39,999 ", "$40,000\nto\n$49,999 ", "$50,000\nto\n$59,999 ",
+                                                        "$60,000\nto\n$74,999 ","$75,000\nto\n$99,999 ","$100,000\nto\n$124,999 ",
+                                                        "$125,000\nto\n$149,999 ","$150,000\nto\n$199,999 ","$200,000\nor\nmore "))
   
   if(nchar(placefips) == 0) {
     hhinc$geoname <- factor(hhinc$geoname, levels=c(ctyname, "Colorado"))
@@ -220,9 +196,9 @@ incomePRO=function(listID, ACS){
   
   pltTitle <- "Household Income Distribution"
   xTitle <- paste0("Income (in 20",substr(ACS,6,8)," Dollars)")
-  
-  axs <- setAxis(hhinc$propHIGH)
-  minAxs <- min(hhinc$propLOW)
+
+  maxAxs  <- round(max(hhinc$propHIGH),digits=0) + 2
+  minAxs <- round(min(hhinc$propLOW),digits=0)
   minAxs <- ifelse(as.numeric(minAxs) > 0, 0,-10)
   
   p=hhinc%>%ggplot(aes(x=Income_Cat, y=prop, fill=geoname))+
@@ -231,11 +207,10 @@ incomePRO=function(listID, ACS){
                   width=.2,                    # Width of the error bars
                   position=position_dodge(.9)) +
     geom_hline(yintercept=0, size=1.05) +
-    scale_y_continuous(limits=c(minAxs,axs$maxBrk), breaks=axs$yBrk,label=percent, expand = c(0, 0))+
+    scale_y_continuous(limits=c(minAxs,maxAxs), label=percent, expand = c(0, 0))+
     scale_fill_manual(values=c("#6EC4E8","#00953A"),
                       name="Geography")+
     theme_codemog(base_size=base)+
-    theme(axis.text.x=element_text(angle=45, hjust=1))+
     labs(title = pltTitle,
          subtitle = subTitle,
          caption = captionSrc("ACS",ACS),
@@ -244,9 +219,10 @@ incomePRO=function(listID, ACS){
     theme(plot.title = element_text(hjust = 0.5, size=16),
           panel.background = element_rect(fill = "white", colour = "gray50"),
           panel.grid.major = element_line(colour = "gray80"),
-          axis.text.x = element_text(size=10),
+          axis.text.x = element_text(size=9),
           axis.text.y = element_text(size=12),
-          legend.position= "bottom")
+          legend.position= "bottom",
+           plot.margin = margin(0,0,0,0, "cm"))
   
   # Building Output dataset
   if(nchar(placefips) == 0) {
@@ -293,7 +269,8 @@ incomePRO=function(listID, ACS){
   }  
   
   
-  f.dwideo$Income_Cat <- factor(f.dwideo$Income_Cat, levels=c("Less than $10,000","$10,000 to $19,999","$20,000 to $29,999",
+  f.dwideo$Income_Cat <- factor(f.dwideo$Income_Cat, levels = 1:12, 
+                                labels =c("Less than $10,000","$10,000 to $19,999","$20,000 to $29,999",
                                                               "$30,000 to $39,999", "$40,000 to $49,999", "$50,000 to $59,999",
                                                               "$60,000 to $74,999","$75,000 to $99,999","$100,000 to $124,999",
                                                               "$125,000 to $149,999","$150,000 to $199,999","$200,000 or more"))
