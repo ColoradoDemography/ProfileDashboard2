@@ -1172,7 +1172,7 @@ server <- function(input, output, session) {
         
  
         #knitting file and copy to final document
-        inRmd <-  "/srv/shiny-server/ProfileDashboard2/www/SDO_Report.Rmd"
+        inRmd <-  "SDO_Report.Rmd"
         tempPDF <- "SDO_Report.pdf"
 
         rmarkdown::render(inRmd, 
