@@ -19,7 +19,7 @@ TempFil <- function() {
   
  #Copying Dola Image
   file.copy("www\\co_dola_div_localgov_300_rgb.png",oDir)
-  oMatrix[90] <- file.path(paste0(oDir,"\\","co_dola_div_localgov_300_rgb.png"))
+  oMatrix[90] <- file.path(paste0(oDir,"//","co_dola_div_localgov_300_rgb.png"))
 
   
   
