@@ -1168,19 +1168,18 @@ server <- function(input, output, session) {
       },
       content <- function(file) {
         #Generate Report
-        # Check for file locatio       
-        
- 
         #knitting file and copy to final document
-        inRmd <-  "SDO_Report.Rmd"
-        tempPDF <- "SDO_Report.pdf"
 
-        rmarkdown::render(inRmd, 
+        tempRMD <- fileMat[88]
+        tempPDF <- fileMat[89] 
+
+        rmarkdown::render(tempRMD, output_file = tempPDF,
                           params =  list(outChk = input$outChk,
                                          olistID = idList,
                                          olevel = input$level,
                                          filemat = fileMat))
-
+        
+        
         file.rename(tempPDF, file) # move pdf to file for downloading
       } #Content
     ) #Download Handler
