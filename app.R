@@ -145,8 +145,6 @@ popem3 <<- list()
 popem4 <<- list()
 popem.list <<- list()
 
-#Prepping Matrix of filenames
-fileMat <- TempFil()
 
 # Structure of user Interface
 ui <-
@@ -220,6 +218,7 @@ ui <-
 
 # Server Management Function
 server <- function(input, output, session) {
+  tmpDir <- tempdir()
   infoSrc <- matrix(" ",nrow=8,ncol=2)
   infoSrc[1,1] <- "<b>Basic Statistics</b>"
   infoSrc[1,2] <- "Summary Table and Map"
@@ -368,6 +367,12 @@ server <- function(input, output, session) {
   observeEvent(input$profile,  {
 
     shinyjs::hide("outputPDF")
+    
+    #Prepping Matrix of filenames
+
+    fileMat <- TempFil(tmpDir)
+    
+    
  
     dLout <- submitPush(input$level,input$unit,input$outChk)  # Generate dataLayer Command
     session$sendCustomMessage("handler1",dLout)  #Sends dataLayer command to dataL.js script
@@ -1179,7 +1184,6 @@ server <- function(input, output, session) {
                                          olevel = input$level,
                                          filemat = fileMat))
         
-        
         file.rename(tempPDF, file) # move pdf to file for downloading
       } #Content
     ) #Download Handler
@@ -1289,7 +1293,10 @@ server <- function(input, output, session) {
   }) #observeEvent input$profile
   
  
-  
+  session$onSessionEnded(function() {
+    file.remove(tmpDir)
+    discard(tmpDir)
+  })
   
   
 }  #server
