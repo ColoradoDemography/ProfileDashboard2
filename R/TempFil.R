@@ -1,13 +1,28 @@
 #' TempFil Outputs a matrix of temporary file names and directories
 #'
-#' @param filemat tTempoary file matrix
-#' @return Matric of filename vectors
+#' @param filemat Temporary file matrix
+#' @return Matrix of filename vectors
 #' @export
 
 TempFil <- function() {
 
-  oMatrix <- matrix(data=NA,nrow=87)
+  oMatrix <- matrix(data=NA,nrow=90)
   oDir <- tempdir()
+  
+  # Copying RMD File      
+  file.copy("SDO_Report.Rmd",oDir)
+  oMatrix[88] <- file.path(paste0(oDir,"\\","SDO_Report.Rmd"))
+  
+  # Location of PDF File
+  oMatrix[89] <- file.path(paste0(oDir,"\\","SDO_REPORT.pdf"))
+
+  
+ #Copying Dola Image
+  file.copy("www\\co_dola_div_localgov_300_rgb.png",oDir)
+  oMatrix[90] <- file.path(paste0(oDir,"\\","co_dola_div_localgov_300_rgb.png"))
+
+  
+  
   for(i in 1:87) {
     if(i %in% c(4, 5, 9, 10, 11, 12, 14, 15, 17, 18, 20, 21, 25, 26, 28, 29, 31, 32, 34, 
                 35, 42, 43, 55, 56, 61, 62, 64, 65, 67, 68, 71, 72, 76, 77, 79, 80, 82, 83)) { #PNG files
