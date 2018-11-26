@@ -1292,12 +1292,6 @@ server <- function(input, output, session) {
     
   }) #observeEvent input$profile
   
- 
-  session$onSessionEnded(function() {
-    file.remove(tmpDir)
-    discard(tmpDir)
-  })
-  
   
 }  #server
 
