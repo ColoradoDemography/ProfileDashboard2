@@ -57,7 +57,7 @@ houseEstPRO <- function(listID,curYr, base=10) {
   subTitle <- ctyname
   srcTitle <- "Source: State Demography Office"
 
-  axs <- setAxis(f.hhPlace$total_households)
+    axs <- setAxis(f.hhPlace$total_households)
 
   p <- f.hhPlace%>%
     ggplot(aes(x=year, y=total_households, group=datatype))+

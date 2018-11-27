@@ -4,13 +4,13 @@
 #'  This function compares housing occupancy and vacancy rates for a place to the state
 #'
 #' @param listID the list containing place id and Place names
-#' @param ACS Specifies the ACS data set to be used, reads curACS from Shiny program
+#' @param HH Specifies the HH data set to be used, reads curHH from Shiny program
 #' @return kable formatted  table and data file
 #' @export
 #'
 
-housePRO=function(listID, ACS){
-  
+housePRO=function(listID, curYr){
+
   # Collecting place ids from  idList, setting default values
   
   ctyfips <- listID$ctyNum
@@ -24,67 +24,82 @@ housePRO=function(listID, ACS){
 state <- "08"
 
   if(nchar(placefips) == 0) {
-    # Building ACS county data table
-    f.b25001 <- codemog_api(data="b25001", db=ACS, geonum=paste("1", state, ctyfips, sep=""),meta="no")
-    f.b25003 <- codemog_api(data="b25003", db=ACS, geonum=paste("1", state, ctyfips, sep=""),meta="no")
-    f.b25004 <- codemog_api(data="b25004", db=ACS, geonum=paste("1", state, ctyfips, sep=""),meta="no")
+    # Building county data table
+    HHSQL <- paste0("SELECT countyfips, year, totalpopulation, householdpopulation, groupquarterspopulation,  householdsize, totalhousingunits, vacanthousingunits, vacancyrate FROM estimates.county_profiles  WHERE (countyfips = ", ctyfips ," and year = ", curYr,");")
   } else {
-    # Building ACS Place data table
-    f.b25001 <- codemog_api(data="b25001", db=ACS, geonum=paste("1", state, placefips, sep=""),meta="no")
-    f.b25003 <- codemog_api(data="b25003", db=ACS, geonum=paste("1", state, placefips, sep=""),meta="no")
-    f.b25004 <- codemog_api(data="b25004", db=ACS, geonum=paste("1", state, placefips, sep=""),meta="no")
+    # Building Place data table
+    HHSQL <- paste0("SELECT countyfips, placefips, year, totalpopulation, householdpopulation, groupquarterspopulation,  householdsize, totalhousingunits, vacanthousingunits, vacancyrate FROM estimates.muni_pop_housing WHERE (placefips = ", placefips," and year = ", curYr,");")
   }
 
 
-  f.AcsPl <- cbind(f.b25001[,c(1,8)], f.b25003[,8:10],f.b25004[,8:15])
+# create a connection
+# save the password that we can "hide" it as best as we can by collapsing it
+pw <- {
+  "demography"
+}
 
-  f.AcsPl[,2:13]=as.numeric(as.character(f.AcsPl[,2:13]))
+# loads the PostgreSQL driver
+drv <- dbDriver("PostgreSQL")
+# creates a connection to the postgres database
+# note that "con" will be used later in each connection to the database
+con <- dbConnect(drv, dbname = "dola",
+                 host = "104.197.26.248", port = 5433,
+                 user = "codemog", password = pw)
+rm(pw) # removes the password
 
-  f.AcsPl <- f.AcsPl %>% rename(Total=b25001001, Occupied=b25003001, Vacant=b25004001,
-                                Owner = b25003002, Renter = b25003003, Seasonal = b25004006)%>%
-    mutate(Other = sum(b25004002, b25004003, b25004004, b25004005, b25004007,b25004008))
+f.hhP <- dbGetQuery(con, HHSQL)
 
-  f.AcsPlace <- f.AcsPl[,c(1:6,11,14)] %>%
-    gather(var, ACS, Total:Other, -geoname)
+
+#Closing the connection
+dbDisconnect(con)
+dbUnloadDriver(drv)
+rm(con)
+
+# Preparing data
+if(nchar(placefips) == 0) {
+  # Building county data table
+  f.hhP$occupiedhousingunits <- f.hhP$totalhousingunits - f.hhP$vacanthousingunits
+  f.hhP <- f.hhP[,c(1:7,10,8,9)]
+  f.HHPl <- f.hhP %>% gather(housing, count, totalpopulation:vacancyrate, factor_key=TRUE)
+  f.HHPl <- f.HHPl[,c(3,4)]
+}  else {
+    f.hhP <- f.hhP[which(as.numeric(f.hhP$countyfips) != 999),]
+    f.hhP$occupiedhousingunits <- f.hhP$totalhousingunits - f.hhP$vacanthousingunits
+    
+    f.HHPl <- f.hhP %>% summarize(totalpopulation	 = sum(totalpopulation),
+                                  householdpopulation	 = sum( householdpopulation),
+                                  groupquarterspopulation	 = sum( groupquarterspopulation),
+                                  householdsize	 = sum(  householdsize),
+                                  totalhousingunits	 = sum( totalhousingunits),
+                                  occupiedhousingunits	 = sum(occupiedhousingunits),
+                                  vacanthousingunits	 = sum( vacanthousingunits)) %>%
+                        mutate(vacancyrate = (vacanthousingunits/totalhousingunits) *100) %>%
+                        gather(housing, count, totalpopulation:vacancyrate, factor_key=TRUE)
+  }
   
+
+f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population",
+                   ifelse(f.HHPl$housing == "householdpopulation", "Household Population",         
+                   ifelse(f.HHPl$housing == "groupquarterspopulation", "Group Quarters Population",
+                   ifelse(f.HHPl$housing == "totalhousingunits", "Total Housing Units",
+                   ifelse(f.HHPl$housing == "householdsize", "Persons per Household",       
+                   ifelse(f.HHPl$housing == "occupiedhousingunits", "Occupied Housing Units",
+                   ifelse(f.HHPl$housing == "vacanthousingunits", "Vacant Housing Units","Vacancy Rate")))))))
+
+
+ 
+  f.HHPl[c(1:3,5:7),2] <- comma(as.numeric(f.HHPl[c(1:3,5:7),2]))
+  f.HHPl[4,2] <- round(as.numeric(f.HHPl[4,2]), 2)
+  f.HHPl[8,2] <- percent(as.numeric(f.HHPl[8,2]))
+
+  m.House <- as.matrix(f.HHPl)
+
   
-
-
-  #Finalizing place table
-  f.AcsPLFin <- f.AcsPlace
-  names(f.AcsPLFin) <- c("HCat", "geoname","PL_Value")
-  #Calculating  proportions
-  PL_Tot <- as.numeric(f.AcsPLFin[1,3])
-  f.AcsPLFin$PL_VAL_Prop <- f.AcsPLFin$PL_Value/PL_Tot
-  f.AcsPLFin$PL_VAL_PCT <- percent(f.AcsPLFin$PL_VAL_Prop *100)
-
-
-
-  # Assembling Combined Tab: f.longtab
-
-  f.longTab <- f.AcsPLFin[,c(2,3,5)]
-
-  f.longTab$geoname <- ifelse(f.longTab$geoname == "Total","Total Housing Units",
-                           ifelse(f.longTab$geoname == "Occupied","Occupied Housing Units",
-                                  ifelse(f.longTab$geoname == "Owner", "Owner-Occupied Units",
-                                         ifelse(f.longTab$geoname == "Renter", "Renter-Occupied Units",
-                                                ifelse(f.longTab$geoname == "Vacant", "Vacant Housing Units",
-                                                       ifelse(f.longTab$geoname == "Seasonal","Seasonal Units","All Other Vacant Units"))))))
-
-  #Reordering Table and prepating output
-
-  f.HouseTab <- f.longTab
-  f.HouseTab[2] <- comma(f.HouseTab[,2])
-
-  m.House <- as.matrix(f.HouseTab)
-
-  names(f.HouseTab) <- c("Housing Type", paste0("Housing Units: ",ctyname),
-                         paste0("Percentage: ",ctyname))
 
   # Setting up table
 
   #Column Names
-  names_spaced <- c("Housing Type","Count","Percent")
+  names_spaced <- c("Housing Type","Value")
   #Span Header
 
   if(nchar(placefips) == 0) {
@@ -93,73 +108,72 @@ state <- "08"
 
   # set vector names
   names(tblHead1) <- c(" ", ctyname)
+  tabTitle <- paste0("Housing Units: ",ctyname, ", ",curYr)
   } else {
     # create vector with colspan
     tblHead1 <- c(" " = 1, placename = 2)
     
     # set vector names
     names(tblHead1) <- c(" ", placename)
-    
+    tabTitle <- paste0("Housing Units: ",placename,", ",curYr)
   }
 
   
   Htable <- m.House %>%
     kable(format='html', table.attr='class="cleanTable"',
           row.names=FALSE,
-          align='lrr',
-          caption="Housing Units",
+          align='lr',
+          caption=tabTitle,
           col.names = names_spaced,
           escape = FALSE)  %>%
     kable_styling(bootstrap_options = "condensed",full_width = F,font_size = 12) %>%
     row_spec(0, align = "c") %>%
     column_spec(1, width = "3.5in") %>%
     column_spec(2, width ="0.5in") %>%
-    column_spec(3, width ="0.5in") %>%
-    add_indent(c(3,4,6,7)) %>%
-    add_header_above(header=tblHead1) %>%
-    footnote(captionSrc("ACS",ACS))
+    add_indent(c(2,3,6,7,8)) %>%
+   # add_header_above(header=tblHead1) %>%
+    footnote(captionSrc("SDO",curYr))
   
   # preparing FlexTable
-  f.house_data <- data.frame(m.House)
-  FlexOut <- regulartable(f.house_data)
-  FlexOut <- set_header_labels(FlexOut, geoname = "Housing Type", 
-                               PL_Value="Count", PL_VAL_PCT="Percent"
-                               )
+  
+  FlexOut <- regulartable(f.HHPl)
+  FlexOut <- set_header_labels(FlexOut, housing = "Housing Type", 
+                               count="Value")
   
   if(nchar(placefips) == 0) {
-    FlexOut <- add_header(FlexOut,PL_Value=ctyname,top=TRUE)
+    FlexOut <- add_header(FlexOut,count=ctyname,top=TRUE)
   } else {
-    FlexOut <- add_header(FlexOut,PL_Value=placename,top=TRUE)
+    FlexOut <- add_header(FlexOut,count=placename,top=TRUE)
   }
   
-  FlexOut <- add_header(FlexOut,geoname="Housing Units",top=TRUE)
-  FlexOut <- add_footer(FlexOut,geoname=captionSrc("ACS",ACS))
-  FlexOut <- merge_at(FlexOut,i=1, j = 1:3, part = "header")
-  FlexOut <- merge_at(FlexOut,i=2, j = 2:3, part = "header") 
-  FlexOut <- merge_at(FlexOut,i=1, j = 1:3, part = "footer")
+  FlexOut <- add_header(FlexOut,housing=tabTitle,top=TRUE)
+  FlexOut <- add_footer(FlexOut,housing=captionSrc("SDO",curYr))
+  FlexOut <- merge_at(FlexOut,i=1, j = 1:2, part = "header")
+  FlexOut <- merge_at(FlexOut,i=2, j = 2, part = "header") 
+  FlexOut <- merge_at(FlexOut,i=1, j = 1:2, part = "footer")
   FlexOut <- align(FlexOut,i=1:3, j=1, align="left",part="header")
-  FlexOut <- align(FlexOut,i=2:3, j=2:3, align="center",part="header")
+  FlexOut <- align(FlexOut,i=2:3, j=2, align="center",part="header")
   FlexOut <- align(FlexOut,i=1, align="left",part="footer")
   FlexOut <- align(FlexOut, j=1, align="left", part="body")
   FlexOut <- autofit(FlexOut)
   FlexOut <- width(FlexOut,j=1, width=3)
-  FlexOut <- width(FlexOut,j=2:3, width=1)
+  FlexOut <- width(FlexOut,j=2, width=1)
 
    Ltable <- m.House %>% kable(
         col.names = names_spaced,
         align="lrr",
-        caption="Housing Units", row.names=FALSE,
+        caption=tabTitle, row.names=FALSE,
         format="latex", booktabs=TRUE)  %>%
         kable_styling(latex_options="HOLD_position") %>%
         column_spec(1, width = "3.5in") %>%
         column_spec(2, width ="0.5in") %>%
-        column_spec(3, width ="0.5in") %>%
-        add_indent(c(3,4,6,7)) %>%
+        add_indent(c(2,3,6,7,8)) %>%
         add_header_above(header=tblHead1) %>%
-        footnote(captionSrc("ACS",ACS))
+        footnote(captionSrc("SDO",curYr))
 
+  names(f.HHPl) <- c(tabTitle,"Value")  
 
-   outList <- list("Htable" = Htable, "Ltable" = Ltable,"data" = f.HouseTab,"FlexTable" = FlexOut)
+   outList <- list("Htable" = Htable, "Ltable" = Ltable,"data" = f.HHPl,"FlexTable" = FlexOut)
    return(outList)
   }
 
