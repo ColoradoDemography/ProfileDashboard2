@@ -59,8 +59,8 @@ rm(con)
 if(nchar(placefips) == 0) {
   # Building county data table
   f.hhP$occupiedhousingunits <- f.hhP$totalhousingunits - f.hhP$vacanthousingunits
-  f.hhP <- f.hhP[,c(1:7,10,8,9)]
-  f.HHPl <- f.hhP %>% gather(housing, count, totalpopulation:vacancyrate, factor_key=TRUE)
+  f.hhP <- f.hhP[,c(1,2,7,10,8,9,3:6)]
+  f.HHPl <- f.hhP %>% gather(housing, count, totalhousingunits:householdsize, factor_key=TRUE)
   f.HHPl <- f.HHPl[,c(3,4)]
 }  else {
     f.hhP <- f.hhP[which(as.numeric(f.hhP$countyfips) != 999),]
@@ -73,8 +73,10 @@ if(nchar(placefips) == 0) {
                                   totalhousingunits	 = sum( totalhousingunits),
                                   occupiedhousingunits	 = sum(occupiedhousingunits),
                                   vacanthousingunits	 = sum( vacanthousingunits)) %>%
-                        mutate(vacancyrate = (vacanthousingunits/totalhousingunits) *100) %>%
-                        gather(housing, count, totalpopulation:vacancyrate, factor_key=TRUE)
+                        mutate(vacancyrate = (vacanthousingunits/totalhousingunits) *100) 
+    
+     f.HHPl <- f.HHPl[,c(5:8,1:4)] %>%           
+                        gather(housing, count, totalhousingunits:householdsize, factor_key=TRUE)
   }
   
 
@@ -89,8 +91,8 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
 
  
   f.HHPl[c(1:3,5:7),2] <- comma(as.numeric(f.HHPl[c(1:3,5:7),2]))
-  f.HHPl[4,2] <- round(as.numeric(f.HHPl[4,2]), 2)
-  f.HHPl[8,2] <- percent(as.numeric(f.HHPl[8,2]))
+  f.HHPl[8,2] <- round(as.numeric(f.HHPl[8,2]), 2)
+  f.HHPl[4,2] <- percent(as.numeric(f.HHPl[4,2]))
 
   m.House <- as.matrix(f.HHPl)
 
@@ -130,7 +132,7 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
     row_spec(0, align = "c") %>%
     column_spec(1, width = "3.5in") %>%
     column_spec(2, width ="0.5in") %>%
-    add_indent(c(2,3,6,7,8)) %>%
+    add_indent(c(2,3,4,6,7,8)) %>%
    # add_header_above(header=tblHead1) %>%
     footnote(captionSrc("SDO",curYr))
   
@@ -167,7 +169,7 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
         kable_styling(latex_options="HOLD_position") %>%
         column_spec(1, width = "3.5in") %>%
         column_spec(2, width ="0.5in") %>%
-        add_indent(c(2,3,6,7,8)) %>%
+        add_indent(c(2,3,4,6,7,8)) %>%
         add_header_above(header=tblHead1) %>%
         footnote(captionSrc("SDO",curYr))
 
