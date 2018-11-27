@@ -218,7 +218,7 @@ ui <-
 
 # Server Management Function
 server <- function(input, output, session) {
-  tmpDir <- tempdir()
+  
   infoSrc <- matrix(" ",nrow=8,ncol=2)
   infoSrc[1,1] <- "<b>Basic Statistics</b>"
   infoSrc[1,2] <- "Summary Table and Map"
@@ -370,7 +370,7 @@ server <- function(input, output, session) {
     
     #Prepping Matrix of filenames
 
-    fileMat <- TempFil(tmpDir)
+    fileMat <- TempFil()
     
     
  
@@ -769,7 +769,7 @@ server <- function(input, output, session) {
         if("housing" %in% input$outChk){
           #Generate tables, plots and text...
           poph1 <<- houseEstPRO(listID=idList,curYr=curYr)
-          poph2 <<- housePRO(listID=idList, ACS=curACS) # Housing Unit Table
+          poph2 <<- housePRO(listID=idList, curYr=curYr) # Housing Unit Table
           poph3 <<- OOHouse(listID=idList,ACS=curACS)  # Chars of Owner Occupied Housing
           poph4 <<- RTHouse(listID=idList,ACS=curACS)  # Chars of Rental Housing
           poph5 <<- HouseVal(listID=idList,ACS=curACS) # Comparative Value of Housing both OO and Rental
@@ -1193,7 +1193,6 @@ server <- function(input, output, session) {
     #Event to outload plots and data files
     
     #Basic Statistics
-    # Check this
     callModule(downloadObj, id = "statstabl", simpleCap(input$unit), "statstabl", stat_List$FlexTable)
     
     #Population Forecast
@@ -1291,6 +1290,7 @@ server <- function(input, output, session) {
     callModule(downloadObj, id = "popem4data", simpleCap(input$unit),"popem4data", popem4$data)
     
   }) #observeEvent input$profile
+  
   
   
 }  #server
