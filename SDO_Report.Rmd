@@ -12,6 +12,7 @@ header-includes:
    - \usepackage{xcolor}
    - \usepackage{etoolbox}
    - \usepackage{float}
+   - \usepackage{threeparttable}
    
 output: pdf_document
 fontsize: 11
