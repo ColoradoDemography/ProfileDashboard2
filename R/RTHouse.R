@@ -217,17 +217,17 @@ if(nchar(placefips) == 0) {
                      align=c("lrrrr"),
                      caption="Characteristics of Rental Housing", row.names=FALSE,
                      format="latex", booktabs=TRUE)  %>%
-      kable_styling(latex_options=c("scale_down","HOLD_position"),font_size=10)  %>%
+      kable_styling(latex_options="HOLD_position",font_size=10)  %>%
       row_spec(0, align = "c") %>%
       column_spec(1, width = "3.3in") %>%
-      column_spec(2, width = "0.5in") %>%
-      column_spec(3, width ="0.5in") %>%
-      column_spec(4, width ="0.5in") %>%
-      column_spec(5, width ="0.5in") %>%
+      column_spec(2, width = "0.4in") %>%
+      column_spec(3, width ="0.4in") %>%
+      column_spec(4, width ="0.4in") %>%
+      column_spec(5, width ="0.4in") %>%
       add_indent(c(2:6)) %>%
       add_header_above(header=tblHead2) %>%
       add_header_above(header=tblHead1) %>%
-      footnote(captionSrc("ACS",ACS))
+      footnote(captionSrc("ACS",ACS),threeparttable = T)
 
     
     outList <- list("Htable" = Housing_tab, "Ltable" = tabOut, "data" = f.RTHouse,"FlexTable" = FlexOut)

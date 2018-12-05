@@ -9,7 +9,7 @@
 #' @export
 
 popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
-  
+
   # Collecting place ids from  idList, setting default values
   
   ctyfips <- listID$ctyNum
@@ -30,6 +30,8 @@ popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
   
   yaxs <- setAxis(d$Tot_pop)
   xaxs <- setAxis(d$year)
+  xaxs$maxBrk <- ifelse(xaxs$maxBrk > eyr,eyr,xaxs$maxBrk)
+  xaxs$yBrk <- seq(byr, eyr, by = 10)
   
   #Creating Plot  
   p=d%>%

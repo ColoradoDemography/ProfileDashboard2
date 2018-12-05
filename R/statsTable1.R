@@ -467,10 +467,12 @@ statsTable1 <- function(lvl,listID,sYr,eYr,ACS){
               col.names = names_spaced,
               caption="Community Quick Facts",
               format ="latex", booktabs=TRUE,escape=TRUE) %>%
-        kable_styling(latex_options=c("scale_down","HOLD_position"),font_size=10) %>%
+        kable_styling(latex_options="HOLD_position",font_size=10) %>%
         row_spec(0, align="c") %>%
-        column_spec(1, width = "5in") 
-      
+        column_spec(1, width = "4in") %>%
+        column_spec(2, width = "0.4in") %>%
+        column_spec(3, width = "0.4in") %>%
+        column_spec(4, width = "0.4in") 
     }  else  {
       outLATEX <- outTab %>%
       kable(digits=1,
@@ -479,9 +481,11 @@ statsTable1 <- function(lvl,listID,sYr,eYr,ACS){
             col.names = names_spaced,
             caption="Community Quick Facts",
             format ="latex", booktabs=TRUE, escape=TRUE) %>%
-        kable_styling(latex_options=c("scale_down","HOLD_position"),font_size=10) %>%
+        kable_styling(latex_options="HOLD_position",font_size=10) %>%
         row_spec(0, align="c") %>%
-        column_spec(1, width = "5in") 
+        column_spec(1, width = "4in") %>%
+        column_spec(2, width = "0.4in") %>%
+        column_spec(3, width = "0.4in")
     }
     OutTxt <- " "
     if(listID$multiCty == "T") {

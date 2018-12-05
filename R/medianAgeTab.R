@@ -361,8 +361,15 @@ if(nchar(placename) == 0)  {
                   format="latex", booktabs=TRUE)  %>%
     kable_styling(latex_options="HOLD_position",font_size=10)  %>%
     row_spec(0, align="c") %>%
+    column_spec(1, width = "0.5in") %>%
+    column_spec(2, width = "0.5in") %>%
+    column_spec(3, width = "0.5in") %>%
+    column_spec(4, width = "0.5in") %>%
+    column_spec(5, width = "0.5in") %>%
+    column_spec(6, width = "0.75in") %>%
+    column_spec(7, width = "0.5in") %>%
     add_header_above(header=tblHead) %>%
-    footnote(captionSrc("ACS",ACS))
+    footnote(captionSrc("ACS",ACS),threeparttable = T)
 
   PlAge <- as.numeric(m.ageTab[3,2])
   StAge <- as.numeric(m.ageTab[3,4])

@@ -486,9 +486,10 @@ HouseVal <- function(listID, ACS, state="08"){
                            align=c("lrrrrr"),
                            caption="Comparison of Owner-Occupied Housing Values", row.names=FALSE,
                            format="latex", booktabs=TRUE)  %>%
-      kable_styling(latex_options=c("scale_down","HOLD_position"),font_size=10)  %>%
+      kable_styling(latex_options="HOLD_position",font_size=10)  %>%
       row_spec(0, align = "c") %>%
-      column_spec(1,width="3in") %>%
+      column_spec(1, width = "3in") %>%
+      column_spec(2:6, width = "0.33in") %>%
       add_header_above(header=tblHead1) %>%
       footnote(captionSrc("ACS",ACS))
     
@@ -497,9 +498,10 @@ HouseVal <- function(listID, ACS, state="08"){
                            align=c("lrrrrr"),
                            caption="Comparison of Rental Housing Values", row.names=FALSE,
                            format="latex", booktabs=TRUE)  %>%
-      kable_styling(latex_options=c("scale_down","HOLD_position"),font_size=10) %>%
+      kable_styling(latex_options="HOLD_position",font_size=10) %>%
       row_spec(0, align = "c") %>%
-      column_spec(1,width="3in") %>%
+      column_spec(1, width = "3in") %>%
+      column_spec(2:6, width = "0.33in") %>%
       add_header_above(header=tblHead1) %>%
       footnote(captionSrc("ACS",ACS))
     

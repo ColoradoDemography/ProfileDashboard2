@@ -268,9 +268,9 @@ if(nchar(placefips) != 0) {
                  align='lrr',
                  caption=capstr2,
                  format="latex", booktabs=TRUE) %>%
-    kable_styling(font_size=10)  %>%
+    kable_styling(latex_options="HOLD_position",font_size=10)  %>%
     row_spec(0, align = "c") %>%
-    footnote(captionSrc("LODES",""))
+    footnote(captionSrc("LODES",""),threeparttable = T)
 
 
   liveTabL <-kable(m.live,
@@ -279,9 +279,9 @@ if(nchar(placefips) != 0) {
                   align='lrr',
                   caption=capstr1,
                   format="latex", booktabs=TRUE) %>%
-    kable_styling(font_size=10)  %>%
+    kable_styling(latex_options="HOLD_position",font_size=10)  %>%
     row_spec(0, align = "c") %>%
-    footnote(captionSrc("LODES",""))
+    footnote(captionSrc("LODES",""),threeparttable = T)
 
   # Binding List for Output
   outList <- list("plot" = outVenn, "liveTabH" = liveTabH, "data1" = f.live_fin,

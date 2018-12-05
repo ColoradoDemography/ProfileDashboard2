@@ -266,9 +266,9 @@ popTable <- function(lvl,listID,sYr,eYr) {
               format ="latex", booktabs=TRUE) %>%
         kable_styling(latex_options="HOLD_position",font_size=9) %>%
         row_spec(0, align="c") %>%
-        column_spec(column=1:7, width="0.5in") %>%
+        column_spec(column=1:7, width="0.4in") %>%
         add_header_above(header=tblHead)  %>%
-        footnote(captionSrc("SDO",""))
+        footnote(captionSrc("SDO",""),threeparttable=T)
     }  else { 
       OutLATEX <- x.OutTab %>%
         kable(digits=1,
@@ -279,9 +279,9 @@ popTable <- function(lvl,listID,sYr,eYr) {
               format ="latex", booktabs=TRUE) %>%
         kable_styling(latex_options="HOLD_position",font_size=9) %>%
         row_spec(0, align="c") %>%
-        column_spec(column=1:5, width="0.5in") %>%
+        column_spec(column=1:5, width="0.4in") %>%
         add_header_above(header=tblHead)  %>%
-        footnote(captionSrc("SDO",""))
+        footnote(captionSrc("SDO",""),threeparttable=T)
     }
     
     # Building text

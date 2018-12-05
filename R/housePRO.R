@@ -166,12 +166,12 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
         align="lrr",
         caption=tabTitle, row.names=FALSE,
         format="latex", booktabs=TRUE)  %>%
-        kable_styling(latex_options="HOLD_position") %>%
+        kable_styling(latex_options="HOLD_position", font_size=10) %>%
         column_spec(1, width = "3.5in") %>%
         column_spec(2, width ="0.5in") %>%
         add_indent(c(2,3,4,6,7,8)) %>%
         add_header_above(header=tblHead1) %>%
-        footnote(captionSrc("SDO",curYr))
+        footnote(captionSrc("SDO",curYr),threeparttable = T)
 
   names(f.HHPl) <- c(tabTitle,"Value")  
 
