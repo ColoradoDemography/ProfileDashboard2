@@ -381,7 +381,7 @@ statsTable1 <- function(lvl,listID,sYr,eYr,ACS){
       outHTML <-  kable(outTab, format='html', table.attr='class="cleanTab"',
                          digits=1,
                          row.names=FALSE,
-                         align='lrr',
+                         align='lrrr',
                          col.names = names_spaced,
                          caption="Community Quick Facts",
                          escape = FALSE)   %>%
@@ -395,7 +395,7 @@ statsTable1 <- function(lvl,listID,sYr,eYr,ACS){
       outHTML <-  kable(outTab, format='html', table.attr='class="cleanTab"',
                          digits=1,
                          row.names=FALSE,
-                         align='lrrr',
+                         align='lrr',
                          col.names = names_spaced,
                          caption="Community Quick Facts",
                          escape = FALSE)   %>%
@@ -463,7 +463,7 @@ statsTable1 <- function(lvl,listID,sYr,eYr,ACS){
       outLATEX <- outTab %>%
         kable(digits=1,
               row.names=FALSE,
-              align="lrr",
+              align="lrrr",
               col.names = names_spaced,
               caption="Community Quick Facts",
               format ="latex", booktabs=TRUE,escape=TRUE) %>%
@@ -477,7 +477,7 @@ statsTable1 <- function(lvl,listID,sYr,eYr,ACS){
       outLATEX <- outTab %>%
       kable(digits=1,
             row.names=FALSE,
-            align="lrrr",
+            align="lrr",
             col.names = names_spaced,
             caption="Community Quick Facts",
             format ="latex", booktabs=TRUE, escape=TRUE) %>%
