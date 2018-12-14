@@ -269,13 +269,20 @@ educPRO <- function(listID, ACS){
   
     f.dwideo <-  f.dwide[,c(1,4:7,10:13,15)]
     
+ 
+    
     names(f.dwideo) <- c("Education_Cat",paste0("Percentage: ",ctyname), paste0("Margin of Error: ",ctyname),
                          paste0("Lower 90% Conf Int: ",ctyname),paste0("Upper 90% Conf Int: ",ctyname),
                          "Percentage: Colorado", "Margin of Error: Colorado",
                          "Lower 90% Conf Int: Colorado","Upper 90% Conf Int: Colorado","Significant Difference")
     
+    f.dwideo$Education_Cat <- factor(f.dwideo$Education_Cat, levels=c("ed1", "ed2", "ed3", "ed4",
+                                      "ed5"),
+           labels=c("Less than High School",
+                    "High School Graduate (or GED)",
+                    "Some College or Associate's Degree", "Bachelor's Degree",
+                    "Graduate or Professional Degree"))
 
-    f.dwideo <- f.dwideo[c(4,3,5,1,2),]
   } else {
     ed_place <- f.d13plFin[, c(3,6,7,10:13)]
     ed_county <- f.d13ctyFin[, c(3,6,7,10:13)]
@@ -290,13 +297,6 @@ educPRO <- function(listID, ACS){
     
     # Preparing Final File
     f.dwideo <-  f.dwide[,c(1,4:7,10:13,15)]
-    factor(f.dwideo$educcat, levels=c("ed1", "ed2", "ed3", "ed4",
-                                     "ed5"),
-           labels=c("Less than High School",
-                    "High School Graduate (or GED)",
-                    "Some College or Associate's Degree", "Bachelor's Degree",
-                    "Graduate or Professional Degree"))
-    
     
     names(f.dwideo) <- c("Education_Cat",paste0("Percentage: ",placename), paste0("Margin of Error: ",placename),
                          paste0("Lower 90% Conf Int: ",placename),paste0("Upper 90% Conf Int: ",placename),
@@ -306,9 +306,12 @@ educPRO <- function(listID, ACS){
                          paste0("Upper 90% Conf Int: ",ctyname),
                          "Significant Difference")
     
-    f.dwideo$Education_Cat <- gsub("\\n"," ",f.dwideo$Education_Cat)
-    
-    f.dwideo <- f.dwideo[c(4,3,5,1,2),]
+    f.dwideo$Education_Cat <- factor(f.dwideo$Education_Cat, levels=c("ed1", "ed2", "ed3", "ed4",
+                                                                      "ed5"),
+                                     labels=c("Less than High School",
+                                              "High School Graduate (or GED)",
+                                              "Some College or Associate's Degree", "Bachelor's Degree",
+                                              "Graduate or Professional Degree"))
     
   }
   
