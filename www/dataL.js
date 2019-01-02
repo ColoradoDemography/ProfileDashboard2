@@ -49,7 +49,7 @@ $(document).on('shiny:inputchanged', function(event) {
 	  }		 
      var dl1 = "window.dataLayer = window.dataLayer || [];"
 	 var dl2 = " window.dataLayer.push({ event: 'ProfileSubmit',
-	      'DataLevel' : " + levelValue + "," +
+	     " 'DataLevel' : " + levelValue + "," +
 		 " 'Location' : " + locValue + "," +
 	     " 'BasicStatistics' : " + basic + "," +
 		 " 'PopulationForecast' : " + popf + "," +
@@ -68,5 +68,14 @@ $(document).on('shiny:inputchanged', function(event) {
        target.appendChild(newScript);
 
 	
-  }	  
+  }	
+  if (event.name == 'DownloadPDF') {
+      var dl1 = "window.dataLayer = window.dataLayer || [];"
+      var dl2 = " window.dataLayer.push({ event: 'DownloadPDF',
+            " 'DownloadPDF' : yes;"	
+      var newScript = document.createElement("script");
+      var inlineScript = document.createTextNode(dl1 + dl2);
+       newScript.appendChild(inlineScript); 
+       target.appendChild(newScript);	
+	  }	   
   });
