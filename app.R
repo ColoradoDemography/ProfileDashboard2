@@ -24,19 +24,9 @@ library(geojsonio)
 library(gridExtra)
 library(ggthemes)
 library(maptools)
-
-if (!require("officer"))
-{
-  install.packages("officer",dep=TRUE)
-}
 library(officer)
-
-
-if (!require("flextable"))
-{
-  install.packages("flextable",dep=TRUE)
-}
 library(flextable)
+
 source("R/ageForecastPRO.R")
 source("R/agePlotPRO.R")
 source("R/baseIndustries.R")
@@ -182,8 +172,10 @@ ui <-
                                    actionButton("profile","View Profile"),
                                    #   actionButton("comparison","View Comparison"),  Disabled in V1
                                    actionButton("contact","Contact SDO",onclick ="window.open('https://goo.gl/forms/xvyxzq6DGD46rMo42', '_blank')"),
+                                   actionButton("survey","Demographic Profiles User Survey",onclick="window.open('https://goo.gl/forms/sWY6wvcdBLgSErKs2','_blank')"),
                                    downloadButton("outputPDF", label="Download PDF Report",
                                                   style="color: black; background-color: gray90; border-color: black")
+                                   
                                    
                                    
                  ), #dashboardSidebar
@@ -320,7 +312,7 @@ server <- function(input, output, session) {
   CountyList <- popPlace("Counties",curYr)
   PlaceList <- popPlace("Municipalities",curYr)
   #RegionList <- popPlace("Region",curYr)
-
+  
   observeEvent(input$level, ({
     shinyjs::hide("outputPDF")
     
@@ -330,16 +322,16 @@ server <- function(input, output, session) {
       outUnit <- ""
       outComp <- ""
     }
-  #  if(input$level == "Region") {  # Added 9/18
-  #           outUnit <-  RegionList
-  #        }
+    #  if(input$level == "Region") {  # Added 9/18
+    #           outUnit <-  RegionList
+    #        }
     if(input$level == "Counties") {
       outUnit <- unique(as.list(CountyList[,3]))
-  #    outComp <- c("Selected County Only", "Counties in Planning Region", "Custom List of Counties (Select Below)","State")
+      #    outComp <- c("Selected County Only", "Counties in Planning Region", "Custom List of Counties (Select Below)","State")
     }
     if(input$level == "Municipalities") {  
       outUnit <- unique(as.list(PlaceList[,3]))
-  #    outComp <- c("Selected Municipality Only", "Similar Municipalities", "County", "Custom List of Municipalities (Select Below)", "State")
+      #    outComp <- c("Selected Municipality Only", "Similar Municipalities", "County", "Custom List of Municipalities (Select Below)", "State")
     }
     
     updateSelectInput(session, "unit", choices = outUnit)
@@ -365,15 +357,15 @@ server <- function(input, output, session) {
   
   # Event for click on profile button
   observeEvent(input$profile,  {
-
+    
     shinyjs::hide("outputPDF")
     
     #Prepping Matrix of filenames
-
+    
     fileMat <- TempFil()
     
     
- 
+    
     dLout <- submitPush(input$level,input$unit,input$outChk)  # Generate dataLayer Command
     session$sendCustomMessage("handler1",dLout)  #Sends dataLayer command to dataL.js script
     
@@ -413,7 +405,7 @@ server <- function(input, output, session) {
           # creating output files
           #HTML table
           dput(stat_List$Htable,fileMat[1])
-
+          
           #Latex File
           dput(stat_List$Ltable, fileMat[2])
           
@@ -432,7 +424,7 @@ server <- function(input, output, session) {
                                  tags$ul(
                                    tags$li(tags$a(href="https://demography.dola.colorado.gov/data/","State Demography Office Data",target="_blank")),
                                    tags$li(tags$a(href="https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml","U.S. Census Bureau American Community Survey",target="_blank"),
-                                   tags$br(),tags$br(),downloadObjUI("statstabl")
+                                           tags$br(),tags$br(),downloadObjUI("statstabl")
                                    )))
           
           stats.box0 <- box(width=12,ln1)
@@ -460,7 +452,7 @@ server <- function(input, output, session) {
           # creating output files
           #HTML table
           dput(popf1$Htable,fileMat[6])
-
+          
           #Latex File
           dput(popf1$Ltable, fileMat[7])
           
@@ -477,7 +469,7 @@ server <- function(input, output, session) {
           ggsave(fileMat[14],popf4$plot, device="png", height = 5 , width = 7, dpi=300)
           ggsave(fileMat[15],popf4$plot, device="png", height = 5 , width = 7, dpi=300)
           dput(popf4$text,fileMat[16])
-        
+          
           
           img_List2 <- list(src = fileMat[9], contentType = 'image/png', width = 500, height = 300)
           img_List3 <- list(src = fileMat[11], contentType = 'image/png', width = 500, height = 300)
@@ -576,7 +568,7 @@ server <- function(input, output, session) {
           ggsave(fileMat[21],popa2$plot, device="png", height = 5 , width = 7, dpi=300)
           
           dput(popa2$Htable,fileMat[22])
-
+          
           dput(popa2$Ltable, fileMat[23])
           dput(popa2$text, fileMat[24])
           
@@ -662,7 +654,7 @@ server <- function(input, output, session) {
                               tabPanel("Sources and Downloads",popa1.info))
           popa2.box <- tabBox(width=6, height=400,
                               tabPanel("Plot", renderImage({img_List6})),
-                         #    tabPanel("Table", tags$div(class="cleanTab", HTML(popa2$table))),
+                              #    tabPanel("Table", tags$div(class="cleanTab", HTML(popa2$table))),
                               tabPanel("Sources and Downloads",popa2.info))
           popa3.box <- tabBox(width=6, height=400,
                               tabPanel("Plot",renderImage({img_List7})),
@@ -697,13 +689,13 @@ server <- function(input, output, session) {
           
           #Race 1
           dput(popc3$Htable,fileMat[36])
-
+          
           dput(popc3$Ltable, fileMat[37])
           dput(popc3$text, fileMat[38])
           
           #Race 2
           dput(popc4$Htable,fileMat[39])
-
+          
           dput(popc4$Ltable, fileMat[40])
           dput(popc4$text, fileMat[41])
           
@@ -773,7 +765,7 @@ server <- function(input, output, session) {
           poph3 <<- OOHouse(listID=idList,ACS=curACS)  # Chars of Owner Occupied Housing
           poph4 <<- RTHouse(listID=idList,ACS=curACS)  # Chars of Rental Housing
           poph5 <<- HouseVal(listID=idList,ACS=curACS) # Comparative Value of Housing both OO and Rental
-
+          
           #Housing Estimate
           ggsave(fileMat[42],poph1$plot, device="png", height = 5 , width = 7, dpi=300)
           ggsave(fileMat[43],poph1$plot, device="png", height = 5 , width = 7, dpi=300)
@@ -783,27 +775,27 @@ server <- function(input, output, session) {
           
           #Housing Unit Table
           dput(poph2$Htable,fileMat[45])
-
+          
           dput(poph2$Ltable, fileMat[46])
           
           #Housing Value Owner Occupied
           dput(poph5$HtableOO,fileMat[47])
-
+          
           dput(poph5$LtableOO, fileMat[48])
-   
+          
           #Housing Value Rental
           dput(poph5$HtableRT,fileMat[49])
-
+          
           dput(poph5$LtableRT, fileMat[50])
           
           #Housing Characteristics Owner Occupied
           dput(poph3$Htable,fileMat[51])
-
+          
           dput(poph3$Ltable, fileMat[52])
           
           #Housing Value Rental
           dput(poph4$Htable,fileMat[53])
-
+          
           dput(poph4$Ltable, fileMat[54])
           
           #Contents of Information Tabs
@@ -893,16 +885,16 @@ server <- function(input, output, session) {
           
           #Live table HTML, Flex Table and Latex table
           #HTML Table
-      
+          
           dput(popt1$liveTabH,fileMat[57])
-
+          
           #Latex Table
           dput(popt1$liveTabL, fileMat[58])
           
           #Work table HTML, Flex Table and Latex table
           #HTML Table
           dput(popt1$workTabH,fileMat[59])
-
+          
           #Latex Table
           dput(popt1$workTabL, fileMat[60])
           
@@ -1059,7 +1051,7 @@ server <- function(input, output, session) {
           popem2 <<- weeklyWages(listID=idList)
           popem3 <<- residentialLF(listID=idList,curyr=curYr)
           popem4 <<- incomeSrc(level=input$level,listID=idList,ACS=curACS)  
-
+          
           #JobsPopForecast
           ggsave(fileMat[76],popem1$plot, device="png", height = 5 , width = 7, dpi=300)
           ggsave(fileMat[77],popem1$plot, device="png", height = 5 , width = 7, dpi=300)
@@ -1144,7 +1136,7 @@ server <- function(input, output, session) {
         
         
         
-       
+        
         incProgress()       
         shinyjs::show("outputPDF") 
       }) #Progress Bar
@@ -1174,15 +1166,16 @@ server <- function(input, output, session) {
       content <- function(file) {
         #Generate Report
         #knitting file and copy to final document
-
+        
         tempRMD <- fileMat[88]
         tempPDF <- fileMat[89] 
-
-        rmarkdown::render(tempRMD, output_file = tempPDF,
+        
+        rmarkdown::render(input= tempRMD, output_file = tempPDF,
                           params =  list(outChk = input$outChk,
                                          olistID = idList,
                                          olevel = input$level,
-                                         filemat = fileMat))
+                                         filemat = fileMat),
+                          run_pandoc = TRUE)
         
         file.rename(tempPDF, file) # move pdf to file for downloading
       } #Content
