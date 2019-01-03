@@ -68,14 +68,5 @@ $(document).on('shiny:inputchanged', function(event) {
        target.appendChild(newScript);
 
 	
-  }	
- if (event.name == 'outputPDF') {
-      var dl1 = "window.dataLayer = window.dataLayer || [];"
-      var dl2 = " window.dataLayer.push({ event: 'DownloadReport',
-            " 'DownloadReport' : yes;"	
-      var newScript = document.createElement("script");
-      var inlineScript = document.createTextNode(dl1 + dl2);
-       newScript.appendChild(inlineScript); 
-       target.appendChild(newScript);	
-	  }	   	   
+  }		   
   });
