@@ -161,7 +161,7 @@ medianAgeTab <- function(listID, ACS, state="08"){
   maleP <- malebyagePL[,c(1,9,10)]
   male <- merge(maleC,maleP,by="agecat",all.x=TRUE)
   male <- male[,c(2,1,3,5)]
-  names(male) <- c("Place","Age","Count","Percent")
+  names(male) <- c("Geography","Age","Count","Percent")
   male$Count <- format(round(male$Count,digits=0),big.mark=",")
   male$Percent <- if_else(is.na(male$Percent),100,male$Percent)
   male$Percent <- percent(abs(male$Percent))
@@ -171,7 +171,7 @@ medianAgeTab <- function(listID, ACS, state="08"){
   femaleP <- femalebyagePL[,c(1,9,10)]
   female <- merge(femaleC,femaleP,by="agecat",all.x=TRUE)
   female <- female[,c(2,1,3,5)]
-  names(female) <- c("Place","Age","Count","Percent")
+  names(female) <- c("Geography","Age","Count","Percent")
   female$Percent <- if_else(is.na(female$Percent),100,female$Percent)
   female$Count <- format(round(female$Count,digits=0),big.mark=",")
   female$Percent <- percent(abs(female$Percent))
@@ -179,12 +179,12 @@ medianAgeTab <- function(listID, ACS, state="08"){
   
   sexbyagedf <- merge(male,female,by="Age")
   sexbyagedf <- sexbyagedf[,c(2,1,3,4,6,7)]
-  names(sexbyagedf) <- c("Place","Age", "Male_Count","Male_Percent","Female_Count","Female_Percent")
+  names(sexbyagedf) <- c("Geography","Age", "Male_Count","Male_Percent","Female_Count","Female_Percent")
   
   if(nchar(placefips) == 0) {  # Output for places
-    sexbyagedf$Place <- ctyname
+    sexbyagedf$Geography <- ctyname
   } else {
-    sexbyagedf$Place <- placename
+    sexbyagedf$Geography <- placename
   }
   
   #County  Age

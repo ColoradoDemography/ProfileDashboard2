@@ -80,7 +80,7 @@ jobMigration <- function(listID, maxyr, base=10){
     group_by(year5) %>%
     summarize(avgmigr = sum(netmigration)/n())
 
-
+  
   f.pltdata <- merge(f.migr5yr,f.jobs5yr,by="year5")
 
   # Generating Plot
@@ -118,7 +118,11 @@ jobMigration <- function(listID, maxyr, base=10){
 
 
   #Final dataset
-  names(f.pltdata) <- c("5-Year Period", paste0("5-Year Average Jobs: ",ctyname),paste0("5-Year Average Net Migration: ",ctyname))
+
+  f.pltdata$Geography <- ctyname
+  f.pltdata <-f.pltdata[,c(4,1:3)]
+  f.pltdata[,3:4] <- sapply(f.pltdata[,3:4], function(x) format(round(x,digits=0),big.mark=",",scientific=FALSE))
+  names(f.pltdata) <- c("Geography"," 5-Year Period", "5-Year Average Jobs","5-Year Average Net Migration")
 
   
   #Building text

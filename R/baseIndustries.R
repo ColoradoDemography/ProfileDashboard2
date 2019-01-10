@@ -204,9 +204,9 @@ baseIndustries <- function(listID, curyr, oType,base=10){
   #preparing data
 
   f.jobsBaseFin <- f.jobsBaseFin[,c(4:6,8)]
-  f.jobsBaseFin$jobs <- round(f.jobsBaseFin$jobs,digits=0)
-
-    names(f.jobsBaseFin) <- c("Place","Industry","Jobs","Percentage")
+  f.jobsBaseFin$cname <- ctyname
+  f.jobsBaseFin$jobs <- format(round(f.jobsBaseFin$jobs,digits=0),big.mark=",",scientific=FALSE)
+  names(f.jobsBaseFin) <- c("Geography","Industry","Jobs","Percentage")
     
   
   # Text
@@ -242,7 +242,12 @@ baseIndustries <- function(listID, curyr, oType,base=10){
     Flextab <- autofit(Flextab)
     Flextab <- width(Flextab,j=1, width=3)
     Flextab <- width(Flextab,j=2:3, width=1)
-
+    
+    f.jobsBaseTab$Geography <- ctyname
+    f.jobsBaseTab <- f.jobsBaseTab[order(f.jobsBaseTab$pos),]
+    f.jobsBaseTab <- f.jobsBaseTab[,c(9,5,6,8)]
+    names(f.jobsBaseTab) <- c("Geography","Employment Type","Job Estimate","Percent")
+    
   outList <- list("plot" = BaseBars,"Htable" = jobsTabH, "Ltable" = jobsTabL, "data1"=f.jobsBaseFin, "data2" = f.jobsBaseTab, "text" = OutText, "FlexTable" = Flextab)
   return(outList)
 }

@@ -116,12 +116,12 @@ residentialLF <- function(listID, curyr, base=10){
   #line data
 
   f.LFPlaceSum$geoname <- ctyname
-  f.LFPlaceSum <- f.LFPlaceSum[,c(5,1,2,3)]
+  f.LFPlaceSum <- f.LFPlaceSum[,c(6,1:3)]
 
-  f.LFPlaceSum[,c(3,4)] <- round(f.LFPlaceSum[,c(3,4)],digits=0)
+  f.LFPlaceSum[,c(3,4)] <- sapply(f.LFPlaceSum[,c(3,4)], function(x) format(round(x,digits=0),big.mark=",",scientific=FALSE))
 
 
-  names(f.LFPlaceSum) <- c("Place","Year", "Persons in Labor Force", "Persons  Age 16 +")
+  names(f.LFPlaceSum) <- c("Geography","Year", "Persons in Labor Force", "Persons Age 16 +")
 #Text
   OutText <- paste0("This plot compares the forecast residential labor force to the forecast population of person age 16 and older for ",ctyname,".")
 

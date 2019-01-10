@@ -57,6 +57,11 @@ jobsPlot=function(listID, maxyr,base=10){
   OutText <- paste0(OutText," Areas dependent on a single industry such as agriculture, mining or tourism can suffer from prolonged downturns due to drought,")
   OutText <- paste0(OutText," shifting demand for commodities, and the health of the national economy. ")
  
+
+  jobs_data$Geography <- ctyname 
+  jobs_data <- jobs_data[,c(5,2,4)]
+  jobs_data[3] <- format(jobs_data[3],big.mark=",",scientific=FALSE)
+  names(jobs_data) <- c("Geography","Year","Jobs Estimate")
   
   outList <- list("plot" = jobs_plot, "data" = jobs_data, "text" = OutText)
   return(outList)

@@ -83,11 +83,10 @@ migbyagePRO <- function(listID, base=10) {
 
 
   #Preparing data set
-  # f.migD <- merge(f.migPlace,f.migState, by="agegroup")
-
-  f.migD <- f.migPlace
-  f.migData <- f.migD[,c(3,4)]
-  names(f.migData) <- c("5-Year Age Group",paste0("2000-2010 Migration Rate: ",ctyname))
+ 
+  f.migData <- f.migPlace[,2:4]
+  f.migData[3] <- format(round(f.migData[3], digits = 0),big.mark=",",scientific=FALSE)
+  names(f.migData) <- c("Geography","5-Year Age Group","Net Migration 2000-2010")
 
   #Geneerating Text
    OutText <-paste0("  This plot shows the net migration by age in ",ctyname,". ")  

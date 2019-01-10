@@ -70,7 +70,6 @@ pop_timeseries=function(lvl,listID, beginyear=2000,endyear, base=10){
   
   # Region
   if(lvl == "Region") {
-    browser()
     popReg <- data.frame()
     for(i in 1:length(ctynum)) {
       popReg <- rbind(popReg,county_profile(ctynum[i], beginyear:endyear, "totalpopulation"))
@@ -92,7 +91,9 @@ pop_timeseries=function(lvl,listID, beginyear=2000,endyear, base=10){
     xaxs$yBrk[length(xaxs$yBrk)] <- endyear
   }
 
-
+  d2 <- d[,c(5,3,4)]
+  names(d2) <- c("Geography","Year","Total Population")
+  
   p=d%>%
     ggplot(aes(x=year, y=totalPopulation))+
     geom_line(color="#00953A", size=1.75)+
@@ -107,7 +108,8 @@ pop_timeseries=function(lvl,listID, beginyear=2000,endyear, base=10){
           axis.text.y = element_text(size=12))
 
   # Bind List
-  outList <- list("plot" = p, "data" = d)
+
+  outList <- list("plot" = p, "data" = d2)
 
   return(outList)
 }

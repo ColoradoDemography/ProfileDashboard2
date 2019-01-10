@@ -20,7 +20,7 @@ popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
     placefips <- ""
     placename <- ""
   }
-  
+
   fips=as.numeric(ctyfips)
   yrs <- seq(byr,eyr,2)
   d <- county_sya(fips, yrs) %>%
@@ -83,6 +83,8 @@ popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
   OutText <- paste0(OutText,"  The change is due in part to population aging and changes in the proportion of the population in childbearing ages.")
   
   OutText <- paste0(OutText,"  Note: Population forecasts are only provided for Colorado counties.")
+  
+  names(d) <- c("Geography","Data Type","Year","Total Population")
   
   outList <- list("plot" = p,"data" = d,"text" = OutText)
   return(outList)

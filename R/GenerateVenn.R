@@ -282,7 +282,21 @@ if(nchar(placefips) != 0) {
     kable_styling(latex_options="HOLD_position",font_size=10)  %>%
     row_spec(0, align = "c") %>%
     footnote(captionSrc("LODES",""),threeparttable = T)
-
+  
+  
+  if(nchar(placefips) != 0) {
+       f.live_fin$Geography <- placename
+       f.work_fin$Geography <- placename
+  } else {
+       f.live_fin$Geography <- ctyname
+       f.work_fin$Geography <- ctyname
+  }
+  f.live_fin <- f.live_fin[,c(4,1:3)]
+  f.work_fin <- f.work_fin[,c(4,1:3)]
+  
+  names(f.live_fin) <- c("Geography","Residence Location", "Number","Percentage")
+  names(f.work_fin) <- c("Geography","Work Location", "Number","Percentage")
+  
   # Binding List for Output
   outList <- list("plot" = outVenn, "liveTabH" = liveTabH, "data1" = f.live_fin,
                   "workTabH" = workTabH, "data2" = f.work_fin,

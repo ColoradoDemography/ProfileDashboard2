@@ -72,17 +72,20 @@ ageForecastPRO=function(listID, sYr, mYr, eYr, base=12, agegroup="ten"){
   #Regrouping Data
 
   dWide <- spread(d, Year, totalpopulation)
-  names(dWide)[4] <- paste0("totalPop_",sYr)
-  names(dWide)[5] <- paste0("totalPop_",mYr)
-  names(dWide)[6] <- paste0("totalPop_",eYr)
-
-  dWide[4] <- round(dWide[4], digits = 0)
-  dWide[5] <- round(dWide[5], digits = 0)
-  dWide[6] <- round(dWide[6], digits = 0)
+ 
+  dWide[,4:6] <- sapply(dWide[,4:6], function(x)  format(round(x, digits = 0),big.mark=",",scientific=FALSE))
+  
 
   dWide$county <- paste0(dWide$county," County")
   
+  dWide <- dWide[,2:6]
+  names(dWide)[1] <- "Geography"
+  names(dWide)[2] <- "Age Category"
+  names(dWide)[3] <- paste0("Total Population ",sYr)
+  names(dWide)[4] <- paste0("Total Population ",mYr)
+  names(dWide)[5] <- paste0("Total Population ",eYr)
   
+
   # Generating text
     OutText <- paste0("  The changing age distribution of the population of ",ctyname," for the period from 2010 through 2025 is shown here.")
 

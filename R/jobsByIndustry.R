@@ -142,11 +142,12 @@ jobsByIndustry <- function(listID, curyr, base=10){
 
 
   # Building Output data
-
+  
   f.jobsFin <- f.jobsPLMainFin
+  f.jobsFin$Geography <- ctyname
   f.jobsFin <- f.jobsFin[order(f.jobsFin$sector_id),]
-  f.jobsFin <- f.jobsFin[,c(2,4,5)]
-  names(f.jobsFin) <- c("Job Sector", paste0("Number of Jobs: ",ctyname), paste0("Percentage of Jobs: ",ctyname))
+  f.jobsFin <- f.jobsFin[,c(6,2,3,5)]
+  names(f.jobsFin) <- c("Geography","Job Sector", "Number of Jobs", "Percentage of Jobs")
   
   # Generating text
   OutText1 <- paste0(" The total estimated jobs are subdivided into 3 categories:")
