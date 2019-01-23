@@ -405,7 +405,7 @@ if(nchar(placename) == 0)  {
     }
     if(sDiffa == "Yes" & sDiffm == "No" && sDifff == "No") {
       medText <- paste0(" The median age of ",placename," is  significantly different than the population of ", ctyname,".")
-      medText <- paste0(medText, " Women are not significantly older or younger than women in ", ctyname,". Men in ",ctyname," are not significantly ",diffDirm," than men in the county.")
+      medText <- paste0(medText, " Women in ",ctyname," are not significantly older or younger than women in the state. Men in ",ctyname," are not significantly older or younger than men in the state.")
     }
     if(sDiffa == "No" & sDiffm == "No" && sDifff == "No") {
       medText <- paste0(" The median age of ",ctyname," is not significantly different than population of the state.")
@@ -436,7 +436,7 @@ if(nchar(placename) == 0)  {
     }
     if(sDiffa == "Yes" & sDiffm == "No" && sDifff == "No") {
           medText <- paste0(" The median age of ",placename," is  significantly different than the population of ", ctyname,".")
-          medText <- paste0(medText, " Women are not significantly older or younger than women in ", ctyname,". Men in ",ctyname," are not significantly ",diffDirm," than men in the county.")
+          medText <- paste0(medText, " Women are not significantly older or younger than women in ", ctyname,". Men are not significantly older or younger than men in ", ctyname,".")
         }
         
     if(sDiffa == "No" & sDiffm == "No" && sDifff == "No") {
