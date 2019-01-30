@@ -12,15 +12,15 @@ TempFil <- function() {
   
   # Copying RMD File      
   file.copy("SDO_Report.Rmd",oDir)
-  oMatrix[88] <- file.path(paste0(oDir,"\\","SDO_Report.Rmd"))
+  oMatrix[88] <- file.path(paste0(oDir,"/","SDO_Report.Rmd"))
   
   # Location of PDF File
-  oMatrix[89] <- file.path(paste0(oDir,"\\","SDO_REPORT.pdf"))
+  oMatrix[89] <- file.path(paste0(oDir,"/","SDO_REPORT.pdf"))
 
   
  #Copying Dola Image
-  file.copy("www\\co_dola_div_localgov_300_rgb.png",oDir)
-  oMatrix[90] <- file.path(paste0(oDir,"\\","co_dola_div_localgov_300_rgb.png"))
+  file.copy("www/co_dola_div_localgov_300_rgb.png",oDir)
+  oMatrix[90] <- file.path(paste0(oDir,"/","co_dola_div_localgov_300_rgb.png"))
 
   
   
