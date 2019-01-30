@@ -33,7 +33,6 @@ knitr::opts_chunk$set(echo = FALSE,
                       fig.align='center',
                       out.width='80%',
                       out.height='80%') 
-
 library(tidyverse, quietly=TRUE)
 library(readxl, quietly=TRUE)
 library(scales, quietly=TRUE)
@@ -53,19 +52,13 @@ library(geojsonio)
 library(gridExtra)
 library(ggthemes)
 library(maptools)
-library(gt)
-
 muffleError <- function(x,options) {}
 knit_hooks$set(error=muffleError)
-
 fixPath <- function(inPath){
- # outPath <- gsub("ABICKF~1","ABickford",inPath)
- # outPath <-gsub("\\\\","/",outPath)
-  outPath <- inPath
+  outPath <- gsub("ABICKF~1","ABickford",inPath)
+  outPath <-gsub("\\\\","/",outPath)
   return(outPath)
 }
-
-
  outChk <- params$outChk  # List of topical areas
  olistID <- params$olistID # Place List
  olevel <- params$olevel # Output Level
@@ -76,15 +69,12 @@ fixPath <- function(inPath){
  } else {
    placename = olistID$ctyName
  }
-
  
-
 ```
 
 ```{r Topmat}
 DOLA <- fixPath(filemat[90])
 include_graphics(DOLA)
-
 ```
 
 # State Demography Office Colorado Demographic Profile
@@ -102,7 +92,6 @@ if("stats" %in% unlist(outChk)) {
  smapx <- fixPath(filemat[5])
  include_graphics(smapx)
 }
-
 ```
 
 ```{r statsTab}
@@ -125,12 +114,10 @@ if("stats" %in% unlist(outChk)) {
     cat(dget(filemat[3]))
   }
 }
-
 ```
 
 ```{r poptrend1}
 if("popf" %in% unlist(outChk)) {
-
   popTrendText <- function(level,idList) {
     if(level == "Counties") {
      OutText <- paste0("The tables and plots in this section highlight trends and forecasts")
@@ -239,7 +226,6 @@ if("pop" %in% unlist(outChk)) {
     OutText <- paste0(OutText,"  due to changes in spending on taxable goods.")
     return(OutText)
 }
-
   
   cat("### Age Characteristics\n")
   cat(ageText())
@@ -250,7 +236,6 @@ if("pop" %in% unlist(outChk)) {
 if("pop" %in% unlist(outChk)) {
    cat(dget(filemat[19]))  # Age Plot Text
 }
-
 ```
 
 ```{r popage3}
@@ -332,11 +317,9 @@ if("popc" %in% unlist(outChk)) {
     cat("#### Household Income\n")
     cat(dget(filemat[33]))
 }
-
 ```
 
 ```{r popchar3}
-
 if("popc" %in% unlist(outChk)) {
   popc1p <- fixPath(filemat[32])  #Income Plot
   include_graphics(popc1p)
@@ -494,7 +477,6 @@ if("comm" %in% unlist(outChk)) {
   cat(liveText(placename))
   cat("\\FloatBarrier\n")
   
-
 }
 ```
 
