@@ -573,7 +573,7 @@ if("emplind" %in% unlist(outChk)) {
 if("emplind" %in% unlist(outChk)) {
   popei3p <- fixPath(filemat[72])  #Jobs Plot Plot
   include_graphics(popei3p)
-  cat("\\FloarBarrier\n")
+  cat("\\FloatBarrier\n")
   cat(dget(filemat[74]))
 }
 ```
