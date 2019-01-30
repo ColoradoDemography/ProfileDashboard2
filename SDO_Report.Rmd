@@ -59,8 +59,9 @@ muffleError <- function(x,options) {}
 knit_hooks$set(error=muffleError)
 
 fixPath <- function(inPath){
-  outPath <- gsub("ABICKF~1","ABickford",inPath)
-  outPath <-gsub("\\\\","/",outPath)
+ # outPath <- gsub("ABICKF~1","ABickford",inPath)
+ # outPath <-gsub("\\\\","/",outPath)
+  outPath <- inPath
   return(outPath)
 }
 
@@ -81,7 +82,7 @@ fixPath <- function(inPath){
 ```
 
 ```{r Topmat}
-DOLA <- filemat[90]
+DOLA <- fixPath(filemat[90])
 include_graphics(DOLA)
 
 ```
@@ -98,7 +99,7 @@ Demographic information is critical for making informed decisions at the local, 
 
 ```{r statsMap, echo = FALSE}
 if("stats" %in% unlist(outChk)) {
- smapx <- filemat[5]
+ smapx <- fixPath(filemat[5])
  include_graphics(smapx)
 }
 
@@ -170,7 +171,7 @@ if("popf" %in% unlist(outChk)) {
 
 ```{r poptrend2}
 if("popf" %in% unlist(outChk)) {
-  popf2r <- filemat[10]  #Images
+  popf2r <- fixPath(filemat[10])  #Images
   include_graphics(popf2r)
 }
 ```
@@ -184,7 +185,7 @@ if("popf" %in% unlist(outChk)) {
 
 ```{r poptrend4}
 if("popf" %in% unlist(outChk)) {
-  popf3r <- filemat[12]  #Images
+  popf3r <- fixPath(filemat[12])  #Images
   include_graphics(popf3r)
 }
 ```
@@ -215,7 +216,7 @@ if("popf" %in% unlist(outChk)) {
 
 ```{r poptrend6}
 if("popf" %in% unlist(outChk)) {
-  popf4r <- filemat[15]  #Images
+  popf4r <- fixPath(filemat[15])  #Images
   include_graphics(popf4r)
 } 
 ```
@@ -254,14 +255,14 @@ if("pop" %in% unlist(outChk)) {
 
 ```{r popage3}
 if("pop" %in% unlist(outChk)) {
-  popa2p <- filemat[18]  #age Plot Plot
+  popa2p <- fixPath(filemat[18])  #age Plot Plot
   include_graphics(popa2p)
 }
 ```
 
 ```{r popage4}
 if("pop" %in% unlist(outChk)) {
-  popa1p <- filemat[21]  #age Plot Plot
+  popa1p <- fixPath(filemat[21])  #age Plot Plot
   include_graphics(popa1p)
 }
 ```
@@ -275,7 +276,7 @@ if("pop" %in% unlist(outChk)) {
 
 ```{r popage6}
 if("pop" %in% unlist(outChk)) {
-  popa3p <- filemat[26]  #age Plot Plot
+  popa3p <- fixPath(filemat[26])  #age Plot Plot
   include_graphics(popa3p)
 }
 ```
@@ -288,7 +289,7 @@ if("pop" %in% unlist(outChk)) {
 
 ```{r popage8}
 if("pop" %in% unlist(outChk)) {
-  popa4p <- filemat[29]  #age Plot Plot
+  popa4p <- fixPath(filemat[29])  #age Plot Plot
   include_graphics(popa4p)
 }
 ```
@@ -337,7 +338,7 @@ if("popc" %in% unlist(outChk)) {
 ```{r popchar3}
 
 if("popc" %in% unlist(outChk)) {
-  popc1p <- filemat[32]  #Income Plot
+  popc1p <- fixPath(filemat[32])  #Income Plot
   include_graphics(popc1p)
 }
 ```
@@ -360,7 +361,7 @@ if("popc" %in% unlist(outChk)) {
 ```{r popchar5}
 if("popc" %in% unlist(outChk)) {
   
-  popc2p <- filemat[35]  #Education Plot
+  popc2p <- fixPath(filemat[35])  #Education Plot
   include_graphics(popc2p)
 }
 ```
@@ -407,7 +408,7 @@ if("housing" %in% unlist(outChk)) {
 
 ```{r housing2}
 if("housing" %in% unlist(outChk)) {
-  poph1p <- filemat[43]  #Housing Forecast Plot 
+  poph1p <- fixPath(filemat[43])  #Housing Forecast Plot 
   include_graphics(poph1p)
 }
 ```
@@ -476,7 +477,7 @@ if("comm" %in% unlist(outChk)) {
 
 ```{r commute2}
 if("comm" %in% unlist(outChk)) {
-  commute1p <- filemat[56]  #Venn Diagram Plot 
+  commute1p <- fixPath(filemat[56])  #Venn Diagram Plot 
   include_graphics(commute1p)
 }
 ```
@@ -514,7 +515,7 @@ if("comm" %in% unlist(outChk)) {
 
 ```{r commute5}
 if("comm" %in% unlist(outChk)) {
-  commute2p <- filemat[62]  #Jobs Migration Plot 
+  commute2p <- fixPath(filemat[62])  #Jobs Migration Plot 
   include_graphics(commute2p)
 }
 ```
@@ -545,7 +546,7 @@ if("emplind" %in% unlist(outChk)) {
 
 ```{r industry2}
 if("emplind" %in% unlist(outChk)) {
-  popei1p <- filemat[65]  #Jobs Plot Plot
+  popei1p <- fixPath(filemat[65])  #Jobs Plot Plot
   include_graphics(popei1p)
 }
 ```
@@ -558,7 +559,7 @@ if("emplind" %in% unlist(outChk)) {
 
 ```{r industry4}
 if("emplind" %in% unlist(outChk)) {
-  popei2p <- filemat[68]  #Jobs Plot Plot
+  popei2p <- fixPath(filemat[68])  #Jobs Plot Plot
   include_graphics(popei2p)
 }
 ```
@@ -572,7 +573,7 @@ if("emplind" %in% unlist(outChk)) {
 
 ```{r industry6}
 if("emplind" %in% unlist(outChk)) {
-  popei3p <- filemat[72]  #Jobs Plot Plot
+  popei3p <- fixPath(filemat[72])  #Jobs Plot Plot
   include_graphics(popei3p)
   cat("\\FloatBarrier\n")
   cat(dget(filemat[74]))
@@ -607,7 +608,7 @@ if("emply" %in% unlist(outChk)) {
 
 ```{r employment2}
 if("emply" %in% unlist(outChk)) {
-  popem1p <- filemat[77]   #JobsPopForecast
+  popem1p <- fixPath(filemat[77])   #JobsPopForecast
   include_graphics(popem1p)
 }
 ```
@@ -620,7 +621,7 @@ if("emply" %in% unlist(outChk)) {
 
 ```{r employment4}
 if("emply" %in% unlist(outChk)) {
-  popem2p <- filemat[80]   #Weekly Wages Plot
+  popem2p <- fixPath(filemat[80])   #Weekly Wages Plot
   include_graphics(popem2p)
 }
 ```
@@ -634,7 +635,7 @@ if("emply" %in% unlist(outChk)) {
 
 ```{r employment6}
 if("emply" %in% unlist(outChk)) {
-  popem3p <- filemat[83]   #Residential LF
+  popem3p <- fixPath(filemat[83])   #Residential LF
   include_graphics(popem3p)
 }
 ```
