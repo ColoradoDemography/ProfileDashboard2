@@ -53,6 +53,7 @@ library(geojsonio)
 library(gridExtra)
 library(ggthemes)
 library(maptools)
+library(gt)
 
 muffleError <- function(x,options) {}
 knit_hooks$set(error=muffleError)
