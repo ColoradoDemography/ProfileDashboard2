@@ -985,9 +985,9 @@ server <- function(input, output, session) {
           dput(popei3$Htable, fileMat[73])
           
           #latex Table
-          dput(popei2$Ltable, fileMat[74])
+          dput(popei3$Ltable, fileMat[74])
           #Text
-          dput(popei2$text, fileMat[75])
+          dput(popei3$text, fileMat[75])
           
           
           
