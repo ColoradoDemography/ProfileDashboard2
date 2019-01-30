@@ -217,7 +217,7 @@ baseIndustries <- function(listID, curyr, oType,base=10){
     OutText <- paste0(OutText," or rail transportation, and large item retail purchases like autos or appliances.")
     OutText <- paste0(OutText," \\textit{Retirees} are considered basic since they spend money from social security or other pensions, Medicare and savings.")
     OutText <- paste0(OutText," \\textit{Government} typically only includes employment in Federal Government and State Government.")
-    OutText <- paste0(OutText," \\textit{Tourism} not only includes traditional tourist services like accommodation and food, but also includes 2nd homes,")
+    OutText <- paste0(OutText," \\textit{Tourism} not only includes traditional tourist services like accommodation and food, but also includes second homes,")
     OutText <- paste0(OutText," property management and transportation of tourists by airlines, car rental, car sharing and shuttles.")
     
   #FlexTable
