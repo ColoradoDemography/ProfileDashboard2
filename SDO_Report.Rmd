@@ -54,9 +54,11 @@ library(ggthemes)
 library(maptools)
 muffleError <- function(x,options) {}
 knit_hooks$set(error=muffleError)
+
 fixPath <- function(inPath){
-  outPath <- gsub("ABICKF~1","ABickford",inPath)
-  outPath <-gsub("\\\\","/",outPath)
+#  outPath <- gsub("ABICKF~1","ABickford",inPath)
+#  outPath <-gsub("\\\\","/",outPath)
+   outPath <- inPath
   return(outPath)
 }
  outChk <- params$outChk  # List of topical areas
