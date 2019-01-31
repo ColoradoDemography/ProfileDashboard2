@@ -48,37 +48,41 @@ weeklyWages <- function(listID, base=10){
   rm(drv)
 
 
-    # Place data
-  f.wagePL$wages <- f.wagePL$weekly_wage
+# Place data
+  f.wagePL$wages <- as.numeric(f.wagePL$weekly_wage)
   
   f.wagePL$fmt_wages <- paste0("$", formatC(as.numeric(f.wagePL$wages), format="f", digits=0, big.mark=","))
-  f.wagePL <- f.wagePL[which(f.wagePL$year >= 2001 & f.wagePL$year <= 2016),]
+  f.wagePL <- f.wagePL[which(f.wagePL$year >= 2001),]
   f.wagePL <- f.wagePL[which(f.wagePL$wages != 0),]
   f.wagePL$geoname <- ctyname
 
   # State data
-  f.wageST$wages <- f.wageST$weekly_wage
+  f.wageST$wages <- as.numeric(f.wageST$weekly_wage)
   f.wageST$fmt_wages <- paste0("$", formatC(as.numeric(f.wageST$wages), format="f", digits=0, big.mark=","))
-  f.wageST <- f.wageST[which(f.wageST$year >= 2001 & f.wageST$year <= 2016),]
+  f.wageST <- f.wageST[which(f.wageST$year >= 2001),]
   f.wageST$geoname <- "Colorado"
-
 
   #Preparing the Plot
 
   f.plot <- rbind(f.wagePL, f.wageST)
 
-  maxYr <- as.numeric(max(f.plot$year))
-  f.plot <- f.plot[which(f.plot$year %in% seq(2001,maxYr,3)),]
+  maxYr <- 2016
+  f.plot <- f.plot[which(f.plot$year %in% c(2001,2003,2005,2007,2009,2011,2013,2015,2016),]
 
   axs <- setAxis(f.plot$wages)
   axs$maxBrk <- axs$maxBrk + 50
 
   f.plot$geoname <- factor(f.plot$geoname,levels=c(ctyname,"Colorado"))
+ 
 
   pltTitle <- paste0("Average Weekly Wage,\nin Real (",max(f.plot$year),") Dollars")
-
+  f.plot$year <- factor(f.plot$year,labels=c("2001","2003", "2005",
+                                              "2007","2009",
+                                              "2011","2013","2015",
+                                              "2016"))
+  
   Plot <- f.plot %>%
-    ggplot(aes(x=year, y=wages, colour=geoname))+
+    ggplot(aes(x=year, y=wages, colour=geoname, group=geoname))+
     geom_line(size=1.5) + geom_point(size=2.5) +
     scale_colour_manual("Geography", values=c("#6EC4E8", "#00953A")) +
     geom_text(mapping=aes(x=year, y=wages, label=fmt_wages),
@@ -86,7 +90,7 @@ weeklyWages <- function(listID, base=10){
               position = position_dodge(width = 1),
               inherit.aes = TRUE) +
     scale_y_continuous(limits=c(axs$minBrk,axs$maxBrk), label=dollar)+
-    scale_x_continuous(breaks=seq(2001,maxYr,3)) +
+    scale_x_discrete() +
     scale_fill_manual(values=c("#6EC4E8","#00953A"),
                       name="Geography")+
     theme_codemog(base_size=base)+
@@ -102,9 +106,9 @@ weeklyWages <- function(listID, base=10){
           panel.grid.minor.y = element_blank(),
           axis.text = element_text(size=12),
           legend.position= "bottom")
-
-  f.wages <- merge(f.wagePL_L,f.wageST_L,by="year")
-  f.wages <- f.wages[,c(1,5,9)]
+  
+  f.wages <- left_join(f.wagePL,f.wageST,by="year")
+  f.wages <- f.wages[,c(3,6,11)]
   names(f.wages) <- c("Year",paste0(" Average Weekly Wage: ",ctyname), "Average Weekly Wage: Colorado")
 
   
