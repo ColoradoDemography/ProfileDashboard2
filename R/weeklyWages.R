@@ -48,23 +48,20 @@ weeklyWages <- function(listID, base=10){
   rm(drv)
 
 
-  # Creating long data set for Place data
-  f.wagePL_L <- gather(f.wagePL,year,wages, wkwage_2001:wkwage_2016)
-  f.wagePL_L$year <- as.numeric(gsub("wkwage_","",f.wagePL_L$year))
-  f.wagePL_L$wages <- as.numeric(f.wagePL_L$wages)
+    # Place data
+  f.wagePL$wages <- as.numeric(f.wagePL$weekly_wage)
   
-  f.wagePL_L$fmt_wages <- paste0("$", formatC(as.numeric(f.wagePL_L$wages), format="f", digits=0, big.mark=","))
-  f.wagePL_L <- f.wagePL_L[which(f.wagePL_L$year >= 2001),]
-  f.wagePL_L <- f.wagePL_L[which(f.wagePL_L$wages != 0),]
-  f.wagePL_L$geoname <- ctyname
+  f.wagePL$fmt_wages <- paste0("$", formatC(as.numeric(f.wagePL$wages), format="f", digits=0, big.mark=","))
+  f.wagePL <- f.wagePL[which(f.wagePL$year >= 2001 & f.wagePL$year <= 2016),]
+  f.wagePL <- f.wagePL[which(f.wagePL$wages != 0),]
+  f.wagePL$geoname <- ctyname
 
-  # Creating long data set for State data
-  f.wageST_L <- gather(f.wageST,year,wages, wkwage_2001:wkwage_2016)
-  f.wageST_L$year <- as.numeric(gsub("wkwage_","",f.wageST_L$year))
-  f.wageST_L$wages <- as.numeric(f.wageST_L$wages)
-  f.wageST_L$fmt_wages <- paste0("$", formatC(as.numeric(f.wageST_L$wages), format="f", digits=0, big.mark=","))
-  f.wageST_L <- f.wageST_L[which(f.wageST_L$year >= 2001),]
-  f.wageST_L$geoname <- "Colorado"
+  # State data
+  f.wageST$wages <- as.numeric(f.wageST$weekly_wage)
+  f.wageST$fmt_wages <- paste0("$", formatC(as.numeric(f.wageST$wages), format="f", digits=0, big.mark=","))
+  f.wageST <- f.wageST[which(f.wageST$year >= 2001 & f.wageST$year <= 2016),]
+  f.wageST$geoname <- "Colorado"
+
 
   #Preparing the Plot
 
