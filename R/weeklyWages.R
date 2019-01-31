@@ -67,7 +67,7 @@ weeklyWages <- function(listID, base=10){
   f.plot <- rbind(f.wagePL, f.wageST)
 
   maxYr <- 2016
-  f.plot <- f.plot[which(f.plot$year %in% c(2001,2003,2005,2007,2009,2011,2013,2015,2016),]
+  f.plot <- f.plot[which(f.plot$year %in% c(2001,2003,2005,2007,2009,2011,2013,2015,2016)),]
 
   axs <- setAxis(f.plot$wages)
   axs$maxBrk <- axs$maxBrk + 50
