@@ -49,7 +49,7 @@ weeklyWages <- function(listID, base=10){
 
 
     # Place data
-  f.wagePL$wages <- as.numeric(f.wagePL$weekly_wage)
+  f.wagePL$wages <- f.wagePL$weekly_wage
   
   f.wagePL$fmt_wages <- paste0("$", formatC(as.numeric(f.wagePL$wages), format="f", digits=0, big.mark=","))
   f.wagePL <- f.wagePL[which(f.wagePL$year >= 2001 & f.wagePL$year <= 2016),]
@@ -57,7 +57,7 @@ weeklyWages <- function(listID, base=10){
   f.wagePL$geoname <- ctyname
 
   # State data
-  f.wageST$wages <- as.numeric(f.wageST$weekly_wage)
+  f.wageST$wages <- f.wageST$weekly_wage
   f.wageST$fmt_wages <- paste0("$", formatC(as.numeric(f.wageST$wages), format="f", digits=0, big.mark=","))
   f.wageST <- f.wageST[which(f.wageST$year >= 2001 & f.wageST$year <= 2016),]
   f.wageST$geoname <- "Colorado"
@@ -65,7 +65,7 @@ weeklyWages <- function(listID, base=10){
 
   #Preparing the Plot
 
-  f.plot <- rbind(f.wagePL_L, f.wageST_L)
+  f.plot <- rbind(f.wagePL, f.wageST)
 
   maxYr <- as.numeric(max(f.plot$year))
   f.plot <- f.plot[which(f.plot$year %in% seq(2001,maxYr,3)),]
