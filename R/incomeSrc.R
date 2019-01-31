@@ -14,8 +14,8 @@ incomeSrc <- function(level, listID, ACS) {
     fipsname <- listID$ctyName
  
   
-  hhSQL <- paste0("SELECT * FROM data.incomesrc_hh WHERE (geonum = paste0("108", fipslist) and acs = '",ACS,"');")
-  incSQL <- paste0("SELECT * FROM data.incomesrc_inc WHERE (geonum = paste0("108", fipslist) and acs = '",ACS,"');")
+  hhSQL <- paste0("SELECT * FROM data.incomesrc_hh WHERE (geonum = 108", fipslist," and acs = '",ACS,"');")
+  incSQL <- paste0("SELECT * FROM data.incomesrc_inc WHERE (geonum = 108", fipslist," and acs = '",ACS,"');")
   
   # Call to Postrgres  
   pw <- {
