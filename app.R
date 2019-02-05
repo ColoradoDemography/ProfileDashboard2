@@ -13,7 +13,7 @@ library(codemogProfile, quietly=TRUE)
 library(codemogLib)
 library(knitr, quietly=TRUE)
 library(kableExtra, quietly=TRUE)
-library(RPostgreSQL, quietly=TRUE)
+library(RPostgreSQL)
 library(rmarkdown)
 library(shiny, quietly=TRUE)
 library(shinydashboard, quietly=TRUE)
@@ -26,6 +26,13 @@ library(ggthemes)
 library(maptools)
 library(officer)
 library(flextable)
+
+# Additions for Database pool
+library('pool') 
+library('DBI')
+library('stringr')
+library('config')
+
 
 source("R/ageForecastPRO.R")
 source("R/agePlotPRO.R")
@@ -79,10 +86,37 @@ source("R/weeklyWages.R")
 
 # The GLOBAL Variables  Add Additional lists items as sections get defined
 # Current ACS database
-curACS <- "acs1216"
-curYr <- 2016
+curACS <- "acs1317"
+curYr <- 2017
 fipslist <<- ""
-tDir <- tempdir()  #Setting Temporary Directory location for Reporting
+
+# Set up database pool 1/23/19
+
+config <- get("database")
+DOLAPool <-  dbPool(
+  drv <- dbDriver(config$Driver),
+  dbname = config$Database,
+  host = config$Server,
+  port = config$Port,
+  user = config$UID,
+  password = config$PWD
+)
+
+
+
+dbGetInfo(DOLAPool)
+
+
+onStop(function(){
+  poolClose(DOLAPool)
+})
+
+
+fixPath <- function(inPath){
+  outPath <- gsub("ABICKF~1","ABickford",inPath)
+  outPath <-gsub("\\\\","/",outPath)
+  return(outPath)
+}
 
 #Basic Statistics
 stats.list <<- list()
@@ -309,9 +343,11 @@ server <- function(input, output, session) {
   
   output$ui <- renderUI(frontPg)
   # updates Dropdown boxes and selects data level and unit
-  CountyList <- popPlace("Counties",curYr)
-  PlaceList <- popPlace("Municipalities",curYr)
-  #RegionList <- popPlace("Region",curYr)
+  
+  LocList <- popPlace(DOLAPool,curYr)
+  CountyList <- LocList$Counties
+  PlaceList <- LocList$Munis
+  #RegionList <- LocList$Region
   
   observeEvent(input$level, ({
     shinyjs::hide("outputPDF")
@@ -357,15 +393,26 @@ server <- function(input, output, session) {
   
   # Event for click on profile button
   observeEvent(input$profile,  {
-    
+ 
     shinyjs::hide("outputPDF")
     
-    #Prepping Matrix of filenames
+    #Creating output file location and Prepping Matrix of filenames
+  
+    tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
+    #tPath <- "/tmp"  #Production
     
-    fileMat <- TempFil()
+    tName <- ""
+    tmpName <- sample(c(0:9, LETTERS),8, replace=TRUE)
+    for(i in 1:8) {
+      tName <- paste0(tName,tmpName[i])
+    }
     
+    fullDir <- file.path(tPath,tName)
+    tDir <- dir.create(fullDir) #Setting Temporary Directory location for Reporting
+  
+    fileMat <- TempFil(fullDir)   
     
-    
+
     dLout <- submitPush(input$level,input$unit,input$outChk)  # Generate dataLayer Command
     session$sendCustomMessage("handler1",dLout)  #Sends dataLayer command to dataL.js script
     
@@ -400,8 +447,8 @@ server <- function(input, output, session) {
         #stats; Basic Statistics
         if("stats" %in% input$outChk) {
           stats.text <- tags$h2("Basic Statistics")
-          stat_List <- statsTable1(lvl=input$level,listID=idList,sYr=2010,eYr=curYr,ACS=curACS)
-          stat_map <- dashboardMAP(lvl=input$level,listID=idList)
+          stat_List <- statsTable1(DBPool=DOLAPool,lvl=input$level,listID=idList,sYr=2010,eYr=curYr,ACS=curACS)
+          stat_map <- dashboardMAP(DBPool=DOLAPool,lvl=input$level,listID=idList)
           # creating output files
           #HTML table
           dput(stat_List$Htable,fileMat[1])
@@ -444,10 +491,10 @@ server <- function(input, output, session) {
         
         if("popf" %in% input$outChk){
           #Chart/Table Objects
-          popf1 <<- popTable(lvl=input$level,listID=idList,sYr=1990,eYr=curYr)
-          popf2 <<- pop_timeseries(lvl=input$level,listID=idList,endyear=curYr,base=12)
+          popf1 <<- popTable(DBPool=DOLAPool,lvl=input$level,listID=idList,sYr=1990,eYr=curYr)
+          popf2 <<- pop_timeseries(DBPool=DOLAPool,lvl=input$level,listID=idList,endyear=curYr,base=12)
           popf3 <<- popForecast(listID=idList)
-          popf4 <<- cocPlot(listID=idList,lyr=curYr)
+          popf4 <<- cocPlot(DBPool=DOLAPool,listID=idList,lyr=curYr)
           
           # creating output files
           #HTML table
@@ -558,7 +605,7 @@ server <- function(input, output, session) {
           popa1 <<- agePlotPRO(listID=idList, ACS=curACS, yrs=curYr)
           popa2 <<- medianAgeTab(listID=idList, ACS=curACS)
           popa3 <<- ageForecastPRO(listID=idList,sYr=2010,mYr=2015,eYr=2025,base=12)
-          popa4 <<- migbyagePRO(listID=idList)
+          popa4 <<- migbyagePRO(DBPool=DOLAPool,listID=idList)
           
           ggsave(fileMat[17],popa1$plot, device="png", height = 5 , width = 7, dpi=300)
           ggsave(fileMat[18],popa1$plot, device="png", height = 5 , width = 7, dpi=300)
@@ -760,8 +807,8 @@ server <- function(input, output, session) {
         # Housing
         if("housing" %in% input$outChk){
           #Generate tables, plots and text...
-          poph1 <<- houseEstPRO(listID=idList,curYr=curYr)
-          poph2 <<- housePRO(listID=idList, curYr=curYr) # Housing Unit Table
+          poph1 <<- houseEstPRO(DBPool=DOLAPool,listID=idList,curYr=curYr)
+          poph2 <<- housePRO(DBPool=DOLAPool,listID=idList, curYr=curYr) # Housing Unit Table
           poph3 <<- OOHouse(listID=idList,ACS=curACS)  # Chars of Owner Occupied Housing
           poph4 <<- RTHouse(listID=idList,ACS=curACS)  # Chars of Rental Housing
           poph5 <<- HouseVal(listID=idList,ACS=curACS) # Comparative Value of Housing both OO and Rental
@@ -874,8 +921,8 @@ server <- function(input, output, session) {
           
           #Generate tables, plots and text...
           
-          popt1 <<- GenerateVenn(listID=idList)
-          popt2 <<- jobMigration(listID=idList,maxyr = curYr)
+          popt1 <<- GenerateVenn(DBPool=DOLAPool,listID=idList)
+          popt2 <<- jobMigration(DBPool=DOLAPool,listID=idList,maxyr = curYr)
           
           #Venn Diagram
           ggsave(fileMat[55],popt1$plot, device="png", height = 5 , width = 7, dpi=300)
@@ -958,9 +1005,9 @@ server <- function(input, output, session) {
         #Employment by Industry
         if("emplind" %in% input$outChk){
           #Generate tables, plots and text...
-          popei1 <<- jobsPlot(listID=idList, maxyr = curYr)
-          popei2 <<- jobsByIndustry(listID=idList, curyr = curYr)
-          popei3 <<- baseIndustries(listID=idList, curyr = curYr)
+          popei1 <<- jobsPlot(DBPool=DOLAPool,listID=idList, maxyr = curYr)
+          popei2 <<- jobsByIndustry(DBPool=DOLAPool,listID=idList, curyr = curYr)
+          popei3 <<- baseIndustries(DBPool=DOLAPool,listID=idList, curyr = curYr)
           
           #JobsPlot
           ggsave(fileMat[64],popei1$plot, device="png", height = 5 , width = 7, dpi=300)
@@ -1047,9 +1094,9 @@ server <- function(input, output, session) {
         #Employment and Demographic Forecast
         if("emply" %in% input$outChk){
           #Generate tables, plots and text...
-          popem1 <<- jobsPopForecast(listID=idList,curyr=curYr)
-          popem2 <<- weeklyWages(listID=idList)
-          popem3 <<- residentialLF(listID=idList,curyr=curYr)
+          popem1 <<- jobsPopForecast(DBPool=DOLAPool,listID=idList,curyr=curYr)
+          popem2 <<- weeklyWages(DBPool=DOLAPool,listID=idList,curyr=curYr)
+          popem3 <<- residentialLF(DBPool=DOLAPool,listID=idList,curyr=curYr)
           popem4 <<- incomeSrc(level=input$level,listID=idList,ACS=curACS)  
           
           #JobsPopForecast
@@ -1167,8 +1214,12 @@ server <- function(input, output, session) {
         #Generate Report
         #knitting file and copy to final document
         
-        tempRMD <- fileMat[88]
-        tempPDF <- fileMat[89] 
+        tempRMD <- fixPath(fileMat[88])  #Testing
+        tempPDF <- fixPath(fileMat[89]) 
+        
+        # tempRMD <- fileMat[88]  #Production
+        # tempPDF <- fileMat[89] 
+        
         
         rmarkdown::render(input= tempRMD, output_file = tempPDF,
                           params =  list(outChk = input$outChk,

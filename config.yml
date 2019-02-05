@@ -1,0 +1,8 @@
+default:
+  database:
+      Driver: 'PostgreSQL'
+      Server: '104.197.26.248'
+      Database: 'dola'
+      UID:  'codemog'
+      PWD:  'demography'
+      Port:  5433     
