@@ -33,7 +33,6 @@ pop_timeseries=function(DBPool,lvl,listID, beginyear=2000,endyear, base=10){
     sqlStrPop1 <- paste0("SELECT countyfips, placefips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE (placefips = ",as.numeric(placefips),"  and (year >= ",beginyear,") and (year <= ",endyear,"));")
                           
     d1 <-  dbGetQuery(DBPool, sqlStrPop1)
-  browser()  
 
     d1 <- d1[which(d1$countyfips != 999), ]  # removing "Total" for multi-county cities
     d1$totalpopulation <- ifelse(is.na(d1$totalpopulation),0,d1$totalpopulation)  #Fixing NA values
