@@ -111,13 +111,6 @@ onStop(function(){
   poolClose(DOLAPool)
 })
 
-
-fixPath <- function(inPath){
-  outPath <- gsub("ABICKF~1","ABickford",inPath)
-  outPath <-gsub("\\\\","/",outPath)
-  return(outPath)
-}
-
 #Basic Statistics
 stats.list <<- list()
 
@@ -398,8 +391,8 @@ server <- function(input, output, session) {
     
     #Creating output file location and Prepping Matrix of filenames
   
-    tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
-    #tPath <- "/tmp"  #Production
+    #tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
+    tPath <- "/tmp"  #Production
     
     tName <- ""
     tmpName <- sample(c(0:9, LETTERS),8, replace=TRUE)
@@ -1214,11 +1207,11 @@ server <- function(input, output, session) {
         #Generate Report
         #knitting file and copy to final document
         
-        tempRMD <- fixPath(fileMat[88])  #Testing
-        tempPDF <- fixPath(fileMat[89]) 
+       # tempRMD <- fixPath(fileMat[88])  #Testing
+       # tempPDF <- fixPath(fileMat[89]) 
         
-        # tempRMD <- fileMat[88]  #Production
-        # tempPDF <- fileMat[89] 
+         tempRMD <- fileMat[88]  #Production
+         tempPDF <- fileMat[89] 
         
         
         rmarkdown::render(input= tempRMD, output_file = tempPDF,
