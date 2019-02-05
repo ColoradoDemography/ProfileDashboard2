@@ -66,7 +66,7 @@ educPRO <- function(listID, ACS){
   d13ctyVAL2 <- d13ctyVAL[,c(1,8,10,9)]
   d13ctyMOE2 <- d13ctyMOE[,c(8,9)]
   
-  d13ctyF <- merge(d13ctyVAL2,d13ctyMOE2,by="EdLevel")
+  d13ctyF <- left_join(d13ctyVAL2,d13ctyMOE2,by="EdLevel")
   f.d13ctyFin <- d13ctyF %>%
     mutate(c_propVAL = value/sum(value),
            c_propMOE = MOE/sum(value))
@@ -122,7 +122,7 @@ educPRO <- function(listID, ACS){
   d13STVAL2 <- d13STVAL[,c(1,8,10,9)]
   d13STMOE2 <- d13STMOE[,c(8,9)]
   
-  d13STF <- merge(d13STVAL2,d13STMOE2,by="EdLevel")
+  d13STF <- left_join(d13STVAL2,d13STMOE2,by="EdLevel")
   f.d13STFin <- d13STF %>%
     mutate(s_propVAL = value/sum(value),
            s_propMOE = MOE/sum(value))
@@ -179,7 +179,7 @@ educPRO <- function(listID, ACS){
     d13plVAL2 <- d13plVAL[,c(1,8,10,9)]
     d13plMOE2 <- d13plMOE[,c(8,9)]
     
-    d13plF <- merge(d13plVAL2,d13plMOE2,by="EdLevel")
+    d13plF <- left_join(d13plVAL2,d13plMOE2,by="EdLevel")
     f.d13plFin <- d13plF %>%
       mutate(p_propVAL = value/sum(value),
              p_propMOE = MOE/sum(value))
@@ -256,7 +256,7 @@ educPRO <- function(listID, ACS){
   if(nchar(placefips) == 0) {
     ed_county <- f.d13ctyFin[, c(3,6,7,10:13)]
     ed_state <- f.d13STFin[, c(3,6,7,10:13)]
-    f.dwide <- merge(ed_county,ed_state,by="educcat")
+    f.dwide <- left_join(ed_county,ed_state,by="educcat")
     
     #calcualting Statistical Test
     #Calculating the statistical test
@@ -286,7 +286,7 @@ educPRO <- function(listID, ACS){
   } else {
     ed_place <- f.d13plFin[, c(3,6,7,10:13)]
     ed_county <- f.d13ctyFin[, c(3,6,7,10:13)]
-    f.dwide <- merge(ed_place,ed_county,by="educcat")
+    f.dwide <- left_join(ed_place,ed_county,by="educcat")
     
     #calcualting Statistical Test
     #Calculating the statistical test

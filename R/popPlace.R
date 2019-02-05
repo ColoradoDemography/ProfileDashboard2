@@ -1,5 +1,5 @@
 #'  popPlace : Populates the input$unit field using information from the PostGres estimates database.
-#'  return a data frame with the placefips, countyfips, placename and totalPopulation
+#'  return a data frame with the placefips, countyfips, placename and totalPopulation  Revised 1/23/2019
 #'
 #' @param level identifies the level to be used (State, Planning Regions, Counties, Municipalities)
 #'    taken from the input$level parameter from the dashboard
@@ -7,9 +7,9 @@
 #' @export
 
 
-popPlace <- function(level,curyr) {
+popPlace <- function(DBPool,curyr) {
 
-  if(level == "Region")  {
+  #Regions
     regList <- list(
       "Region  1: Northern Eastern Plains",
       "Region  2: Northern Front Range",
@@ -25,54 +25,30 @@ popPlace <- function(level,curyr) {
       "Region 12: Northern Mountains",
       "Region 13: Central Mountains",
       "Region 14: Southern Mountains")
-    return(regList)  
-  } else {
+ 
   
   # Create Connection Strings
   clookupStr <- paste0("SELECT countyfips, placefips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE year = ", curyr, " and placefips = 0;")
   plookupStr <- paste0("SELECT countyfips, placefips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE year = ", curyr, ";")
   mlookupStr <- paste0("SELECT countyfips, placefips,  year, totalpopulation FROM estimates.county_muni_timeseries WHERE year = ", curyr, " and placefips != 0 and placefips != 99990 and countyfips = 999;")
  
-   # create a connection  
-   # save the password that we can "hide" it as best as we can by collapsing it
-  pw <- {
-    "demography"
-  }
-
-  # loads the PostgreSQL driver
-  drv <- dbDriver("PostgreSQL")
-  # creates a connection to the postgres database
-  # note that "con" will be used later in each connection to the database
-  con <- dbConnect(drv, dbname = "dola",
-                   host = "104.197.26.248", port = 5433,
-                   user = "codemog", password = pw)
-  rm(pw) # removes the password
 
     # f.cLookup contains the county records
-    f.cLookup <- dbGetQuery(con, clookupStr)
+    f.cLookup <- dbGetQuery(DBPool, clookupStr)
     
-    f.pLookup <- dbGetQuery(con, plookupStr)
+    f.pLookup <- dbGetQuery(DBPool, plookupStr)
     
     #f.mLookup is the multi county cities
-    f.mLookup <- dbGetQuery(con, mlookupStr)
+    f.mLookup <- dbGetQuery(DBPool, mlookupStr)
     
+  
+ # Counties   
+    f.cLookup <- f.cLookup[c(2:nrow(f.cLookup)),]
+    f.cLookup[,3] <- sapply(f.cLookup[,3], function(x) simpleCap(x))
+   
 
-    #closing the connections
-    dbDisconnect(con)
-    dbUnloadDriver(drv)
-    rm(con)
-    rm(drv)
-    if(level == "Counties") {    
-      f.cLookup <- f.cLookup[c(2:nrow(f.cLookup)),]
-      
-      for(i in 1: nrow(f.cLookup)) {
-        f.cLookup[i,3] <- simpleCap(f.cLookup[i,3])
-      }
-      
-      return(f.cLookup)
-   }
+ # Municialities
 
-  if(level == "Municipalities") {
     #removing errant records...
     f.pLookup <- f.pLookup[which(f.pLookup$placefips != 0),] #remove State Records
     f.pLookup <- f.pLookup[which(f.pLookup$countyfips != 999),] # County total records for multiple places
@@ -86,7 +62,7 @@ popPlace <- function(level,curyr) {
     #merging f.pLookup and f.mLookup and updating totalpopulation value
     f.mLookup <- f.mLookup[,c(2,4)]
 
-    f.pLookupFin <- merge(f.pLookup,f.mLookup,by="placefips", all.x=TRUE)
+    f.pLookupFin <- left_join(f.pLookup,f.mLookup,by="placefips")
     f.pLookupFin$cty_Pop <- f.pLookupFin$totalpopulation.x  # this is the potions of the population in each portion
 
     f.pLookupFin$totalpopulation <- ifelse(is.na(f.pLookupFin$totalpopulation.y),f.pLookupFin$totalpopulation.x,f.pLookupFin$totalpopulation.y)
@@ -94,15 +70,14 @@ popPlace <- function(level,curyr) {
     
     # merging counties and municipals
     f.cty <- f.cLookup[,c(1,3)]
- 
-    f.plac <- merge(f.pLookupFin,f.cty,by="countyfips",all.x=TRUE)
+
+    f.plac <- left_join(f.pLookupFin,f.cty,by="countyfips")
     names(f.plac)[3] <- "municipalityname"
     names(f.plac)[7] <- "countyname"
-    
+    f.plac <- f.plac[,c(2,1,3:7)]
     f.plac <- f.plac[order(f.plac$municipalityname),]
     
-    return(f.plac)
-  }
-  }
+  loc <- list("Counties" = f.cLookup, "Munis" = f.plac, "Region" = regList)
+  return(loc)
 }
 

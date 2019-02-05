@@ -4,12 +4,10 @@
 #' @return Matrix of filename vectors
 #' @export
 
-TempFil <- function() {
-
-  oDir <- tempdir()
+TempFil <- function(oDir) {
   oMatrix <- matrix(data=NA,nrow=90)
 
-  
+  x <- oDir
   # Copying RMD File      
   file.copy("SDO_Report.Rmd",oDir)
   oMatrix[88] <- file.path(paste0(oDir,"/","SDO_Report.Rmd"))

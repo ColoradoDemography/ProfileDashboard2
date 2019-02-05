@@ -9,7 +9,7 @@
 #' @return ggplot2 graphics and associated data sets
 #' @export
 
-residentialLF <- function(listID, curyr, base=10){
+residentialLF <- function(DBPool,listID, curyr, base=10){
   
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
@@ -26,29 +26,10 @@ residentialLF <- function(listID, curyr, base=10){
   LFSQLPL <- paste0("SELECT * FROM estimates.labor_force_participation WHERE area_code = ",as.numeric(ctyfips), ";")
   LFSQLST <- paste0("SELECT * FROM estimates.labor_force_participation WHERE area_code = 0;")
 
-
-  pw <- {
-    "demography"
-  }
-
-  # loads the PostgreSQL driver
-  drv <- dbDriver("PostgreSQL")
-  # creates a connection to the postgres database
-  # note that "con" will be used later in each connection to the database
-  con <- dbConnect(drv, dbname = "dola",
-                   host = "104.197.26.248", port = 5433,
-                   user = "codemog", password = pw)
-  rm(pw) # removes the password
-
   # Read data files
-  f.LFPlace <- dbGetQuery(con, LFSQLPL)
-  f.LFState <- dbGetQuery(con, LFSQLST)
+  f.LFPlace <- dbGetQuery(DBPool, LFSQLPL)
+  f.LFState <- dbGetQuery(DBPool, LFSQLST)
 
-  #closing the connections
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  rm(con)
-  rm(drv)
 
   # Summing by Participation Year
 

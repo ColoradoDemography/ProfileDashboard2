@@ -9,7 +9,7 @@
 #' @return ggplot2 graphic and data file
 #' @export
 
-baseIndustries <- function(listID, curyr, oType,base=10){
+baseIndustries <- function(DBPool,listID, curyr, oType,base=10){
   
 
   ctyfips <- listID$ctyNum
@@ -39,30 +39,11 @@ baseIndustries <- function(listID, curyr, oType,base=10){
   LFSQLPL <- substr(LFSQLPL,1,nchar(LFSQLPL)-2)
   LFSQLPL <- paste0(LFSQLPL, ");")
 
-
-  pw <- {
-    "demography"
-  }
-
-  # loads the PostgreSQL driver
-  drv <- dbDriver("PostgreSQL")
-  # creates a connection to the postgres database
-  # note that "con" will be used later in each connection to the database
-  con <- dbConnect(drv, dbname = "dola",
-                   host = "104.197.26.248", port = 5433,
-                   user = "codemog", password = pw)
-  rm(pw) # removes the password
-
   # Read data files
 
-  f.jobsBase <- dbGetQuery(con, jobsSQL)
-  f.LFPlace <- dbGetQuery(con, LFSQLPL)
-  #closing the connections
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  rm(con)
-  rm(drv)
-
+  f.jobsBase <- dbGetQuery(DBPool, jobsSQL)
+  f.LFPlace <- dbGetQuery(DBPool, LFSQLPL)
+  
   # Adding Population Age 16 + and total Population for Table
 
   f.LFPlace <- f.LFPlace[which(f.LFPlace$population_year == curyr),c(1:6,8)]
@@ -217,7 +198,7 @@ baseIndustries <- function(listID, curyr, oType,base=10){
     OutText <- paste0(OutText," or rail transportation, and large item retail purchases like autos or appliances.")
     OutText <- paste0(OutText," \\textit{Retirees} are considered basic since they spend money from social security or other pensions, Medicare and savings.")
     OutText <- paste0(OutText," \\textit{Government} typically only includes employment in Federal Government and State Government.")
-    OutText <- paste0(OutText," \\textit{Tourism} not only includes traditional tourist services like accommodation and food, but also includes second homes,")
+    OutText <- paste0(OutText," \\textit{Tourism} not only includes traditional tourist services like accommodation and food, but also includes 2nd homes,")
     OutText <- paste0(OutText," property management and transportation of tourists by airlines, car rental, car sharing and shuttles.")
     
   #FlexTable

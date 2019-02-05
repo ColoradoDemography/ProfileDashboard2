@@ -17,7 +17,7 @@
 
 
 
-pop_timeseries=function(lvl,listID, beginyear=2000,endyear, base=10){
+pop_timeseries=function(DBPool,lvl,listID, beginyear=2000,endyear, base=10){
 
   # Collecting place ids from  idList, setting default values
 
@@ -30,72 +30,55 @@ pop_timeseries=function(lvl,listID, beginyear=2000,endyear, base=10){
 
   # Checking length of fips to idenify municipality data series
   if(lvl == "Municipalities") {
-    sqlStrPop1 <- paste0("SELECT countyfips, placefips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE (placefips = ",as.numeric(placefips),") 
-                            and (year >= ",beginyear,") and (year <= ",endyear,");")
-    
-    pw <- {
-      "demography"
-    }
-    
-    # loads the PostgreSQL driver
-    drv <- dbDriver("PostgreSQL")
-    # creates a connection to the postgres database
-    # note that "con" will be used later in each connection to the database
-    con <- dbConnect(drv, dbname = "dola",
-                     host = "104.197.26.248", port = 5433,
-                     user = "codemog", password = pw)
-    rm(pw) # removes the password
-    
-    d1 <-  dbGetQuery(con, sqlStrPop1)
-    
-    #closing the connections
-    dbDisconnect(con)
-    dbUnloadDriver(drv)
-    rm(con)
-    rm(drv)
+    sqlStrPop1 <- paste0("SELECT countyfips, placefips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE (placefips = ",as.numeric(placefips),"  and (year >= ",beginyear,") and (year <= ",endyear,"));")
+                          
+    d1 <-  dbGetQuery(DBPool, sqlStrPop1)
+  browser()  
 
     d1 <- d1[which(d1$countyfips != 999), ]  # removing "Total" for multi-county cities
     d1$totalpopulation <- ifelse(is.na(d1$totalpopulation),0,d1$totalpopulation)  #Fixing NA values
     d1$municipalityname <-gsub(' \\([P,p]art\\)','',d1$municipalityname)
-    d <- d1 %>% group_by(placefips, municipalityname, year) %>% summarize(totalPopulation = sum(totalpopulation))
+    d <- d1 %>% group_by(placefips, municipalityname, year) %>% summarize(totalpopulation = sum(totalpopulation))
     d$placename <- d$municipalityname
     
    } 
    if(lvl == "Counties") { #fips is a county code
-        
-        d=county_profile(as.numeric(ctyfips), beginyear:endyear, "totalpopulation")%>%
-          select(countyfips, county, year, totalPopulation=totalpopulation)
-        d$placename <- paste0(d$county, " County")
+        sqlCtyPop <-  paste0("SELECT countyfips, year, totalpopulation FROM estimates.county_profiles WHERE (countyfips = ",as.numeric(ctyfips),") 
+                            and (year >= ",beginyear,") and (year <= ",endyear,");")
+        d=dbGetQuery(DBPool, sqlCtyPop) 
+        d$placename <- ctyname
    }
   
   # Region
   if(lvl == "Region") {
     popReg <- data.frame()
     for(i in 1:length(ctynum)) {
-      popReg <- rbind(popReg,county_profile(ctynum[i], beginyear:endyear, "totalpopulation"))
+      sqlRegPop <-  paste0("SELECT countyfips, year, totalpopulation FROM estimates.county_profiles WHERE (countyfips = ",as.numeric(ctynum[i]),") 
+                            and (year >= ",beginyear,") and (year <= ",endyear,");")
+      popReg <- rbind(popReg,dbGetQuery(DBPool, sqlRegPop))
     }
     d <- popReg %>% 
       group_by(year) %>%
-      summarize(totalPopulation=sum(as.numeric(totalpopulation))) 
+      summarize(totalpopulation=sum(as.numeric(totalpopulation))) 
     d$placeName  <- ctyname
     d <- d[,c(3,1,2)]
   }
         
-  d$totalPopulation <- as.numeric(d$totalPopulation)
-  d <- d[which(d$totalPopulation != 0),]
   
-  yaxs <- setAxis(d$totalPopulation)
+  d <- d[which(d$totalpopulation != 0),]
+  
+  yaxs <- setAxis(d$totalpopulation)
   xaxs <- setAxis(d$year)
   if(xaxs$maxBrk != endyear) {
     xaxs$maxBrk <- endyear
     xaxs$yBrk[length(xaxs$yBrk)] <- endyear
   }
 
-  d2 <- d[,c(5,3,4)]
+  d2 <- d[,c(4,2,3)]
   names(d2) <- c("Geography","Year","Total Population")
   
   p=d%>%
-    ggplot(aes(x=year, y=totalPopulation))+
+    ggplot(aes(x=year, y=totalpopulation))+
     geom_line(color="#00953A", size=1.75)+
     labs(x="Year", y="Population", title=paste("Population,", beginyear, "to", max(d$year), sep=" "),
          subtitle = d$placename,

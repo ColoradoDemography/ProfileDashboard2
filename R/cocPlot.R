@@ -6,7 +6,7 @@
 #' @return ggplot2 graphic and data file
 #' @export
 
-cocPlot <- function(listID,fyr=2000,lyr,base=12) {
+cocPlot <- function(DBPool,listID,fyr=2000,lyr,base=12) {
   
   # Collecting place ids from  idList, setting default values
   
@@ -18,9 +18,11 @@ cocPlot <- function(listID,fyr=2000,lyr,base=12) {
     placefips <- ""
     placename <- ""
   }  
+
+  cocStr <- "SELECT countyfips, year, totalpopulation, births, deaths, netmigration FROM estimates.county_profiles;"
   
- 
-  f.coccty <- county_profile(as.numeric(ctyfips), fyr:lyr, vars="totalpopulation,births,deaths,netmigration")%>%
+  f.coccty <-  dbGetQuery(DBPool,cocStr) %>%
+    filter(countyfips == as.numeric(ctyfips) & year >= fyr & year <= lyr) %>%
     mutate( totalpopulation = as.numeric(totalpopulation),
             births=as.numeric(births),
             deaths=as.numeric(deaths),
@@ -59,13 +61,15 @@ cocPlot <- function(listID,fyr=2000,lyr,base=12) {
           axis.text = element_text(size=12),
           legend.position= "bottom")
   
+  f.coccty$place <- ctyname
+  f.coccty2 <- f.coccty[,c(8,2:7)]
+  names(f.coccty2)  <- c("Place","Year","Total Population","Births","Deaths", "Net Migration","Natural Increase")
   
-  f.coccty <- f.coccty[,2:8]
-  names(f.coccty)  <- c("Place","Year","Total Population","Births","Deaths", "Net Migration","Natural Increase")
-  f.coccty$Place <- ctyname
   
   #Creating text 
+
   f.coccty5 <- tail(f.coccty,5)
+  f.coccty5 <- f.coccty5[,c(8,2:7)]
   names(f.coccty5)  <- c("Place","Year","Total Population","Births","Deaths", "NetMigration","NaturalIncrease")
   fyr <- as.numeric(f.coccty5[1,2])
   lyr <- as.numeric(f.coccty5[5,2])
@@ -85,7 +89,7 @@ cocPlot <- function(listID,fyr=2000,lyr,base=12) {
   OutText <- paste0(OutText," The total natural increase (births - deaths) over this period was ",format(f.sum$sumNat,big.mark=",")," and the total net migration (new residents who moved in minus those who moved out) was ",format(f.sum$sumMig,big.mark=","),".")                 
   OutText <- paste0(OutText,"  Note: Components of Change data are only available for Colorado counties.")
   
-  outList <- list("plot" = cocPlt, "data" = f.coccty,"text" = OutText)
+  outList <- list("plot" = cocPlt, "data" = f.coccty2,"text" = OutText)
   
   return(outList)
 }

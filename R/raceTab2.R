@@ -69,7 +69,7 @@ raceTab2 <- function(listID, ACS) {
   f.ACSRaceCTYMOE_Fin <- gather(ACSRaceCTYMOE2[, c(20:29)], key = "race", value=ACS, TotalPop:NHTwo)
   
   # the county file
-  f.county <- merge(f.ACSRaceCTY,f.ACSRaceCTYMOE_Fin,by="race")
+  f.county <- left_join(f.ACSRaceCTY,f.ACSRaceCTYMOE_Fin,by="race")
   names(f.county) <- c("Race","Count_County","MOE_County")
   
   total_County <- as.numeric(f.county[which(f.county$Race == "TotalPop"),2])
@@ -119,7 +119,7 @@ raceTab2 <- function(listID, ACS) {
   f.ACSRaceSTMOE_Fin <- gather(ACSRaceSTMOE2[, c(20:29)], key = "race", value=ACS, TotalPop:NHTwo)
   
   # the state file
-  f.state <- merge(f.ACSRaceST,f.ACSRaceSTMOE_Fin,by="race")
+  f.state <- left_join(f.ACSRaceST,f.ACSRaceSTMOE_Fin,by="race")
   names(f.state) <- c("Race","Count_State","MOE_State")
   
   total_State <- as.numeric(f.state[which(f.state$Race == "TotalPop"),2])
@@ -169,7 +169,7 @@ if(nchar(placefips) != 0) {
   f.ACSRacePLMOE_Fin <- gather(ACSRacePLMOE2[, c(20:29)], key = "race", value=ACS, TotalPop:NHTwo)
  
   # the state file
-  f.place <- merge(f.ACSRacePL,f.ACSRacePLMOE_Fin,by="race")
+  f.place <- left_join(f.ACSRacePL,f.ACSRacePLMOE_Fin,by="race")
   names(f.place) <- c("Race","Count_Place","MOE_Place")
   
   total_Place <- as.numeric(f.place[which(f.place$Race == "TotalPop"),2])
@@ -178,7 +178,7 @@ if(nchar(placefips) != 0) {
 }
 
 if(nchar(placefips) == 0){
-  f.raceFin <- merge(f.county,f.state, by="Race")
+  f.raceFin <- left_join(f.county,f.state, by="Race")
   #Calculating the statistical test
   f.raceFin$ZScore <- (abs(f.raceFin$CountPCT_County - f.raceFin$CountPCT_State)/
                          sqrt((f.raceFin$MOEPCT_County^2) + (f.raceFin$MOEPCT_State^2)))
@@ -196,7 +196,7 @@ if(nchar(placefips) == 0){
   # set vector names
   names(tblHead) <- c(" ", ctyname,"Colorado"," ")
 } else {
-  f.raceFin <- merge(f.place,f.county, by="Race")
+  f.raceFin <- left_join(f.place,f.county, by="Race")
   #Calculating the statistical test
   f.raceFin$ZScore <- (abs(f.raceFin$CountPCT_Place - f.raceFin$CountPCT_County)/
                          sqrt((f.raceFin$MOEPCT_Place^2) + (f.raceFin$MOEPCT_County^2)))

@@ -7,7 +7,7 @@
 #' @return ggplot2 graphic and data file
 #' @export
 #'
-houseEstPRO <- function(listID,curYr, base=10) {
+houseEstPRO <- function(DBPool,listID,curYr, base=10) {
 
   
   # Collecting place ids from  idList, setting default values
@@ -23,31 +23,12 @@ houseEstPRO <- function(listID,curYr, base=10) {
   fipsN <- as.numeric(ctyfips)
   state= 0
 
-  # create a connection
-  # save the password that we can "hide" it as best as we can by collapsing it
-  pw <- {
-    "demography"
-  }
-
-  # loads the PostgreSQL driver
-  drv <- dbDriver("PostgreSQL")
-  # creates a connection to the postgres database
-  # note that "con" will be used later in each connection to the database
-  con <- dbConnect(drv, dbname = "dola",
-                   host = "104.197.26.248", port = 5433,
-                   user = "codemog", password = pw)
-  rm(pw) # removes the password
 
   sqlPlace <- paste0("SELECT * FROM estimates.household_projections WHERE area_code = ",fipsN,";")
-  f.hhP <- dbGetQuery(con, sqlPlace)
+  f.hhP <- dbGetQuery(DBPool, sqlPlace)
 
   f.hhPlace <-  f.hhP[which(f.hhP$household_type_id == 0 & f.hhP$age_group_id == 0),]
 
-  #Closing the connection
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  rm(con)
-  rm(drv)
 
   # Preparing Plot
   f.hhPlace$datatype <- ifelse(f.hhPlace$year <= curYr, "Estimate", "Forecast")

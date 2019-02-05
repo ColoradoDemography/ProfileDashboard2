@@ -10,7 +10,7 @@
 #' @return  ggplot graphic and data file
 #' @export
 #'
-jobsByIndustry <- function(listID, curyr, base=10){
+jobsByIndustry <- function(DBPool,listID, curyr, base=10){
   
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
@@ -22,31 +22,12 @@ jobsByIndustry <- function(listID, curyr, base=10){
   }
   
   options(warn=-1)  # Suppressing warning messages produced by VennDiagram
-  #Reading data
-  pw <- {
-    "demography"
-  }
-
-  # loads the PostgreSQL driver
-  drv <- dbDriver("PostgreSQL")
-  # creates a connection to the postgres database
-  # note that "con" will be used later in each connection to the database
-  con <- dbConnect(drv, dbname = "dola",
-                   host = "104.197.26.248", port = 5433,
-                   user = "codemog", password = pw)
-  rm(pw) # removes the password
 
   # Read data files
-  f.jobsPL <- dbGetQuery(con, paste0("SELECT * FROM estimates.jobs_by_sector WHERE (area_code = ", as.character(as.numeric(ctyfips)),
+  f.jobsPL <- dbGetQuery(DBPool, paste0("SELECT * FROM estimates.jobs_by_sector WHERE (area_code = ", as.character(as.numeric(ctyfips)),
                                      " AND population_year = ", as.character(curyr), ");"))
-  f.jobsST <- dbGetQuery(con, paste0("SELECT * FROM estimates.jobs_by_sector WHERE (area_code = 0 AND population_year = ",
+  f.jobsST <- dbGetQuery(DBPool, paste0("SELECT * FROM estimates.jobs_by_sector WHERE (area_code = 0 AND population_year = ",
                                      as.character(curyr), ");"))
-
-  #closing the connections
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  rm(con)
-  rm(drv)
 
   f.jobsPL$total_jobs <- if_else(is.na(f.jobsPL$total_jobs),0,f.jobsPL$total_jobs)
   f.jobsPL$sector_name <- gsub("&nbsp;","",f.jobsPL$sector_name)

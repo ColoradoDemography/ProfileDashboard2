@@ -5,8 +5,8 @@
 #' @return ggplot2 graphic and data file
 #' @export
 #'
-migbyagePRO <- function(listID, base=10) {
-  
+migbyagePRO <- function(DBPool,listID, base=10) {
+
   # Collecting place ids from  idList, setting default values
   
   ctyfips <- listID$ctyNum
@@ -19,32 +19,14 @@ migbyagePRO <- function(listID, base=10) {
   }
   
 
-  # create a connection
-  # save the password that we can "hide" it as best as we can by collapsing it
-  pw <- {
-    "demography"
-  }
-
-  # loads the PostgreSQL driver
-  drv <- dbDriver("PostgreSQL")
-  # creates a connection to the postgres database
-  # note that "con" will be used later in each connection to the database
-  con <- dbConnect(drv, dbname = "dola",
-                   host = "104.197.26.248", port = 5433,
-                   user = "codemog", password = pw)
-  rm(pw) # removes the password
-
+  
   sqlPlace <- paste0("SELECT fips, county, agegroup, netmig0010 FROM data.netmigrbyage WHERE fips = ",as.numeric(ctyfips),";")
-  f.migPlace <- dbGetQuery(con, sqlPlace)
+  f.migPlace <- dbGetQuery(DBPool, sqlPlace)
 
  # sqlState <- paste0("SELECT fips, county, agegroup, rate0010 FROM data.netmigrbyage WHERE fips = ",state,";")
  # f.migState <- dbGetQuery(con, sqlState)
 
-  #Closing the connection
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  rm(con)
-  rm(drv)
+
 
   # Preparing for merge
   f.migPlace[2] <- ctyname

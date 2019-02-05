@@ -1,4 +1,5 @@
 #' popTable The population table showing the annual growth rate in the Population Section
+#' Updates 1/2019 to remove county_profiles call and PostgreSQL code
 #'
 #' @param lvl the data level, Counties, Municipalities and region
 #' @param listID the list containing place id and Place names
@@ -7,7 +8,7 @@
 #' @return kable formatted  table and data file
 #' @export
 #'
-popTable <- function(lvl,listID,sYr,eYr) {
+popTable <- function(DBPool,lvl,listID,sYr,eYr) {
 
   # Collecting place ids from  idList, setting default values
   
@@ -25,53 +26,37 @@ popTable <- function(lvl,listID,sYr,eYr) {
   yrs <- as.character(setYrRange(sYr,eYr))
   
   #State Population and Growth Rate
-  popCO=county_profile(0, sYr:eYr, "totalpopulation")%>%
+  stPopGrowth <- "SELECT countyfips, year, totalpopulation FROM estimates.county_muni_timeseries WHERE countyfips = 0 AND placefips = 0;"
+  popCO <- dbGetQuery(DBPool,stPopGrowth) %>%
     filter(year %in% yrs)%>%
     mutate(name="Colorado",
            totalpopulation=as.numeric(totalpopulation),
            year=as.numeric(year),
            growthRate=percent(signif((((totalpopulation/lag(totalpopulation))^(1/(year-lag(year)))) -1)*100),digits=1),
            Population=comma(totalpopulation))
-  mCO <- popCO[,c(1,5,7,6)]
+  mCO <- popCO[,c(2,6,5)]
   
   #County Population and Growth Rate  *** need to account for multip county communities...
   if(lvl == "Counties" || lvl == "Municipalities") {
-  mCty <- county_profile(ctynum, sYr:eYr, "totalpopulation")%>%
+  ctyPopGrowth <- paste0("SELECT countyfips, year, totalpopulation FROM estimates.county_muni_timeseries WHERE countyfips = ",ctynum," AND placefips = 0;") 
+  mCty <- dbGetQuery(DBPool,ctyPopGrowth) %>%
     filter(year %in% yrs)%>%
-    arrange(county,year)%>%
-    mutate(name=county,
-           year=as.numeric(year),
+    arrange(countyfips,year)%>%
+    mutate(year=as.numeric(year),
            totalpopulation=as.numeric(totalpopulation),
            growthRate=percent(signif((((totalpopulation/lag(totalpopulation))^(1/(year-lag(year)))) -1)*100),digits=1),
            Population=comma(totalpopulation))
   mCty$Population  <- ifelse(mCty$totalpopulation == 0, " ",mCty$Population)
+  mCty$name <- ctyname
+  mCty <- mCty[,c(2,6,5,4)]
   }
   
   
   
   if(lvl == "Municipalities") { #if a placename is present
     sqlStrPop1 <- paste0("SELECT countyfips, placefips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE placefips = ",placenum,";")
-    # Postgres Call to gather municipal jobs numbers
-    pw <- {
-      "demography"
-    }
-    
-    # loads the PostgreSQL driver
-    drv <- dbDriver("PostgreSQL")
-    # creates a connection to the postgres database
-    # note that "con" will be used later in each connection to the database
-    con <- dbConnect(drv, dbname = "dola",
-                     host = "104.197.26.248", port = 5433,
-                     user = "codemog", password = pw)
-    rm(pw) # removes the password
-    
-    f.popPlace <-  dbGetQuery(con, sqlStrPop1)
-    
-    #closing the connections
-    dbDisconnect(con)
-    dbUnloadDriver(drv)
-    rm(con)
-    rm(drv)
+   
+    f.popPlace <-  dbGetQuery(DBPool, sqlStrPop1)
     
     
     f.popPlace <- f.popPlace[which(f.popPlace$countyfips != 999), ]  # removing "Total" for multi-county cities
@@ -111,7 +96,7 @@ popTable <- function(lvl,listID,sYr,eYr) {
     mPlace <- as.matrix(placX[,c(3,2,5,6)])
   }
 
-  # Region
+  # Region  UPDATE THIS
   if(lvl == "Region") {
     popReg <- data.frame()
     for(i in 1:length(ctyfips)) {
@@ -130,11 +115,11 @@ popTable <- function(lvl,listID,sYr,eYr) {
   
   if(lvl == "Municipalities") { #if a placename is present
     m.OutTab <- cbind(mPlace,mCty,mCO)
-    m.OutTab <- m.OutTab[,c(1,3,4,11,10,14,15)]
+    m.OutTab <- m.OutTab[,c(1,3,4,7,8,10,11)]
   } 
   if(lvl == "Counties") {
     m.OutTab <- cbind(mCty,mCO)
-    m.OutTab <- m.OutTab[,c(3,7,6,10,11)] 
+    m.OutTab <- m.OutTab[,c(1,3,4,6,7)] 
   } 
   if(lvl == "Region"){
     m.OutTab <- cbind(mReg,mCO)

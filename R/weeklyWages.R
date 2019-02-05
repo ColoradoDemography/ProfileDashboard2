@@ -8,7 +8,7 @@
 #' @export
 #'
 
-weeklyWages <- function(listID, base=10){
+weeklyWages <- function(DBPool,listID, curyr,base=10){
   
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
@@ -22,33 +22,14 @@ weeklyWages <- function(listID, base=10){
   wagePLSQL <- paste0("SELECT * FROM estimates.weekly_wages WHERE fips = '",as.numeric(ctyfips), "';")
   wageSTSQL <- paste0("SELECT * FROM estimates.weekly_wages WHERE fips = '0';")
 
-
-  pw <- {
-    "demography"
-  }
-
-  # loads the PostgreSQL driver
-  drv <- dbDriver("PostgreSQL")
-  # creates a connection to the postgres database
-  # note that "con" will be used later in each connection to the database
-  con <- dbConnect(drv, dbname = "dola",
-                   host = "104.197.26.248", port = 5433,
-                   user = "codemog", password = pw)
-  rm(pw) # removes the password
-
+  
   # Read data files
 
-  f.wagePL <- dbGetQuery(con, wagePLSQL)
-  f.wageST <- dbGetQuery(con, wageSTSQL)
-
-  #closing the connections
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  rm(con)
-  rm(drv)
+  f.wagePL <- dbGetQuery(DBPool, wagePLSQL)
+  f.wageST <- dbGetQuery(DBPool, wageSTSQL)
 
 
-# Place data
+  # Place data
   f.wagePL$wages <- as.numeric(f.wagePL$weekly_wage)
   
   f.wagePL$fmt_wages <- paste0("$", formatC(as.numeric(f.wagePL$wages), format="f", digits=0, big.mark=","))
@@ -66,8 +47,8 @@ weeklyWages <- function(listID, base=10){
 
   f.plot <- rbind(f.wagePL, f.wageST)
 
-  maxYr <- 2016
-  f.plot <- f.plot[which(f.plot$year %in% c(2001,2003,2005,2007,2009,2011,2013,2015,2016)),]
+  maxYr <- as.numeric(max(f.plot$year))
+  f.plot <- f.plot[which(f.plot$year %in% seq(2001,maxYr,2)),]
 
   axs <- setAxis(f.plot$wages)
   axs$maxBrk <- axs$maxBrk + 50
@@ -79,7 +60,7 @@ weeklyWages <- function(listID, base=10){
   f.plot$year <- factor(f.plot$year,labels=c("2001","2003", "2005",
                                               "2007","2009",
                                               "2011","2013","2015",
-                                              "2016"))
+                                              "2017"))
   
   Plot <- f.plot %>%
     ggplot(aes(x=year, y=wages, colour=geoname, group=geoname))+

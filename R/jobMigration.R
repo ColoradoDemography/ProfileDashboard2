@@ -12,7 +12,7 @@
 #' @return ggplot graphic and data file
 #' @export
 #'
-jobMigration <- function(listID, maxyr, base=10){
+jobMigration <- function(DBPool,listID, maxyr, base=10){
   
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
@@ -26,27 +26,9 @@ jobMigration <- function(listID, maxyr, base=10){
   jobsSQL <- paste0("SELECT * FROM estimates.bea_jobs WHERE fips = ",as.numeric(ctyfips), ";")
   jobslyr <- paste0("jobs_",maxyr)
 
-  pw <- {
-    "demography"
-  }
+    f.jobsBea <- dbGetQuery(DBPool, jobsSQL)
 
-  # loads the PostgreSQL driver
-  drv <- dbDriver("PostgreSQL")
-  # creates a connection to the postgres database
-  # note that "con" will be used later in each connection to the database
-  con <- dbConnect(drv, dbname = "dola",
-                   host = "104.197.26.248", port = 5433,
-                   user = "codemog", password = pw)
-  rm(pw) # removes the password
-
-  # Read data files
-  f.jobsBea <- dbGetQuery(con, jobsSQL)
-
-  #closing the connections
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  rm(con)
-  rm(drv)
+ 
 
 
   #Jobs
@@ -54,34 +36,44 @@ jobMigration <- function(listID, maxyr, base=10){
 
   f.jobs1yr <- gather(f.jobsBea, year,jobs, jobs_1970:jobslyr)
   f.jobs1yr$year <- as.numeric(gsub("jobs_","",f.jobs1yr$year))
-
+  
   # Calculating  5-year value
   f.jobs1yr$year5 <- f.jobs1yr$year - (f.jobs1yr$year %%5)
-
-
+ 
+  maxYear5 <- max(f.jobs1yr$year5)
+  maxYear1 <- max(f.jobs1yr$year)
+  f.jobs1yr$year5 <- ifelse(f.jobs1yr$year >  maxYear5,maxYear1,f.jobs1yr$year5)
+  
   #creating a lagged difference
   f.jobs1yr$lagjobs <- f.jobs1yr$jobs - lag(f.jobs1yr$jobs,1)
-
+  
   f.jobs5yr <- f.jobs1yr %>%
     group_by(year5) %>%
     summarize(avgjobs = sum(lagjobs)/n())
-
+  
   f.jobs5yr <- f.jobs5yr[which(f.jobs5yr$year5 >= 1985),]
 
   #Net Migration
   # convert datasets to wide
-  f.migr1yr <- county_profile(as.numeric(ctyfips), 1985:maxyr, vars="netmigration")
-  f.migr1yr$netmigration <- as.numeric(f.migr1yr$netmigration)
-  f.migr1yr$year5 <- f.migr1yr$year - (f.migr1yr$year %% 5)
-
-
-
-  f.migr5yr <- f.migr1yr %>%
-    group_by(year5) %>%
-    summarize(avgmigr = sum(netmigration)/n())
-
+  ctySQL <- paste0("SELECT countyfips, year, netmigration FROM estimates.county_profiles WHERE countyfips = ", as.numeric(ctyfips),";")
   
-  f.pltdata <- merge(f.migr5yr,f.jobs5yr,by="year5")
+  f.migr1yr <- dbGetQuery(DBPool, ctySQL)
+
+  # Calculating  5-year value
+  f.migr1yr$year5 <- f.migr1yr$year - (f.migr1yr$year %%5)
+  
+  maxYear5 <- max(f.migr1yr$year5)
+  maxYear1 <- max(f.migr1yr$year)
+  f.migr1yr$year5 <- ifelse(f.migr1yr$year >  maxYear5,maxYear1,f.migr1yr$year5)
+  
+  
+  f.migr5yr <- f.migr1yr %>%
+    group_by(year5) %>% 
+    summarize(avgmigr = sum(netmigration)/n())
+  
+  f.migr5yr <- f.migr5yr[which(f.migr5yr$year5 >= 1985),]
+  
+  f.pltdata <- inner_join(f.migr5yr,f.jobs5yr,by="year5")
 
   # Generating Plot
   maxYr <- as.numeric(max(f.pltdata$year5))
@@ -93,16 +85,17 @@ jobMigration <- function(listID, maxyr, base=10){
   f.ylim <- rbind(f.mig,f.job)
   ymin <- min(f.ylim$val)
   ymax <- max(f.ylim$val)
+  
+  f.pltdata$year5 <- factor(f.pltdata$year5, labels = c(1985,1990,1995,2000,2005,2010,2015,maxYr) )
 
   migrPlot <- ggplot(f.pltdata) + 
     geom_bar(aes(x=year5, y=avgjobs,color="Jobs"), stat="identity", fill= "#d8c772") +
-    geom_line( aes(x=year5, y=avgmigr, color="Net Migration"), size=1.75) +
+    geom_line(aes(x=year5, y=avgmigr, color="Net Migration", group=1), size=1.75) +
     geom_hline(yintercept=0, size=1.05) +
-    scale_x_continuous(breaks=seq(1985,maxYr, by=5)) +
+    scale_x_discrete() +
     scale_y_continuous(labels=scales::comma) +
     scale_colour_manual(" ", values=c("Jobs" = "#d8c772", "Net Migration" = "#00953A")) +
     scale_fill_manual("",values="#00953A") +
-
     labs(title = "Job Growth and Net Migration",
          subtitle = ctyname,
          caption = captionSrc("SDOBEA",""),
@@ -120,9 +113,10 @@ jobMigration <- function(listID, maxyr, base=10){
   #Final dataset
 
   f.pltdata$Geography <- ctyname
-  f.pltdata <-f.pltdata[,c(4,1:3)]
+  f.pltdata <-f.pltdata[,c(4,1,3,2)]
   f.pltdata[,3:4] <- sapply(f.pltdata[,3:4], function(x) format(round(x,digits=0),big.mark=",",scientific=FALSE))
-  names(f.pltdata) <- c("Geography"," 5-Year Period", "5-Year Average Jobs","5-Year Average Net Migration")
+  
+  names(f.pltdata) <- c("Geography"," Year", "5-Year Average Jobs","5-year Average Net Migration")
 
   
   #Building text

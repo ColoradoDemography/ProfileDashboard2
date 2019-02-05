@@ -11,7 +11,7 @@
 #' @return ggplot graphic and data file
 #' @export
 #'
-jobsPlot=function(listID, maxyr,base=10){
+jobsPlot=function(DBPool,listID, maxyr,base=10){
   
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
@@ -21,11 +21,13 @@ jobsPlot=function(listID, maxyr,base=10){
     placefips <- ""
     placename <- ""
   }
-  
-  jobs_data <- county_jobs(as.numeric(ctyfips), 2001:maxyr) %>%
-    mutate(jobs=car::recode(totalJobs, "'S'=NA"),
-           jobs=round(as.numeric(jobs),0),
-           year=as.numeric(as.character(year)))
+ 
+  jobsStr <- paste0("SELECT * FROM estimates.jobs_by_sector WHERE area_code = ", as.numeric(ctyfips), " AND sector_id = '0';")
+ 
+  jobs_data <-   dbGetQuery(DBPool,jobsStr) %>%
+    filter(population_year >= 2001 & population_year <= maxyr) %>%
+    mutate(jobs=round(total_jobs,0),
+           year=population_year)
 
   jobs_data <- jobs_data[which(!is.na(jobs_data$jobs)),]
   

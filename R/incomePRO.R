@@ -56,7 +56,7 @@ incomePRO=function(listID, ACS){
   # Combining Place Level Data File; Calculating percentages
   f.hh1VAL <- hhinc1VAL[, c(4,1,3)]
   f.hh1MOE <- hhinc1MOE[,c(4,3)]
-  hhinc1 <- merge(f.hh1VAL, f.hh1MOE, by="cat")
+  hhinc1 <- left_join(f.hh1VAL, f.hh1MOE, by="cat")
   # Calculating Confidence intervale and Percentage valuse
   f.hhinc1 <- hhinc1 %>%
     mutate(c_propVAL = value/sum(value),
@@ -100,7 +100,7 @@ incomePRO=function(listID, ACS){
   # Combining Place Level Data File; Calculating percentages
   f.hh2VAL <- hhinc2VAL[, c(4,1,3)]
   f.hh2MOE <- hhinc2MOE[,c(4,3)]
-  hhinc2 <- merge(f.hh2VAL, f.hh2MOE, by="cat")
+  hhinc2 <- left_join(f.hh2VAL, f.hh2MOE, by="cat")
   # Calculating Confidence intervale and Percentage valuse
   f.hhinc2 <- hhinc2 %>%
     mutate(s_propVAL = value/sum(value),
@@ -145,7 +145,7 @@ incomePRO=function(listID, ACS){
     # Combining Place Level Data File; Calculating percentages
     f.hh1VAL <- hhinc3VAL[, c(4,1,3)]
     f.hh1MOE <- hhinc3MOE[,c(4,3)]
-    hhinc3 <- merge(f.hh1VAL, f.hh1MOE, by="cat")
+    hhinc3 <- left_join(f.hh1VAL, f.hh1MOE, by="cat")
     # Calculating Confidence intervale and Percentage valuse
     f.hhinc3 <- hhinc3 %>%
       mutate(p_propVAL = value/sum(value),
@@ -228,7 +228,7 @@ incomePRO=function(listID, ACS){
   if(nchar(placefips) == 0) {
     hh_place <- f.hhinc1[,c(1,5,6,9:12)]
     hh_state <- f.hhinc2[,c(1,5,6,9:12)]
-    f.dWide <- merge(hh_place,hh_state,by="cat")
+    f.dWide <- left_join(hh_place,hh_state,by="cat")
     
     #calcualting Statistical Test
     #Calculating the statistical test
@@ -246,7 +246,7 @@ incomePRO=function(listID, ACS){
   }  else {
     hh_place <- f.hhinc3[,c(1,5,6,9:12)]
     hh_state <- f.hhinc1[,c(1,5,6,9:12)]
-    f.dWide <- merge(hh_place,hh_state,by="cat")
+    f.dWide <- left_join(hh_place,hh_state,by="cat")
     
     #calcualting Statistical Test
     #Calculating the statistical test

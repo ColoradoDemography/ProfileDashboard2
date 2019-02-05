@@ -4,7 +4,7 @@
 #' @return ggplot2 graphic, formatted datatables, and datasets
 #' @export
 #'
-GenerateVenn <- function(listID){
+GenerateVenn <- function(DBPool,listID){
 
   # Collecting place ids from  idList, setting default values
   
@@ -27,30 +27,9 @@ if(nchar(placefips) != 0) {
   placeSQL <- paste0("SELECT * FROM data.otm_county_place WHERE fips = '",ctyfips,"' ;")
 }
  
-  #Reading data
-  pw <- {
-    "demography"
-  }
+    f.summary <- dbGetQuery(DBPool, sumSQL)
+    f.place <- dbGetQuery(DBPool, placeSQL)
 
-  # loads the PostgreSQL driver
-  drv <- dbDriver("PostgreSQL")
-  # creates a connection to the postgres database
-  # note that "con" will be used later in each connection to the database
-  con <- dbConnect(drv, dbname = "dola",
-                   host = "104.197.26.248", port = 5433,
-                   user = "codemog", password = pw)
-  rm(pw) # removes the password
-
-  # Read data files f.xwalk and f.alljobs
-
-    f.summary <- dbGetQuery(con, sumSQL)
-    f.place <- dbGetQuery(con, placeSQL)
-
-  #closing the connections
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  rm(con)
-  rm(drv)
 
   if(nchar(placefips) != 0) {
     location <- paste0(placename,"\n","All Jobs, ",as.character(f.summary$year))

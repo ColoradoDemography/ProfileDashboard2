@@ -11,7 +11,7 @@
 #' @param listID the list containing place id and Place names
 #' @export
 
-dashboardMAP <- function(lvl,listID){
+dashboardMAP <- function(DBPool,lvl,listID){
   # Collecting place ids from  idList, setting default values
   ctyList <- listID$ctyList
   ctyfips <- listID$ctyNum
@@ -25,28 +25,8 @@ dashboardMAP <- function(lvl,listID){
   
   
   if(lvl == "Municipalities"){
-    # create a connection
-    # save the password that we can "hide" it as best as we can by collapsing it
-    pw <- {
-      "demography"
-    }
-    
-    # loads the PostgreSQL driver
-    drv <- dbDriver("PostgreSQL")
-    # creates a connection to the postgres database
-    # note that "con" will be used later in each connection to the database
-    con <- dbConnect(drv, dbname = "dola",
-                     host = "104.197.26.248", port = 5433,
-                     user = "codemog", password = pw)
-    rm(pw) # removes the password
-    
-    f.muni <- dbGetQuery(con, paste0("SELECT placefp, x, y FROM bounds.place_centroids WHERE  placefp = '",placefips, "';"))
-    
-    #closing the connections
-    dbDisconnect(con)
-    dbUnloadDriver(drv)
-    rm(con)
-    rm(drv)
+  
+    f.muni <- dbGetQuery(DBPool, paste0("SELECT placefp, x, y FROM bounds.place_centroids WHERE  placefp = '",placefips, "';"))
     
     f.muni$lat <- as.numeric(f.muni$y)
     f.muni$long <- as.numeric(f.muni$x)

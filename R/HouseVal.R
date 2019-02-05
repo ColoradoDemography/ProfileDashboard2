@@ -2,7 +2,11 @@
 #'     the Median Gross Rent, and Median Costs as a Percentage of Income for
 #'     Owners and Renters for a place and the State of Colorado
 #'     
-#'     Restructured 5/4/2018 to remove codemog_api calls
+#'     Restructured 1/28/2019 to make direct calls to ACS data tables...
+#'     OO House Value:  b25077
+#'     OO Income percentages b25095
+#'     Median gross rent b25064
+#'     Rental Income Percentages b25074
 #'
 #' @param listID the list containing place id and Place names
 #' @param ACS Specifies the ACS data set to be used, reads curACS from Shiny program
@@ -21,52 +25,64 @@ HouseVal <- function(listID, ACS, state="08"){
  #   placefips <- ""
  #   placename <- ""
  # }
+
+  #County API Calls
+  ctyCode <- paste0("1",state , ctyfips)
+  f.ACSCTY077 <- codemog_api(data="b25077",db=ACS,geonum=ctyCode,meta="no") # Value
+  f.ACSCTY077moe <- codemog_api(data="b25077_moe",db=ACS,geonum=ctyCode,meta="no") # Margin of Error
+ 
+  f.ACSCTY095 <- codemog_api(data="b25095",db=ACS,geonum=ctyCode,meta="no") # Value
+  f.ACSCTY095moe <- codemog_api(data="b25095_moe",db=ACS,geonum=ctyCode,meta="no") # Margin of Error
+ 
+  f.ACSCTY064 <- codemog_api(data="b25064",db=ACS,geonum=ctyCode,meta="no") # Value
+  f.ACSCTY064moe <- codemog_api(data="b25064_moe",db=ACS,geonum=ctyCode,meta="no") # Margin of Error
   
-  #Prepping SQL calls
-  #County SQL Calls
-  CTYSQL01 <- paste0("SELECT * FROM data.houseval_cty WHERE (geonum = ",paste0("1", state, ctyfips)," AND acs = '",ACS,"');")
+  f.ACSCTY074 <- codemog_api(data="b25074",db=ACS,geonum=ctyCode,meta="no") # Value
+  f.ACSCTY074moe <- codemog_api(data="b25074_moe",db=ACS,geonum=ctyCode,meta="no") # Margin of Error
+
+  f.ACSCTY <- list(f.ACSCTY077,f.ACSCTY077moe, f.ACSCTY095, f.ACSCTY095moe, 
+                    f.ACSCTY064, f.ACSCTY064moe, f.ACSCTY074, f.ACSCTY074moe) %>% reduce(left_join, by = "geoname") %>%
+                    select(c(1, 7, 8, 15, 22:94, 101:173, 180, 187, 194:257, 264:327))
   
-  
-  if(nchar(placefips) == 0) {
-    #State  SQL Calls 
-    STSQL01 <- paste0("SELECT * FROM data.houseval_st WHERE acs = '",ACS,"';")
-  }  else {
-    # Place SQL calls
-    PLSQL01 <- paste0("SELECT * FROM data.houseval_muni WHERE (geonum = ",paste0("1", state, placefips)," AND acs = '",ACS,"');")
-  }
-  
-  
-  # Call to Postrgres  
-  pw <- {
-    "demography"
-  }
-  
-  # loads the PostgreSQL driver
-  drv <- dbDriver("PostgreSQL")
-  # creates a connection to the postgres database
-  # note that "con" will be used later in each connection to the database
-  con <- dbConnect(drv, dbname = 'dola',
-                   host = "104.197.26.248", port = 5433,
-                   user = "codemog", password = pw)
-  rm(pw) # removes the password
-  
-  # Read data files
-  # Raw County data 
-  f.ACSCTY <- dbGetQuery(con, CTYSQL01) 
   
   if(nchar(placefips) == 0) {
+    stCode <- paste0("1",state)
     # Raw State data 
-    f.ACSST <- dbGetQuery(con, STSQL01) 
+    f.ACSST077 <- codemog_api(data="b25077",db=ACS,geonum=stCode,meta="no") # Value
+    f.ACSST077moe <- codemog_api(data="b25077_moe",db=ACS,geonum=stCode,meta="no") # Margin of Error
+    
+    f.ACSST095 <- codemog_api(data="b25095",db=ACS,geonum=stCode,meta="no") # Value
+    f.ACSST095moe <- codemog_api(data="b25095_moe",db=ACS,geonum=stCode,meta="no") # Margin of Error
+    
+    f.ACSST064 <- codemog_api(data="b25064",db=ACS,geonum=stCode,meta="no") # Value
+    f.ACSST064moe <- codemog_api(data="b25064_moe",db=ACS,geonum=stCode,meta="no") # Margin of Error
+    
+    f.ACSST074 <- codemog_api(data="b25074",db=ACS,geonum=stCode,meta="no") # Value
+    f.ACSST074moe <- codemog_api(data="b25074_moe",db=ACS,geonum=stCode,meta="no") # Margin of Error
+    
+    f.ACSST <- list(f.ACSST077,f.ACSST077moe, f.ACSST095, f.ACSST095moe, 
+                     f.ACSST064, f.ACSST064moe, f.ACSST074, f.ACSST074moe) %>% reduce(left_join, by = "geoname") %>%
+                     select(c(1, 7, 8, 15, 22:94, 101:173, 180, 187, 194:257, 264:327))
   } else {
     # Raw Place data 
-    f.ACSPL <- dbGetQuery(con, PLSQL01) 
+    plCode <- paste0("1",state , placefips)
+    f.ACSPL077 <- codemog_api(data="b25077",db=ACS,geonum=plCode,meta="no") # Value
+    f.ACSPL077moe <- codemog_api(data="b25077_moe",db=ACS,geonum=plCode,meta="no") # Margin of Error
+    
+    f.ACSPL095 <- codemog_api(data="b25095",db=ACS,geonum=plCode,meta="no") # Value
+    f.ACSPL095moe <- codemog_api(data="b25095_moe",db=ACS,geonum=plCode,meta="no") # Margin of Error
+    
+    f.ACSPL064 <- codemog_api(data="b25064",db=ACS,geonum=plCode,meta="no") # Value
+    f.ACSPL064moe <- codemog_api(data="b25064_moe",db=ACS,geonum=plCode,meta="no") # Margin of Error
+    
+    f.ACSPL074 <- codemog_api(data="b25074",db=ACS,geonum=plCode,meta="no") # Value
+    f.ACSPL074moe <- codemog_api(data="b25074_moe",db=ACS,geonum=plCode,meta="no") # Margin of Error
+    
+    f.ACSPL <- list(f.ACSPL077,f.ACSPL077moe, f.ACSPL095, f.ACSPL095moe, 
+                    f.ACSPL064, f.ACSPL064moe, f.ACSPL074, f.ACSPL074moe) %>% reduce(left_join, by = "geoname") %>%
+                    select(c(1, 7, 8, 15, 22:94, 101:173, 180, 187, 194:257, 264:327))
   }
-  #closing the connections
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  rm(con)
-  rm(drv)
-  
+ 
   #Accounting for Missing value
   
   f.ACSCTY[f.ACSCTY == "-9999"] <- NA
@@ -79,9 +95,7 @@ HouseVal <- function(listID, ACS, state="08"){
   
   
   # Assemble County Data
-  
-  tot_OO <- as.numeric(f.ACSCTY$b25095001)
-  tot_RT <- as.numeric(f.ACSCTY$b25074001)
+  f.ACSCTY[,3:280] <- sapply(f.ACSCTY[,3:280],as.numeric)
   
   f.ACSCTY <- f.ACSCTY %>% mutate(
     #Values
@@ -95,9 +109,9 @@ HouseVal <- function(listID, ACS, state="08"){
       b25095060 + b25095061 + b25095062 + 
       b25095069 + b25095070 + b25095071,
     OO_50 = b25095009 + b25095018 + b25095027 + b25095036 + b25095045 + b25095054 + b25095063 + b25095072,
-    PROP_OO_3049 = OO_3049/tot_OO,
+    PROP_OO_3049 = OO_3049/b25095001,
     PCT_OO_3049 = percent(PROP_OO_3049*100),
-    PROP_OO_50 = OO_50/tot_OO,
+    PROP_OO_50 = OO_50/b25095001,
     PCT_OO_50 = percent(PROP_OO_50*100),
     Med_Rent = b25064001,
     RT_3049 = b25074006 + b25074007 + b25074008 + 
@@ -108,9 +122,9 @@ HouseVal <- function(listID, ACS, state="08"){
       b25074051 + b25074052 + b25074053 + 
       b25074060 + b25074061 + b25074062,
     RT_50 = b25074009 + b25074018 + b25074027 + b25074036 + b25074045 + b25074054 + b25074063,
-    PROP_RT_3049 = RT_3049/tot_RT,
+    PROP_RT_3049 = RT_3049/b25074001,
     PCT_RT_3049 = percent(PROP_RT_3049*100),
-    PROP_RT_50 = RT_50/tot_RT,
+    PROP_RT_50 = RT_50/b25074001,
     PCT_RT_50 = percent(PROP_RT_50*100),
     #MOE
     Med_val_moe = b25077_moe001,
@@ -124,9 +138,9 @@ HouseVal <- function(listID, ACS, state="08"){
                          b25095_moe069^2 + b25095_moe070^2 + b25095_moe071^2),
     OO_50_moe = sqrt(b25095_moe009^2 + b25095_moe018^2 + b25095_moe027^2 + b25095_moe036^2 + 
                        b25095_moe045^2 + b25095_moe054^2 + b25095_moe063^2 + b25095_moe072^2),
-    PROP_OO_3049_moe = OO_3049_moe/tot_OO,
+    PROP_OO_3049_moe = OO_3049_moe/b25095001,
     PCT_OO_3049_moe = percent(PROP_OO_3049_moe*100),
-    PROP_OO_50_moe = OO_50_moe/tot_OO,
+    PROP_OO_50_moe = OO_50_moe/b25095001,
     PCT_OO_50_moe = percent(PROP_OO_50_moe*100),
     Med_Rent_moe = b25064_moe001,
     RT_3049_moe = sqrt(b25074_moe006^2 + b25074_moe007^2 + b25074_moe008^2 + 
@@ -138,15 +152,15 @@ HouseVal <- function(listID, ACS, state="08"){
                          b25074_moe060^2 + b25074_moe061^2 + b25074_moe062^2),
     RT_50_moe = sqrt(b25074_moe009^2 + b25074_moe018^2 + b25074_moe027^2 + 
                        b25074_moe036^2 + b25074_moe045^2 + b25074_moe054^2 + b25074_moe063^2),
-    PROP_RT_3049_moe = RT_3049_moe/tot_RT,
+    PROP_RT_3049_moe = RT_3049_moe/b25074001,
     PCT_RT_3049_moe = percent(PROP_RT_3049_moe*100),
-    PROP_RT_50_moe = RT_50_moe/tot_RT,
+    PROP_RT_50_moe = RT_50_moe/b25074001,
     PCT_RT_50_moe = percent(PROP_RT_50_moe*100)
-  )
+  ) 
   
   
-  f.ACSCTY_val <- f.ACSCTY[,c(2,129,132:135,136,139:142)]
-  f.ACSCTY_moe <- f.ACSCTY[,c(2,143,146:149,150,153:156)]
+  f.ACSCTY_val <- f.ACSCTY[,c(2,281:294)]
+  f.ACSCTY_moe <- f.ACSCTY[,c(2,295:308)]
   
   f.ACSCTY_valL <- as.data.frame(t(f.ACSCTY_val))
   names(f.ACSCTY_valL)[1] <- "CTY_VAL"
@@ -157,13 +171,12 @@ HouseVal <- function(listID, ACS, state="08"){
   f.ACSCTY_moeL <- rownames_to_column( f.ACSCTY_moeL,"value")
   f.ACSCTY_moeL$value <- gsub("_moe","",f.ACSCTY_moeL$value)
   
-  f.ACSCTY_Fin <- merge(f.ACSCTY_valL,f.ACSCTY_moeL, by="value")
+  f.ACSCTY_Fin <- left_join(f.ACSCTY_valL,f.ACSCTY_moeL, by="value")
   
   
   if(nchar(placefips) == 0) {
     # Assemble State Data
-    tot_OO <- as.numeric(f.ACSST$b25095001)
-    tot_RT <- as.numeric(f.ACSST$b25074001)
+    f.ACSST[,3:280] <- sapply(f.ACSST[,3:280],as.numeric)
     
     f.ACSST <- f.ACSST %>% mutate(
       #Values
@@ -177,9 +190,9 @@ HouseVal <- function(listID, ACS, state="08"){
         b25095060 + b25095061 + b25095062 + 
         b25095069 + b25095070 + b25095071,
       OO_50 = b25095009 + b25095018 + b25095027 + b25095036 + b25095045 + b25095054 + b25095063 + b25095072,
-      PROP_OO_3049 = OO_3049/tot_OO,
+      PROP_OO_3049 = OO_3049/b25095001,
       PCT_OO_3049 = percent(PROP_OO_3049*100),
-      PROP_OO_50 = OO_50/tot_OO,
+      PROP_OO_50 = OO_50/b25095001,
       PCT_OO_50 = percent(PROP_OO_50*100),
       Med_Rent = b25064001,
       RT_3049 = b25074006 + b25074007 + b25074008 + 
@@ -190,9 +203,9 @@ HouseVal <- function(listID, ACS, state="08"){
         b25074051 + b25074052 + b25074053 + 
         b25074060 + b25074061 + b25074062,
       RT_50 = b25074009 + b25074018 + b25074027 + b25074036 + b25074045 + b25074054 + b25074063,
-      PROP_RT_3049 = RT_3049/tot_RT,
+      PROP_RT_3049 = RT_3049/b25074001,
       PCT_RT_3049 = percent(PROP_RT_3049*100),
-      PROP_RT_50 = RT_50/tot_RT,
+      PROP_RT_50 = RT_50/b25074001,
       PCT_RT_50 = percent(PROP_RT_50*100),
       #MOE
       Med_val_moe = b25077_moe001,
@@ -206,9 +219,9 @@ HouseVal <- function(listID, ACS, state="08"){
                            b25095_moe069^2 + b25095_moe070^2 + b25095_moe071^2),
       OO_50_moe = sqrt(b25095_moe009^2 + b25095_moe018^2 + b25095_moe027^2 + b25095_moe036^2 + 
                          b25095_moe045^2 + b25095_moe054^2 + b25095_moe063^2 + b25095_moe072^2),
-      PROP_OO_3049_moe = OO_3049_moe/tot_OO,
+      PROP_OO_3049_moe = OO_3049_moe/b25095001,
       PCT_OO_3049_moe = percent(PROP_OO_3049_moe*100),
-      PROP_OO_50_moe = OO_50_moe/tot_OO,
+      PROP_OO_50_moe = OO_50_moe/b25095001,
       PCT_OO_50_moe = percent(PROP_OO_50_moe*100),
       Med_Rent_moe = b25064_moe001,
       RT_3049_moe = sqrt(b25074_moe006^2 + b25074_moe007^2 + b25074_moe008^2 + 
@@ -220,15 +233,15 @@ HouseVal <- function(listID, ACS, state="08"){
                            b25074_moe060^2 + b25074_moe061^2 + b25074_moe062^2),
       RT_50_moe = sqrt(b25074_moe009^2 + b25074_moe018^2 + b25074_moe027^2 + 
                          b25074_moe036^2 + b25074_moe045^2 + b25074_moe054^2 + b25074_moe063^2),
-      PROP_RT_3049_moe = RT_3049_moe/tot_RT,
+      PROP_RT_3049_moe = RT_3049_moe/b25074001,
       PCT_RT_3049_moe = percent(PROP_RT_3049_moe*100),
-      PROP_RT_50_moe = RT_50_moe/tot_RT,
+      PROP_RT_50_moe = RT_50_moe/b25074001,
       PCT_RT_50_moe = percent(PROP_RT_50_moe*100)
     )
     
     
-    f.ACSST_val <- f.ACSST[,c(2,129,132:135,136,139:142)]
-    f.ACSST_moe <- f.ACSST[,c(2,143,146:149,150,153:156)]
+    f.ACSST_val <- f.ACSST[,c(2,281:294)]
+    f.ACSST_moe <- f.ACSST[,c(2,295:308)]
     
     f.ACSST_valL <- as.data.frame(t(f.ACSST_val))
     names(f.ACSST_valL)[1] <- "ST_VAL"
@@ -238,14 +251,14 @@ HouseVal <- function(listID, ACS, state="08"){
     names(f.ACSST_moeL)[1] <- "ST_MOE"
     f.ACSST_moeL <- rownames_to_column( f.ACSST_moeL,"value")
     f.ACSST_moeL$value <- gsub("_moe","",f.ACSST_moeL$value)
-    f.ACSST_Fin <- merge(f.ACSST_valL,f.ACSST_moeL, by="value")
+    f.ACSST_Fin <- left_join(f.ACSST_valL,f.ACSST_moeL, by="value")
   } else {
     # Assemble Place Data
     #Raw values
-    tot_OO <- as.numeric(f.ACSPL$b25095001)
-    tot_RT <- as.numeric(f.ACSPL$b25074001)
+    f.ACSPL[,3:280] <- sapply(f.ACSPL[,3:280],as.numeric)
     
     f.ACSPL <- f.ACSPL %>% mutate(
+      #Values
       #Values
       Med_val = b25077001,
       OO_3049 = b25095006 + b25095007 + b25095008 + 
@@ -257,9 +270,9 @@ HouseVal <- function(listID, ACS, state="08"){
         b25095060 + b25095061 + b25095062 + 
         b25095069 + b25095070 + b25095071,
       OO_50 = b25095009 + b25095018 + b25095027 + b25095036 + b25095045 + b25095054 + b25095063 + b25095072,
-      PROP_OO_3049 = OO_3049/tot_OO,
+      PROP_OO_3049 = OO_3049/b25095001,
       PCT_OO_3049 = percent(PROP_OO_3049*100),
-      PROP_OO_50 = OO_50/tot_OO,
+      PROP_OO_50 = OO_50/b25095001,
       PCT_OO_50 = percent(PROP_OO_50*100),
       Med_Rent = b25064001,
       RT_3049 = b25074006 + b25074007 + b25074008 + 
@@ -270,9 +283,9 @@ HouseVal <- function(listID, ACS, state="08"){
         b25074051 + b25074052 + b25074053 + 
         b25074060 + b25074061 + b25074062,
       RT_50 = b25074009 + b25074018 + b25074027 + b25074036 + b25074045 + b25074054 + b25074063,
-      PROP_RT_3049 = RT_3049/tot_RT,
+      PROP_RT_3049 = RT_3049/b25074001,
       PCT_RT_3049 = percent(PROP_RT_3049*100),
-      PROP_RT_50 = RT_50/tot_RT,
+      PROP_RT_50 = RT_50/b25074001,
       PCT_RT_50 = percent(PROP_RT_50*100),
       #MOE
       Med_val_moe = b25077_moe001,
@@ -286,9 +299,9 @@ HouseVal <- function(listID, ACS, state="08"){
                            b25095_moe069^2 + b25095_moe070^2 + b25095_moe071^2),
       OO_50_moe = sqrt(b25095_moe009^2 + b25095_moe018^2 + b25095_moe027^2 + b25095_moe036^2 + 
                          b25095_moe045^2 + b25095_moe054^2 + b25095_moe063^2 + b25095_moe072^2),
-      PROP_OO_3049_moe = OO_3049_moe/tot_OO,
+      PROP_OO_3049_moe = OO_3049_moe/b25095001,
       PCT_OO_3049_moe = percent(PROP_OO_3049_moe*100),
-      PROP_OO_50_moe = OO_50_moe/tot_OO,
+      PROP_OO_50_moe = OO_50_moe/b25095001,
       PCT_OO_50_moe = percent(PROP_OO_50_moe*100),
       Med_Rent_moe = b25064_moe001,
       RT_3049_moe = sqrt(b25074_moe006^2 + b25074_moe007^2 + b25074_moe008^2 + 
@@ -300,15 +313,15 @@ HouseVal <- function(listID, ACS, state="08"){
                            b25074_moe060^2 + b25074_moe061^2 + b25074_moe062^2),
       RT_50_moe = sqrt(b25074_moe009^2 + b25074_moe018^2 + b25074_moe027^2 + 
                          b25074_moe036^2 + b25074_moe045^2 + b25074_moe054^2 + b25074_moe063^2),
-      PROP_RT_3049_moe = RT_3049_moe/tot_RT,
+      PROP_RT_3049_moe = RT_3049_moe/b25074001,
       PCT_RT_3049_moe = percent(PROP_RT_3049_moe*100),
-      PROP_RT_50_moe = RT_50_moe/tot_RT,
+      PROP_RT_50_moe = RT_50_moe/b25074001,
       PCT_RT_50_moe = percent(PROP_RT_50_moe*100)
     )
     
     
-    f.ACSPL_val <- f.ACSPL[,c(2,129,132:135,136,139:142)]
-    f.ACSPL_moe <- f.ACSPL[,c(2,143,146:149,150,153:156)]
+    f.ACSPL_val <- f.ACSPL[,c(2,281:294)]
+    f.ACSPL_moe <- f.ACSPL[,c(2,295:308)]
     
     f.ACSPL_valL <- as.data.frame(t(f.ACSPL_val))
     names(f.ACSPL_valL)[1] <- "PL_VAL"
@@ -318,33 +331,33 @@ HouseVal <- function(listID, ACS, state="08"){
     names(f.ACSPL_moeL)[1] <- "PL_MOE"
     f.ACSPL_moeL <- rownames_to_column( f.ACSPL_moeL,"value")
     f.ACSPL_moeL$value <- gsub("_moe","",f.ACSPL_moeL$value)
-    f.ACSPL_Fin <- merge(f.ACSPL_valL,f.ACSPL_moeL, by="value")
+    f.ACSPL_Fin <- left_join(f.ACSPL_valL,f.ACSPL_moeL, by="value")
   } 
   
   # Joining Fles and calculating tests
   if(nchar(placefips) == 0) {
-    f.HouseVal <- merge(f.ACSCTY_Fin,f.ACSST_Fin, by="value")
+    f.HouseVal <- left_join(f.ACSCTY_Fin,f.ACSST_Fin, by="value")
     
   } else {
-    f.HouseVal <- merge(f.ACSPL_Fin,f.ACSCTY_Fin, by="value")
+    f.HouseVal <- left_join(f.ACSPL_Fin,f.ACSCTY_Fin, by="value")
   }
   
   m.HouseVal <- as.matrix(f.HouseVal)
-  m.test <- matrix(nrow=11, ncol=2)
+  m.test <- matrix(nrow=15, ncol=2)
   #calculating statistical test
-  for(i in c(2,3,8:11)) {
+  for(i in c(2,5,7,9,12,14)) {
     m.test[i,1] <-abs(as.numeric(m.HouseVal[i,2]) - as.numeric(m.HouseVal[i,4]))/sqrt((as.numeric(m.HouseVal[i,3])^2) + (as.numeric(m.HouseVal[i,5])^2))
     m.test[i,2] <- ifelse(m.test[i,1] < 1,"No","Yes")
   }
-  for(i in 4:7) {
-    m.test[i,1] = m.test[i+4,1]
-    m.test[i,2] = m.test[i+4,2]
+  for(i in c(5,7,12,14)) {
+    m.test[i+1,1] = m.test[i,1]
+    m.test[i+1,2] = m.test[i,2]
   }
   m.HouseVal <- cbind(m.HouseVal,m.test)
   
-  # Bulding Renter and owner-occupied mataices for table 
-  m.rental <- m.HouseVal[c(2,6,7),c(1:5,7)]  
-  m.oocc <- m.HouseVal[c(3:5),c(1:5,7)] 
+  # Bulding Renter and owner-occupied matices for table 
+  m.rental <- m.HouseVal[c(9,13,15),c(1:5,7)]  
+  m.oocc <- m.HouseVal[c(2,6,8),c(1:5,7)] 
   
   m.rental[1,1] <- "Median Gross Rent of Rental Households (Current Dollars)"
   m.rental[2,1] <- "Percentage of Rental Households paying 30-49% of income on housing"
@@ -362,7 +375,7 @@ HouseVal <- function(listID, ACS, state="08"){
   m.FinTab <- rbind(m.oocc,m.rental)
   f.HouseVal_Fin <- as.data.frame(m.FinTab)
   
-  
+
   if(nchar(placefips) == 0) {
     names(f.HouseVal_Fin) <- c("Variable",paste0("Value: ",ctyname), paste0("MOE: ",ctyname),
                                paste0("Value: Colorado"), paste0("MOE: Colorado"), "Siginficant Difference?")
@@ -505,7 +518,10 @@ HouseVal <- function(listID, ACS, state="08"){
       add_header_above(header=tblHead1) %>%
       footnote(captionSrc("ACS",ACS))
     
+   
+    
     outList <- list("HtableOO" = Housing_tab1, "HtableRT" = Housing_tab2, "data" = f.HouseVal_Fin,
                     "FlexTableOO" = FTOO,"FlexTableRT" = FTRT, "LtableOO" = Housing_tab3, "LtableRT" = Housing_tab4)
     return(outList)
   }
+

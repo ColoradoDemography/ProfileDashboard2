@@ -9,7 +9,7 @@
 #' @export
 #'
 
-housePRO=function(listID, curYr){
+housePRO=function(DBPool,listID, curYr){
 
   # Collecting place ids from  idList, setting default values
   
@@ -31,29 +31,8 @@ state <- "08"
     HHSQL <- paste0("SELECT countyfips, placefips, year, totalpopulation, householdpopulation, groupquarterspopulation,  householdsize, totalhousingunits, vacanthousingunits, vacancyrate FROM estimates.muni_pop_housing WHERE (placefips = ", placefips," and year = ", curYr,");")
   }
 
+f.hhP <- dbGetQuery(DBPool, HHSQL)
 
-# create a connection
-# save the password that we can "hide" it as best as we can by collapsing it
-pw <- {
-  "demography"
-}
-
-# loads the PostgreSQL driver
-drv <- dbDriver("PostgreSQL")
-# creates a connection to the postgres database
-# note that "con" will be used later in each connection to the database
-con <- dbConnect(drv, dbname = "dola",
-                 host = "104.197.26.248", port = 5433,
-                 user = "codemog", password = pw)
-rm(pw) # removes the password
-
-f.hhP <- dbGetQuery(con, HHSQL)
-
-
-#Closing the connection
-dbDisconnect(con)
-dbUnloadDriver(drv)
-rm(con)
 
 # Preparing data
 if(nchar(placefips) == 0) {

@@ -9,7 +9,7 @@
 #' @return ggplot2 graphic, a html or latex table and a dataset
 #' @export
 
-jobsPopForecast <- function(listID, curyr, base=10){
+jobsPopForecast <- function(DBPool,listID, curyr, base=10){
   
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
@@ -34,28 +34,9 @@ jobsPopForecast <- function(listID, curyr, base=10){
   jobsSQL <- paste0("SELECT * FROM estimates.jobs_forecast WHERE countyfips = '",as.numeric(ctyfips), "';")
 
 
-  pw <- {
-    "demography"
-  }
+  
+  f.totalJobs <- dbGetQuery(DBPool, jobsSQL)
 
-  # loads the PostgreSQL driver
-  drv <- dbDriver("PostgreSQL")
-  # creates a connection to the postgres database
-  # note that "con" will be used later in each connection to the database
-  con <- dbConnect(drv, dbname = "dola",
-                   host = "104.197.26.248", port = 5433,
-                   user = "codemog", password = pw)
-  rm(pw) # removes the password
-
-  # Read data files
-
-  f.totalJobs <- dbGetQuery(con, jobsSQL)
-
-  #closing the connections
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  rm(con)
-  rm(drv)
 
   f.totalJobs$type <- "Jobs"
 
@@ -73,7 +54,7 @@ jobsPopForecast <- function(listID, curyr, base=10){
 
   y <- as.data.frame(f.totalPop[,c(1,3)])
   names(y) <- c("year","Population")
-  f.plotdata <- merge(x,y,by="year")
+  f.plotdata <- left_join(x,y,by="year")
  
   f.plotdata$Series <-  ifelse(f.plotdata$year > curyr,"Forecast","Estimate")
   

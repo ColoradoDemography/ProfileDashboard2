@@ -57,8 +57,8 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
     
     subTitle <- ctyname
     f.AgePlot$geoname <- factor(f.AgePlot$geoname, levels=c(ctyname, "Colorado"))
-    
-    x <- merge(f.place, f.state, by="agecat")
+
+    x <- left_join(f.place, f.state, by="agecat")
     f.AgePlot2 <- x[,c(1,5,7,12,14)]
     f.AgePlot2$totalpopulation.x <- format(round(f.AgePlot2$totalpopulation.x,digits=0),big.mark=",")
     f.AgePlot2$totalpopulation.y <- format(round(f.AgePlot2$totalpopulation.y,digits=0),big.mark=",")
@@ -69,7 +69,7 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
   if(nchar(placefips) != 0) { # this is municipal Call from the ACS
     state <- "08"
     f.place <- codemog_api(data="b01001",db=ACS,geonum=paste("1",state , placefips,sep=""),meta="no")
-    f.place[,8:56]=as.numeric(as.character(f.place[,8:56]))
+    f.place[,8:ncol(f.place)]=as.numeric(as.character(f.place[,8:ncol(f.place)]))
     f.place2 <- f.place %>%
       mutate(
         a0009 = b01001003 + b01001004 + b01001027 + b01001028,
@@ -95,7 +95,7 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
     f.place2$geoname <- placename
     
     f.county <- codemog_api(data="b01001",db=ACS,geonum=paste("1",state , ctyfips,sep=""),meta="no")
-    f.county[,8:56]=as.numeric(as.character(f.county[,8:56]))
+    f.county[,8:ncol(f.county)]=as.numeric(as.character(f.county[,8:ncol(f.county)]))
     f.county2 <- f.county %>%
       mutate(
         a0009 = b01001003 + b01001004 + b01001027 + b01001028,
@@ -128,7 +128,7 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
     subTitle <- placename
     f.AgePlot$geoname <- factor(f.AgePlot$geoname, levels=c(placename, ctyname))
     
-    f.AgePlot2 <- merge(f.place2, f.county2, by="agecat")
+    f.AgePlot2 <- left_join(f.place2, f.county2, by="agecat")
     f.AgePlot2 <- f.AgePlot2[,c(1,3,4,6,7)]
     f.AgePlot2$age_Value.x <- format(round(f.AgePlot2$age_Value.x,digits=0),big.mark=",")
     f.AgePlot2$age_Prop.x <- percent(f.AgePlot2$age_Prop.x)
