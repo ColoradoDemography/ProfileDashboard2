@@ -53,7 +53,7 @@ library(geojsonio)
 library(gridExtra)
 library(ggthemes)
 library(maptools)
-
+library(gt)
 
 muffleError <- function(x,options) {}
 knit_hooks$set(error=muffleError)
@@ -575,6 +575,11 @@ if("emplind" %in% unlist(outChk)) {
 if("emplind" %in% unlist(outChk)) {
   popei3p <- fixPath(filemat[72])  #Jobs Plot Plot
   include_graphics(popei3p)
+}
+```
+
+```{r industry6a}
+if("emplind" %in% unlist(outChk)) {
   cat("\\FloatBarrier\n")
   cat(dget(filemat[74]))
 }
