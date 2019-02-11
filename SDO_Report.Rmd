@@ -193,8 +193,7 @@ if("popf" %in% unlist(outChk)) {
 ```{r poptrend5}
 if("popf" %in% unlist(outChk)) {
     cocText <- function() {
-      OutText <- paste0("\\begin{flushleft}")
-      OutText <- paste0(OutText," Births, deaths and net migration are the main components of population change.")
+      OutText <- paste0(" Births, deaths and net migration are the main components of population change.")
       OutText <- paste0(OutText," Net migration is the difference between the number of people moving into")
       OutText <- paste0(OutText," an area and the number")
       OutText <- paste0(OutText," of people moving out. Change in net migration typically causes most of the")
@@ -206,7 +205,6 @@ if("popf" %in% unlist(outChk)) {
       OutText <- paste0(OutText," residents work where they live. For many counties with negative natural")
       OutText <- paste0(OutText," increase (more deaths than births),")
       OutText <- paste0(OutText," this makes migration especially important for population stability and growth.") 
-      OutText <- paste0(OutText," \\end{flushleft}")
      return(OutText)
   }
   
