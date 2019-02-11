@@ -74,6 +74,8 @@ cocPlot <- function(DBPool,listID,fyr=2000,lyr,base=12) {
   
   
   totChng <- as.numeric(f.coccty5[6,3] -  f.coccty5[1,3])
+  firstyr <- f.coccty[2,2]
+  lastyr <- f.coccty[6,2
   
   f.sum <- f.coccty5[2:6,] %>%
     summarise(sumNat = sum(NaturalIncrease),
@@ -84,7 +86,7 @@ cocPlot <- function(DBPool,listID,fyr=2000,lyr,base=12) {
   
   
   
-  OutText <- paste0("Over the past five years, between ", fyr," and  ", lyr,", the population of ", ctyname," has ",chgDir," by ",format(totChng,big.mark=",")," people.")
+  OutText <- paste0("Over the past five years, between ", firstyr," and  ", lastyr,", the population of ", ctyname," has ",chgDir," by ",format(totChng,big.mark=",")," people.")
   OutText <- paste0(OutText," The total natural increase (births - deaths) over this period was ",format(f.sum$sumNat,big.mark=",")," and the total net migration (new residents who moved in minus those who moved out) was ",format(f.sum$sumMig,big.mark=","),".")                 
   OutText <- paste0(OutText,"  Note: Components of Change data are only available for Colorado counties.")
   
