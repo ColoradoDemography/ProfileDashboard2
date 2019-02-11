@@ -71,13 +71,12 @@ cocPlot <- function(DBPool,listID,fyr=2000,lyr,base=12) {
   f.coccty5 <- tail(f.coccty,6)
   f.coccty5 <- f.coccty5[,c(8,2:7)]
   names(f.coccty5)  <- c("Place","Year","Total Population","Births","Deaths", "NetMigration","NaturalIncrease")
-  
+  firstyr <- as.numeric(f.coccty5[2,2])
+  lastyr <- as.numeric(f.coccty5[6,2])
   
   totChng <- as.numeric(f.coccty5[6,3] -  f.coccty5[1,3])
-  firstyr <- f.coccty[2,2]
-  lastyr <- f.coccty[6,2
   
-  f.sum <- f.coccty5[2:6,] %>%
+  f.sum <- f.coccty5 %>%
     summarise(sumNat = sum(NaturalIncrease),
               sumMig = sum(NetMigration))
   
