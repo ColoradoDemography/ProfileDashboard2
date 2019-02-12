@@ -231,7 +231,7 @@ if(nchar(placefips) == 0){
 
 
 
-  m.race <- as.matrix(f.raceFin[c(1,9,8,4,3,2,5,6,7,10),c(1,4,5,8,9,11)]) #This is the matrix table
+  m.race <- as.matrix(f.raceFin[c(2:10,1),c(1,4,5,8,9,11)]) #This is the matrix table
 
   #Column Names
 
