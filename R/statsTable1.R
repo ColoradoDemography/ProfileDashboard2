@@ -285,6 +285,7 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
     outTab[1,nCol] <- format(as.numeric(muniData[1]),nsmall=0, big.mark=",")
     outTab[2,nCol] <- format(as.numeric(muniData[2]),nsmall=0, big.mark=",")
     outTab[3,nCol] <- format(round(as.numeric(muniData[3]),digits=0),nsmall=0, big.mark=",")
+    outTab[3,nCol] <- ifelse(outTab[3,nCol] == "NA","",outTab[3,nCol])  # Fix for missing jobs data
     outTab[4,nCol] <- paste0("$",format(as.numeric(muniData[4]),nsmall=0, big.mark=","))
     outTab[5,nCol] <- paste0("$",format(as.numeric(muniData[5]),nsmall=0, big.mark=","))
     outTab[6,nCol] <- muniData[6]
