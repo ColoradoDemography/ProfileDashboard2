@@ -3,7 +3,6 @@
 #' Release Version 2.0 10/31/2018
 
 rm(list = ls())
-
 library(tidyverse, quietly=TRUE)
 library(readr)
 library(readxl, quietly=TRUE)
@@ -26,6 +25,7 @@ library(ggthemes)
 library(maptools)
 library(officer)
 library(flextable)
+
 
 # Additions for Database pool
 library('pool') 
@@ -80,7 +80,7 @@ source("R/tabList.R")
 source("R/tabTitle.R")
 source("R/TempFil.R")
 source("R/weeklyWages.R")
-
+source("R/firmcount.R")
 
 
 
@@ -398,8 +398,8 @@ server <- function(input, output, session) {
     
     #Creating output file location and Prepping Matrix of filenames
   
-    #tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
-     tPath <- "/tmp"  #Production
+    tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
+    #tPath <- "/tmp"  #Production
     
     tName <- ""
     tmpName <- sample(c(0:9, LETTERS),8, replace=TRUE)
@@ -721,9 +721,9 @@ server <- function(input, output, session) {
         if("popc" %in% input$outChk){
           #Generate tables, plots and text...
           popc1 <<- incomePRO(listID=idList, ACS=curACS)
-          popc2 <<- educPRO(listID=idList, ACS=curACS)
-          popc3 <<- raceTab1(listID=idList, ACS=curACS)
-          popc4 <<- raceTab2(listID=idList, ACS=curACS)
+          popc2 <<- incomeSrc(level=input$level,listID=idList,ACS=curACS)
+          popc3 <<- educPRO(listID=idList, ACS=curACS)
+          popc4 <<- raceTab1(listID=idList, ACS=curACS)
           
           #Income
           ggsave(fileMat[31],popc1$plot, device="png", height = 5 , width = 8, dpi=300)
@@ -731,14 +731,14 @@ server <- function(input, output, session) {
           dput(popc1$text,fileMat[33])
           
           # Education
-          ggsave(fileMat[34],popc2$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[35],popc2$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[34],popc3$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[35],popc3$plot, device="png", height = 5 , width = 7, dpi=300)
           
           #Race 1
-          dput(popc3$Htable,fileMat[36])
+          dput(popc2$Htable,fileMat[36])
           
-          dput(popc3$Ltable, fileMat[37])
-          dput(popc3$text, fileMat[38])
+          dput(popc2$Ltable, fileMat[37])
+          dput(popc2$text, fileMat[38])
           
           #Race 2
           dput(popc4$Htable,fileMat[39])
@@ -936,14 +936,13 @@ server <- function(input, output, session) {
           dput(popt1$liveTabH,fileMat[57])
           
           #Latex Table
-          dput(popt1$liveTabL, fileMat[58])
+          dput(popt1$combTabL, fileMat[58])
           
-          #Work table HTML, Flex Table and Latex table
           #HTML Table
           dput(popt1$workTabH,fileMat[59])
           
           #Latex Table
-          dput(popt1$workTabL, fileMat[60])
+          #dput(popt1$workTabL, fileMat[60])
           
           #Jobs and Migration
           ggsave(fileMat[61],popt2$plot, device="png", height = 5 , width = 7, dpi=300)
@@ -1097,13 +1096,16 @@ server <- function(input, output, session) {
           popem1 <<- jobsPopForecast(DBPool=DOLAPool,listID=idList,curyr=curYr)
           popem2 <<- weeklyWages(DBPool=DOLAPool,listID=idList,curyr=curYr)
           popem3 <<- residentialLF(DBPool=DOLAPool,listID=idList,curyr=curYr)
-          popem4 <<- incomeSrc(level=input$level,listID=idList,ACS=curACS)  
+          popem4 <<- firmcount(DBPool=DOLAPool,listID=idList)  
           
           #JobsPopForecast
-          ggsave(fileMat[76],popem1$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[77],popem1$plot, device="png", height = 5 , width = 7, dpi=300)
+          # HTML Table
+          dput(popem1$Htable, fileMat[76])
+          
+          #latex Table
+          dput(popem1$Ltable, fileMat[77])
           dput(popem1$text, fileMat[78])
-          img_List17 <- list(src = fileMat[76], contentType = 'image/png', width = 500, height = 300)
+          
           
           #weeklyWages
           ggsave(fileMat[79],popem2$plot, device="png", height = 5 , width = 7, dpi=300)
@@ -1112,30 +1114,34 @@ server <- function(input, output, session) {
           img_List18 <- list(src = fileMat[79], contentType = 'image/png', width = 500, height = 300)
           
           #residentialLF
-          ggsave(fileMat[82],popem3$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[83],popem3$plot, device="png", height = 5 , width = 7, dpi=300)
-          dput(popem3$text, fileMat[84])
-          img_List19 <- list(src = fileMat[82], contentType = 'image/png', width = 500, height = 300)
-          
-          #incomeSrc
           # HTML Table
-          dput(popem4$Htable, fileMat[85])
+          dput(popem3$Htable, fileMat[82])
           
           #latex Table
-          dput(popem4$Ltable, fileMat[86])
+          dput(popem3$Ltable, fileMat[83])
+          dput(popem3$text, fileMat[84])
+         
+          
+          #Firm Count
+          # HTML Table
+          ggsave(fileMat[85],popem4$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[86],popem4$plot, device="png", height = 5 , width = 7, dpi=300)
+          
+          img_List19 <- list(src = fileMat[85], contentType = 'image/png', width = 500, height = 300)
+          
           #Text
           dput(popem4$text, fileMat[87])
           
           
           
           #Contents of Information Tabs
-          popem1.info <- tags$div(boxContent(title= "Jobs and Population Forecast Plot",
-                                             description = "The Jobs and Population Forecast Plot displays the growth rate in local jpbs and population.",
+          popem1.info <- tags$div(boxContent(title= "Jobs and Population Forecast Table",
+                                             description = "The Jobs and Population Forecast Table displays the growth rate in local jobs and population.",
                                              MSA= "F", stats = "F", muni = "T", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
                                              urlList = list(c("SDO Economic Forecasts"," https://demography.dola.colorado.gov/economy-labor-force/economic-forecasts/#economic-forecasts"),
                                                             c("SDO Jobs Forecasts","https://demography.dola.colorado.gov/economy-labor-force/data/labor-force/#labor-force-participation"))),
                                   tags$br(),
-                                  downloadObjUI("popem1plot"), downloadObjUI("popem1data"))
+                                  downloadObjUI("popem1tabl"), downloadObjUI("popem1data"))
           
           popem2.info <- tags$div(boxContent(title= "Average Weekly wages",
                                              description = "The Average Weekly Wages plot shows the trend in average wages from 2010 to the present for a selected place and the state.",
@@ -1150,34 +1156,34 @@ server <- function(input, output, session) {
                                              MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
                                              urlList = list(c("SDO Labor Force Participation Data","https://demography.dola.colorado.gov/economy-labor-force/data/labor-force/#labor-force-participation"))),
                                   tags$br(),
-                                  downloadObjUI("popem3plot"), downloadObjUI("popem3data"))
+                                  downloadObjUI("popem3tabl"), downloadObjUI("popem3data"))
           
-          popem4.info <- tags$div(boxContent(title= "Household Income Sources(s) Table",
-                                             description = "The Houselold Income Source(s) Table shows household income sources and amounts for housholds in a selected place or county.  
-                                             Households will have multiple sources of income, so this table is not mutually exclusive. Mean income values reflect values from the cited source.",
+          popem4.info <- tags$div(boxContent(title= "Number of Firms",
+                                             description = "The Firm Count data shows the number of firms located in the selected county.",
                                              MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
-                                             urlList = list(c("American Community Survey American Fact Finder, Series B19051 to B19070","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
+                                             urlList = list(c("Department of Labor and Employment Quarterly Census of Employment and Wages","https://www.colmigateway.com/gsipub/index.asp?docid=372") )),
                                   tags$br(),
-                                  downloadObjUI("popem4tabl"),downloadObjUI("popem4data"))
+                                  downloadObjUI("popem4plot"),downloadObjUI("popem4data"))
           
           
           # Bind to boxes
           popem1.box <- tabBox(width=6, height=400,
-                               tabPanel("Plot",renderImage({img_List17})),
+                               tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[76])))),
                                tabPanel("Sources and Downloads",popem1.info))
           popem2.box <- tabBox(width=6, height=400,
-                               tabPanel("Table",renderImage({img_List18})),
+                               tabPanel("Plot",renderImage({img_List18})),
                                tabPanel("Sources and Downloads",popem2.info))
           popem3.box <- tabBox(width=6, height=400,
-                               tabPanel("Plot",renderImage({img_List19})),
+                               tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[82])))),
                                tabPanel("Sources and Downloads",popem3.info))
           popem4.box <- tabBox(width=6, height=400,
-                               tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[85])))),
+                               tabPanel("Plot",renderImage({img_List19})),
                                tabPanel("Sources and Downloads",popem4.info))
           
           
           #Append to List
-          popem.list <<- list(popem1.box,popem2.box,popem3.box,popem4.box)
+     
+          popem.list <<- list(popem1.box,popem3.box,popem2.box,popem4.box)
           incProgress()
         }  #Employment and Demographic Forecast
         
@@ -1214,11 +1220,11 @@ server <- function(input, output, session) {
         #Generate Report
         #knitting file and copy to final document
         
-        #tempRMD <- fixPath(fileMat[88])  #Testing
-       # tempPDF <- fixPath(fileMat[89]) 
+        tempRMD <- fixPath(fileMat[88])  #Testing
+        tempPDF <- fixPath(fileMat[89]) 
         
-         tempRMD <- fileMat[88]  #Production
-         tempPDF <- fileMat[89] 
+        # tempRMD <- fileMat[88]  #Production
+        # tempPDF <- fileMat[89] 
         
         
         rmarkdown::render(input= tempRMD, output_file = tempPDF,
@@ -1303,10 +1309,10 @@ server <- function(input, output, session) {
     #commuting
     callModule(downloadObj, id = "popt1plot", simpleCap(input$unit),"popt1plot", popt1$plot)
     
-    callModule(downloadObj, id = "popt2tabl", simpleCap(input$unit),"popt2tabl", popt1$FlexLive)
+    callModule(downloadObj, id = "popt2tabl", simpleCap(input$unit),"popt2tabl", popt1$Flexcomb)
     callModule(downloadObj, id = "popt2data", simpleCap(input$unit),"popt2data", popt1$data1)
     
-    callModule(downloadObj, id = "popt3tabl", simpleCap(input$unit),"popt3tabl", popt1$FlexWork)
+    callModule(downloadObj, id = "popt3tabl", simpleCap(input$unit),"popt3tabl", popt1$Flexcomb)
     callModule(downloadObj, id = "popt3data", simpleCap(input$unit),"popt3data", popt1$data2)
     
     callModule(downloadObj, id = "popt4plot", simpleCap(input$unit),"popt4plot", popt2$plot)
@@ -1323,14 +1329,14 @@ server <- function(input, output, session) {
     callModule(downloadObj, id = "popei4data", simpleCap(input$unit),"popei4data", popei3$data2)
     
     #Employment and Demographic Forecast
-    callModule(downloadObj, id = "popem1plot", simpleCap(input$unit),"popem1plot", popem1$plot)
+    callModule(downloadObj, id = "popem1tabl", simpleCap(input$unit),"popem1tabl", popem1$FlexTable)
     callModule(downloadObj, id = "popem1data", simpleCap(input$unit),"popem1data", popem1$data)
     callModule(downloadObj, id = "popem2plot", simpleCap(input$unit),"popem2plot", popem2$plot)
     callModule(downloadObj, id = "popem2data", simpleCap(input$unit),"popem2data", popem2$data)
-    callModule(downloadObj, id = "popem3plot", simpleCap(input$unit),"popem3plot", popem3$plot)
+    callModule(downloadObj, id = "popem3tabl", simpleCap(input$unit),"popem3tabl", popem3$FlexTable)
     callModule(downloadObj, id = "popem3data", simpleCap(input$unit),"popem3data", popem3$data)
     
-    callModule(downloadObj, id = "popem4tabl", simpleCap(input$unit),"popem4tabl", popem4$FlexTable)
+    callModule(downloadObj, id = "popem4plot", simpleCap(input$unit),"popem4plot", popem4$plot)
     callModule(downloadObj, id = "popem4data", simpleCap(input$unit),"popem4data", popem4$data)
     
   }) #observeEvent input$profile

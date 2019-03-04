@@ -53,7 +53,7 @@ library(geojsonio)
 library(gridExtra)
 library(ggthemes)
 library(maptools)
-
+#library(gt)
 
 muffleError <- function(x,options) {}
 knit_hooks$set(error=muffleError)
@@ -343,6 +343,16 @@ if("popc" %in% unlist(outChk)) {
 ```
 
 
+```{r popchar3a}
+if("popc" %in% unlist(outChk)) {
+  cat("\\FloatBarrier\n")
+  cat(dget(filemat[38]))
+  cat("\\FloatBarrier\n")
+  cat(dget(filemat[37]))
+}
+```
+
+
 ```{r popchar4}
 if("popc" %in% unlist(outChk)) {
     educText <- function() {
@@ -367,11 +377,8 @@ if("popc" %in% unlist(outChk)) {
 
 ```{r popchar6}
 if("popc" %in% unlist(outChk)) {
-  cat("\\newpage\n")
+ # cat("\\newpage\n")
   cat("#### Race and Ethnicity\n")
-  cat(dget(filemat[38]))
-  cat("\\FloatBarrier\n")
-  cat(dget(filemat[37]))
   cat("\\FloatBarrier\n")
   cat(dget(filemat[41]))
   cat("\\FloatBarrier\n")
@@ -399,7 +406,7 @@ if("housing" %in% unlist(outChk)) {
   return(OutText)
   }  
   
-  cat("\\newpage\n")
+ # cat("\\newpage\n")
   cat("### Housing and Households\n")
   cat(houseText())
 }
@@ -474,7 +481,7 @@ if("comm" %in% unlist(outChk)) {
 }
 ```
 
-```{r commute2}
+```{r commute2, out.width='75%', out.height='75%'}
 if("comm" %in% unlist(outChk)) {
   commute1p <- fixPath(filemat[56])  #Venn Diagram Plot 
   include_graphics(commute1p)
@@ -483,36 +490,15 @@ if("comm" %in% unlist(outChk)) {
 
 ```{r commute3}
 if("comm" %in% unlist(outChk)) {
-  liveText <- function(place) {
-   OutText <- paste0("This table shows the top 10 places where people who live in ",place," work.")
-   return(OutText)
-}
-  cat("\\newpage\n")
+ 
   cat(dget(filemat[58]))
   cat("\\FloatBarrier\n")
-  cat(liveText(placename))
-  cat("\\FloatBarrier\n")
-  
-
+ 
 }
 ```
 
-```{r commute4}
-if("comm" %in% unlist(outChk)) {
-  workText <- function(place) {
-   OutText <- paste0("This table shows the top 10 places where people who work in ",place," live.")
-   return(OutText)
-  }
-  
-  cat("\\newpage\n")
-  cat(dget(filemat[60]))
-  cat("\\FloatBarrier\n")
-  cat(workText(placename))  
-  cat("\\FloatBarrier\n")
-}
-```
 
-```{r commute5}
+```{r commute5,out.width='80%', out.height='80%'}
 if("comm" %in% unlist(outChk)) {
   commute2p <- fixPath(filemat[62])  #Jobs Migration Plot 
   include_graphics(commute2p)
@@ -612,8 +598,7 @@ if("emply" %in% unlist(outChk)) {
 
 ```{r employment2}
 if("emply" %in% unlist(outChk)) {
-  popem1p <- fixPath(filemat[77])   #JobsPopForecast
-  include_graphics(popem1p)
+ cat(dget(filemat[77]))   #JobsPopForecast
 }
 ```
 
@@ -631,7 +616,7 @@ if("emply" %in% unlist(outChk)) {
 ```
 
 ```{r employment5}
-if("emply" %in% unlist(outChk)) {
+if("emply" %in% unlist(outChk)) {  #JobsPopForecast
   cat(dget(filemat[81]))
 }
 ```
@@ -639,15 +624,27 @@ if("emply" %in% unlist(outChk)) {
 
 ```{r employment6}
 if("emply" %in% unlist(outChk)) {
-  popem3p <- fixPath(filemat[83])   #Residential LF
-  include_graphics(popem3p)
+  cat(dget(filemat[84]))
 }
 ```
 
 ```{r employment7}
 if("emply" %in% unlist(outChk)) {
-  cat(dget(filemat[84]))
-  cat(dget(filemat[86]))
+  cat(dget(fixPath(filemat[83])))  #Residential LF
+}
+```
+
+```{r employment8}
+if("emply" %in% unlist(outChk)) {
+  cat("\\FloatBarrier\n")
+  popem4p <- fixPath(filemat[86])   #Firms Plot
+  include_graphics(popem4p)
+}
+```
+
+```{r employment9}
+if("emply" %in% unlist(outChk)) {
+  cat("\\FloatBarrier\n")
   cat(dget(filemat[87]))
 }
 ```
