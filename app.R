@@ -85,6 +85,14 @@ source("R/firmcount.R")
 
 
 # The GLOBAL Variables  Add Additional lists items as sections get defined
+#File Locations ALSO LOOK AT LINE IN THE PDF OUTPUT CODE  LINE 1229
+# Local/Development
+tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
+
+#Production
+# tPath <- "/tmp"  
+
+
 # Current ACS database
 curACS <- "acs1317"
 curYr <- 2017
@@ -252,7 +260,7 @@ server <- function(input, output, session) {
   infoSrc[3,1] <- "<b>Population Characteristics: Age</b>"
   infoSrc[3,2] <- "Population Estimates and Migration by Age"
   infoSrc[4,1] <- "<b>Population Characteristics: Income, Education and Race</b>"
-  infoSrc[4,2] <- "Population Estimates by Income, Educational Attainment and Race"
+  infoSrc[4,2] <- "Population Estimates by Income, Income Source, Educational Attainment and Race"
   infoSrc[5,1] <- "<b>Housing and Households</b>"
   infoSrc[5,2] <- "Housing Units, Costs and Unit Characteristics"
   infoSrc[6,1] <- "<b>Commuting and Job Growth</b>"
@@ -260,7 +268,7 @@ server <- function(input, output, session) {
   infoSrc[7,1] <- "<b>Employment by Industry</b>"
   infoSrc[7,2] <- "Employment Data by Industry"
   infoSrc[8,1] <- "<b>Employment Forecast and Wage Information</b>"
-  infoSrc[8,2] <- "Employment Forecasts, Wage and Income Sources"
+  infoSrc[8,2] <- "Employment Forecasts, Wage and Number of Firms"
   
   infoTab <-  kable(infoSrc, format='html', table.attr='class="cleanTab"',align='l',linesep = "") %>%
     kable_styling(bootstrap_options ="condensed", full_width = F) %>%
@@ -397,8 +405,7 @@ server <- function(input, output, session) {
     
     #Creating output file location and Prepping Matrix of filenames
   
-   # tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
-    tPath <- "/tmp"  #Production
+   
     
     tName <- ""
     tmpName <- sample(c(0:9, LETTERS),8, replace=TRUE)
@@ -733,7 +740,7 @@ server <- function(input, output, session) {
           ggsave(fileMat[34],popc3$plot, device="png", height = 5 , width = 7, dpi=300)
           ggsave(fileMat[35],popc3$plot, device="png", height = 5 , width = 7, dpi=300)
           
-          #Race 1
+          #Income Source
           dput(popc2$Htable,fileMat[36])
           
           dput(popc2$Ltable, fileMat[37])
@@ -750,7 +757,7 @@ server <- function(input, output, session) {
           
           #Contents of Information Tabs
           popc1.info <- tags$div(boxContent(title= "Household Income",
-                                            description = "The Household Income Disctibution Plot compares the distribution of household income for a selected location to the state.",
+                                            description = "The Household Income Distibution Plot compares the distribution of household income for a selected location to the state.",
                                             MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO American Community Survey API","http://coloradodemography.github.io/CensusAPI/"),
                                                            c("American Community Survey American Fact Finder, Series B19001","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
@@ -763,19 +770,19 @@ server <- function(input, output, session) {
                                             urlList = list(c("SDO American Community Survey API","http://coloradodemography.github.io/CensusAPI/"),
                                                            c("American Community Survey American Fact Finder, Series B15003","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
                                  tags$br(),
-                                 downloadObjUI("popc2plot"),  downloadObjUI("popc2data"))
+                                 downloadObjUI("popc3plot"),  downloadObjUI("popc3data"))
           
           
-          popc3.info <- tags$div(boxContent(title= "Racial Identification Trend",
-                                            description= "The Race Trend Table shows changes in the distribution of racial idenification since the 2000 Census.",
+          popc3.info <- tags$div(boxContent(title= "Income Source",
+                                            description= "The Income Source table shows the earning sources for Households and their mean incomes.  A household can have multiple sources of income, these values are not mutually exclusive.",
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO American Community Survey API","http://coloradodemography.github.io/CensusAPI/"),
-                                                           c("American Community Survey American Fact Finder, Series B03002","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
+                                                           c("American Community Survey American Fact Finder, Series B19051 to B19057 and B19061 to B19069","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
                                  tags$br(),
-                                 downloadObjUI("popc3tabl"),downloadObjUI("popc3data"))
+                                 downloadObjUI("popc2tabl"),downloadObjUI("popc2data"))
           
           popc4.info <- tags$div(boxContent(title= "Racial Identification Comparison",
-                                            description= "The Race Comparison Table compares the distribution of racial idenification of a place to the State.",
+                                            description= "The Race Trend Table shows changes in the distribution of racial idenification since the 2000 Census.",
                                             MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO American Community Survey API","http://coloradodemography.github.io/CensusAPI/"),
                                                            c("American Community Survey American Fact Finder, series B03002","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
@@ -1219,11 +1226,11 @@ server <- function(input, output, session) {
         #Generate Report
         #knitting file and copy to final document
         
-      #  tempRMD <- fixPath(fileMat[88])  #Testing
-      #  tempPDF <- fixPath(fileMat[89]) 
+        tempRMD <- fixPath(fileMat[88])  #Testing
+        tempPDF <- fixPath(fileMat[89]) 
         
-         tempRMD <- fileMat[88]  #Production
-         tempPDF <- fileMat[89] 
+      #   tempRMD <- fileMat[88]  
+      #   tempPDF <- fileMat[89] 
         
         
         rmarkdown::render(input= tempRMD, output_file = tempPDF,
