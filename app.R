@@ -206,7 +206,6 @@ ui <-
                                    actionButton("profile","View Profile"),
                                    #   actionButton("comparison","View Comparison"),  Disabled in V1
                                    actionButton("contact","Contact SDO",onclick ="window.open('https://goo.gl/forms/xvyxzq6DGD46rMo42', '_blank')"),
-                                   actionButton("survey","Demographic Profiles User Survey",onclick="window.open('https://goo.gl/forms/sWY6wvcdBLgSErKs2','_blank')"),
                                    downloadButton("outputPDF", label="Download PDF Report",
                                                   style="color: black; background-color: gray90; border-color: black")
                                    
@@ -215,7 +214,7 @@ ui <-
                  ), #dashboardSidebar
                  dashboardBody(  tags$head( 
                    tags$meta(name="keywords", content="Colorado, demographic, county, community, municiplaity, city, population, housing, household, age, median income, jobs, wages"),
-                   includeScript("www/dL_init.js"),
+                   #includeScript("www/dL_init.js"),
                    includeScript("www/tag_manager.js"), #writes GTM connection
                    tags$link(rel = "stylesheet", type = "text/css", href = "dashboard.css"),  #Link to CSS...
                    tags$title("Colorado Demographic Profiles") #,
