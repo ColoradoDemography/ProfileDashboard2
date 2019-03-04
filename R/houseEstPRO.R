@@ -56,11 +56,10 @@ houseEstPRO <- function(DBPool,listID,curYr, base=10) {
           legend.position= "bottom",legend.title=element_blank())
 
 
- 
   f.hhPlace$place <- ctyname
-  f.hhPlaceFin <- f.hhPlace[,c(10,9,8)]
-  f.hhPlaceFin[3] <- format(round(f.hhPlaceFin[3],digits = 0),big.mark=",",scientific=FALSE)
-  names(f.hhPlaceFin) <- c("Geography","Data Type", "Total Households")
+  f.hhPlaceFin <- f.hhPlace[,c(10,3,9,8)]
+  f.hhPlaceFin[4] <- format(round(f.hhPlaceFin[4],digits = 0),big.mark=",",scientific=FALSE)
+  names(f.hhPlaceFin) <- c("Geography","Year", "Data Type", "Total Households")
   
   #Text
   OutText <- paste0("The Household Estimates plot shows the current and projected number of households in ", ctyname, " between 2010 and 2050.")

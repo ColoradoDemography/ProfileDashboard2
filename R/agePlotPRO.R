@@ -59,7 +59,7 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
     f.AgePlot$geoname <- factor(f.AgePlot$geoname, levels=c(ctyname, "Colorado"))
 
     x <- left_join(f.place, f.state, by="agecat")
-    f.AgePlot2 <- x[,c(1,5,7,12,14)]
+    f.AgePlot2 <- x[,c(4,5,7,12,14)]
     f.AgePlot2$totalpopulation.x <- format(round(f.AgePlot2$totalpopulation.x,digits=0),big.mark=",")
     f.AgePlot2$totalpopulation.y <- format(round(f.AgePlot2$totalpopulation.y,digits=0),big.mark=",")
     names(f.AgePlot2) <- c("Age Category",  paste0("Population: ",ctyname), paste0("Population Percentage: ",ctyname),
@@ -129,7 +129,7 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
     f.AgePlot$geoname <- factor(f.AgePlot$geoname, levels=c(placename, ctyname))
     
     f.AgePlot2 <- left_join(f.place2, f.county2, by="agecat")
-    f.AgePlot2 <- f.AgePlot2[,c(1,3,4,6,7)]
+    f.AgePlot2 <- f.AgePlot2[,c(2,3,4,6,7)]
     f.AgePlot2$age_Value.x <- format(round(f.AgePlot2$age_Value.x,digits=0),big.mark=",")
     f.AgePlot2$age_Prop.x <- percent(f.AgePlot2$age_Prop.x)
     f.AgePlot2$age_Value.y <- format(round(f.AgePlot2$age_Value.y,digits=0),big.mark=",")
