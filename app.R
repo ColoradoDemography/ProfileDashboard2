@@ -87,10 +87,10 @@ source("R/firmcount.R")
 # The GLOBAL Variables  Add Additional lists items as sections get defined
 #File Locations ALSO LOOK AT LINE IN THE PDF OUTPUT CODE  LINE 1229
 # Local/Development
-tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
+# tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
 
 #Production
-# tPath <- "/tmp"  
+ tPath <- "/tmp"  
 
 
 # Current ACS database
@@ -1226,11 +1226,11 @@ server <- function(input, output, session) {
         #Generate Report
         #knitting file and copy to final document
         
-        tempRMD <- fixPath(fileMat[88])  #Testing
-        tempPDF <- fixPath(fileMat[89]) 
+       # tempRMD <- fixPath(fileMat[88])  #Testing
+       # tempPDF <- fixPath(fileMat[89]) 
         
-      #   tempRMD <- fileMat[88]  
-      #   tempPDF <- fileMat[89] 
+         tempRMD <- fileMat[88]  
+         tempPDF <- fileMat[89] 
         
         
         rmarkdown::render(input= tempRMD, output_file = tempPDF,
