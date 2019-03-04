@@ -76,7 +76,8 @@ cocPlot <- function(DBPool,listID,fyr=2000,lyr,base=12) {
   
   totChng <- as.numeric(f.coccty5[6,3] -  f.coccty5[1,3])
   
-  f.sum <- f.coccty5 %>% summarise(sumNat = sum(NaturalIncrease),
+  f.sum <- f.coccty5 %>%
+    summarise(sumNat = sum(NaturalIncrease),
               sumMig = sum(NetMigration))
   
   chgDir <- ifelse(totChng > 0,"increased",

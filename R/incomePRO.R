@@ -26,7 +26,7 @@ incomePRO=function(listID, ACS){
    state="08"
   base=12
 
-  hhinc1VAL <- codemog_api(data="b19001",db=ACS, geonum=paste("1", state, ctyfips, sep=""), meta="no") %>%
+  hhinc1VAL <- codemog_api(data="b19001",db=ACS, geonum=paste0("1", state, ctyfips), meta="no") %>%
     select(-b19001001)%>%
     gather(var, value, b19001002:b19001017, -geoname, -state, -county, -place,-tract,-bg,-geonum)%>%
     mutate(geoname=str_trim(geoname, side="both"),
@@ -40,7 +40,7 @@ incomePRO=function(listID, ACS){
   
   
   # Place MOE
-  hhinc1MOE=codemog_api(data="b19001_moe",db=ACS, geonum=paste("1", state, ctyfips, sep=""), meta="no")%>%
+  hhinc1MOE=codemog_api(data="b19001_moe",db=ACS, geonum=paste0("1", state, ctyfips), meta="no")%>%
     select(-b19001_moe001)%>%
     gather(var, value, b19001_moe002:b19001_moe017, -geoname, -state, -county, -place,-tract,-bg,-geonum)%>%
     mutate(geoname=str_trim(geoname, side="both"),
@@ -71,7 +71,7 @@ incomePRO=function(listID, ACS){
   
   
   #State Value
-  hhinc2VAL=codemog_api(data="b19001",db=ACS, geonum=paste("1", state,  sep=""), meta="no")%>%
+  hhinc2VAL=codemog_api(data="b19001",db=ACS, geonum=paste0("1", state), meta="no")%>%
     select(-b19001001)%>%
     gather(var, value, b19001002:b19001017, -geoname, -state, -county, -place,-tract,-bg,-geonum)%>%
     mutate(geoname=str_trim(geoname, side="both"),
@@ -84,7 +84,7 @@ incomePRO=function(listID, ACS){
     mutate(cat=ordered(group, levels=1:12))
   
   #State MOE
-  hhinc2MOE=codemog_api(data="b19001_moe",db=ACS, geonum=paste("1", state, sep=""), meta="no")%>%
+  hhinc2MOE=codemog_api(data="b19001_moe",db=ACS, geonum=paste0("1", state), meta="no")%>%
     select(-b19001_moe001)%>%
     gather(var, value, b19001_moe002:b19001_moe017, -geoname, -state, -county, -place,-tract,-bg,-geonum)%>%
     mutate(geoname=str_trim(geoname, side="both"),
@@ -116,7 +116,7 @@ incomePRO=function(listID, ACS){
   
   #Municipality
   if(nchar(placefips) !=0) {
-    hhinc3VAL=codemog_api(data="b19001",db=ACS, geonum=paste("1", state, placefips, sep=""), meta="no")%>%
+    hhinc3VAL=codemog_api(data="b19001",db=ACS, geonum=paste0("1", state, placefips), meta="no")%>%
       select(-b19001001)%>%
       gather(var, value, b19001002:b19001017, -geoname, -state, -county, -place,-tract,-bg,-geonum)%>%
       mutate(geoname=str_trim(geoname, side="both"),
@@ -129,7 +129,7 @@ incomePRO=function(listID, ACS){
       mutate(cat=ordered(group, levels=1:12))    
     
     # Place MOE
-    hhinc3MOE=codemog_api(data="b19001_moe",db=ACS, geonum=paste("1", state, placefips, sep=""), meta="no")%>%
+    hhinc3MOE=codemog_api(data="b19001_moe",db=ACS, geonum=paste0("1", state, placefips), meta="no")%>%
       select(-b19001_moe001)%>%
       gather(var, value, b19001_moe002:b19001_moe017, -geoname, -state, -county, -place,-tract,-bg,-geonum)%>%
       mutate(geoname=str_trim(geoname, side="both"),

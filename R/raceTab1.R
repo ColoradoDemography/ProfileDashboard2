@@ -18,23 +18,18 @@ raceTab1 <- function(listID, ACS) {
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
-  #  if(listID$PlFilter == "T") {
-  #    placefips <- ""
-  #    placename <- ""
-  #  }
-  
+
   state="08"
-  
+
   #output race tab using pull from API
-  if(nchar(placefips) == 0) { # output county table
+
     Cens20K <- 1
     #call to ACS Race variables
+    #State Values
+    ACSRaceST <- codemog_api(data="b03002", db=ACS, geonum=paste0("1", state),meta="no")
+    ACSRaceST[,7:ncol(ACSRaceST)]=as.numeric(as.character(ACSRaceST[,7:ncol(ACSRaceST)]))
     
-    ACSRace=codemog_api(data="b03002", db=ACS, geonum=paste("1", "08", ctyfips, sep=""),meta="no")
-    #Converting values to numeric
-    ACSRace[,7:ncol(ACSRace)]=as.numeric(as.character(ACSRace[,7:ncol(ACSRace)]))
-    
-    ACSRace2 <- ACSRace %>%
+    ACSRaceST2 <- ACSRaceST %>%
       select(geoname:b03002012) %>%
       mutate(TotalPop=b03002001,
              Hispanic=b03002012,
@@ -57,18 +52,54 @@ raceTab1 <- function(listID, ACS) {
              NHTwoP=percent(round(NHTwo/TotalPop,3)*100))
     
     
-    f.ACSRace <- gather(ACSRace2[, c(1,30:38)], key = "race", value=ACS, HispanicP:NHTwoP)
-    f.ACSRace$geoname <- ctyname
-    ACSRow <- data.frame(geoname = ctyname,
+    f.ACSRaceST <- gather(ACSRaceST2[, c(1,30:38)], key = "race", value=ACS, HispanicP:NHTwoP)
+    f.ACSRaceST$geoname <- "Colorado"
+    ACSRowST <- data.frame(geoname = "Colorado",
                          race = "TotalP",
                          ACS = "100.00%")
-    f.ACSRace <- rbind(f.ACSRace,ACSRow)
+    f.ACSRaceST <- rbind(f.ACSRaceST,ACSRowST)
+    
+    ACSRaceCTY <- codemog_api(data="b03002", db=ACS, geonum=paste0("1", state, ctyfips),meta="no")
+    #Converting values to numeric
+    ACSRaceCTY[,7:ncol(ACSRaceCTY)]=as.numeric(as.character(ACSRaceCTY[,7:ncol(ACSRaceCTY)]))
+    
+    ACSRaceCTY2 <- ACSRaceCTY %>%
+      select(geoname:b03002012) %>%
+      mutate(TotalPop=b03002001,
+             Hispanic=b03002012,
+             NonHispanic=b03002002,
+             NHWhite=b03002003,
+             NHBlack=b03002004,
+             NHAIAN=b03002005,
+             NHAsian=b03002006,
+             NHNHOPI=b03002007,
+             NHOther=b03002008,
+             NHTwo=b03002009,
+             HispanicP=percent(round(Hispanic/TotalPop, 3)*100),
+             NonHispanicP=percent(round(NonHispanic/TotalPop,3)*100),
+             NHWhiteP=percent(round(NHWhite/TotalPop, 3)*100),
+             NHBlackP=percent(round(NHBlack/TotalPop, 3)*100),
+             NHAIANP=percent(round(NHAIAN/TotalPop,3)*100),
+             NHAsianP=percent(round(NHAsian/TotalPop,3)*100),
+             NHNHOPIP=percent(round(NHNHOPI/TotalPop, 3)*100),
+             NHOtherP=percent(round(NHOther/TotalPop,3)*100),
+             NHTwoP=percent(round(NHTwo/TotalPop,3)*100))
+    
+    
+    f.ACSRaceCTY <- gather(ACSRaceCTY2[, c(1,30:38)], key = "race", value=ACS, HispanicP:NHTwoP)
+    f.ACSRaceCTY$geoname <- ctyname
+    ACSRowCTY <- data.frame(geoname = ctyname,
+                         race = "TotalP",
+                         ACS = "100.00%")
+    f.ACSRaceCTY <- rbind(f.ACSRaceCTY,ACSRowCTY)
     
     #call to Census 2010 API Race variables
-    p9_10=codemog_api(data="p9", geonum=paste("1", state, ctyfips, sep=""),meta="no")
-    p9_10[,7:ncol(p9_10)]=as.numeric(as.character(p9_10[,7:ncol(p9_10)]))
+
+    #State
+    p9_10ST <- codemog_api(data="p9", geonum=paste0("1", state),meta="no")
+    p9_10ST[,7:ncol(p9_10ST)]=as.numeric(as.character(p9_10ST[,7:ncol(p9_10ST)]))
     
-    p9_10=p9_10%>%
+    p9_10ST =p9_10ST  %>%
       select(geoname:p9011)%>%
       mutate(TotalPop=p9001, Hispanic=p9002, NonHispanic=p9003, NHWhite=p9005, NHBlack=p9006,
              NHAIAN=p9007, NHAsian=p9008, NHNHOPI=p9009, NHOther=p9010, NHTwo=p9011,
@@ -84,20 +115,73 @@ raceTab1 <- function(listID, ACS) {
       select(-p9001:-p9011)%>%
       gather(race, Census.2010, HispanicP:NHTwoP, -geoname:-geonum)
     
-    p9_10 <- p9_10[,c(1,18,19)]
-    p9_10$geoname <- ctyname
+    p9_10ST <- p9_10ST[,c(1,18,19)]
+    p9_10ST$geoname <- "Colorado"
     
-    CensRow <- data.frame(geoname = ctyname,
+    CensRowST <- data.frame(geoname = "Colorado",
                           race = "TotalP",
                           Census.2010 = "100.00%")
-    p9_10 <- rbind(p9_10,CensRow)
+    p9_10ST <- rbind(p9_10ST,CensRowST)
+    
+    #County
+    p9_10CTY <- codemog_api(data="p9", geonum=paste("1", state, ctyfips, sep=""),meta="no")
+    p9_10CTY[,7:ncol(p9_10CTY)]=as.numeric(as.character(p9_10CTY[,7:ncol(p9_10CTY)]))
+    
+    p9_10CTY <- p9_10CTY %>%
+      select(geoname:p9011)%>%
+      mutate(TotalPop=p9001, Hispanic=p9002, NonHispanic=p9003, NHWhite=p9005, NHBlack=p9006,
+             NHAIAN=p9007, NHAsian=p9008, NHNHOPI=p9009, NHOther=p9010, NHTwo=p9011,
+             HispanicP=percent(round(Hispanic/TotalPop, 3)*100),
+             NonHispanicP=percent(round(NonHispanic/TotalPop,3)*100),
+             NHWhiteP=percent(round(NHWhite/TotalPop, 3)*100),
+             NHBlackP=percent(round(NHBlack/TotalPop, 3)*100),
+             NHAIANP=percent(round(NHAIAN/TotalPop,3)*100),
+             NHAsianP=percent(round(NHAsian/TotalPop,3)*100),
+             NHNHOPIP=percent(round(NHNHOPI/TotalPop, 3)*100),
+             NHOtherP=percent(round(NHOther/TotalPop,3)*100),
+             NHTwoP=percent(round(NHTwo/TotalPop,3)*100)) %>%
+      select(-p9001:-p9011)%>%
+      gather(race, Census.2010, HispanicP:NHTwoP, -geoname:-geonum)
+    
+    p9_10CTY <- p9_10CTY[,c(1,18,19)]
+    p9_10CTY$geoname <- ctyname
+    
+    CensRowCTY <- data.frame(geoname = ctyname,
+                          race = "TotalP",
+                          Census.2010 = "100.00%")
+    p9_10CTY <- rbind(p9_10CTY,CensRowCTY)
     
     #Call to Census 2000 API
-    p4_00=codemog_api(data="p4", db="c2000",geonum=paste("1", state, ctyfips, sep=""),meta="no")
-    if(nrow(p4_00) != 0) {
-      p4_00[,7:ncol(p4_00)]=as.numeric(as.character(p4_00[,7:ncol(p4_00)]))
-      p4_00=p4_00%>%
-        select(geoname:p4011)%>%
+    #State
+    p4_00ST <- codemog_api(data="p4", db="c2000",geonum=paste0("1", state),meta="no")
+    p4_00ST[,7:ncol(p4_00ST)]=as.numeric(as.character(p4_00ST[,7:ncol(p4_00ST)]))
+    p4_00ST <- p4_00ST %>%
+      select(geoname:p4011) %>%
+      mutate(TotalPop=p4001, Hispanic=p4002, NonHispanic=p4003, NHWhite=p4005, NHBlack=p4006,
+             NHAIAN=p4007, NHAsian=p4008, NHNHOPI=p4009, NHOther=p4010, NHTwo=p4011,
+             HispanicP=percent(round(Hispanic/TotalPop, 3)*100),
+             NonHispanicP=percent(round(NonHispanic/TotalPop,3)*100),
+             NHWhiteP=percent(round(NHWhite/TotalPop, 3)*100),
+             NHBlackP=percent(round(NHBlack/TotalPop, 3)*100),
+             NHAIANP=percent(round(NHAIAN/TotalPop,3)*100),
+             NHAsianP=percent(round(NHAsian/TotalPop,3)*100),
+             NHNHOPIP=percent(round(NHNHOPI/TotalPop, 3)*100),
+             NHOtherP=percent(round(NHOther/TotalPop,3)*100),
+             NHTwoP=percent(round(NHTwo/TotalPop,3)*100))%>%
+      select(-p4001:-p4011)%>%
+      gather(race, Census.2000, HispanicP:NHTwoP, -geoname:-geonum)
+    
+    p4_00ST <- p4_00ST[,c(1,18,19)]
+    p4_00ST$geoname <- "Colorado"
+    
+    names(CensRowST)[3] <- "Census.2000"
+    p4_00ST <- rbind(p4_00ST,CensRowST)
+    
+  # County  
+    p4_00CTY <- codemog_api(data="p4", db="c2000",geonum=paste0("1", state, ctyfips),meta="no")
+    p4_00CTY[,7:ncol(p4_00CTY)]=as.numeric(as.character(p4_00CTY[,7:ncol(p4_00CTY)]))
+    p4_00CTY <- p4_00CTY %>%
+        select(geoname:p4011) %>%
         mutate(TotalPop=p4001, Hispanic=p4002, NonHispanic=p4003, NHWhite=p4005, NHBlack=p4006,
                NHAIAN=p4007, NHAsian=p4008, NHNHOPI=p4009, NHOther=p4010, NHTwo=p4011,
                HispanicP=percent(round(Hispanic/TotalPop, 3)*100),
@@ -112,25 +196,20 @@ raceTab1 <- function(listID, ACS) {
         select(-p4001:-p4011)%>%
         gather(race, Census.2000, HispanicP:NHTwoP, -geoname:-geonum)
       
-      p4_00 <- p4_00[,c(1,18,19)]
-      p4_00$geoname <- ctyname
+      p4_00CTY <- p4_00CTY[,c(1,18,19)]
+      p4_00CTY$geoname <- ctyname
       
-      names(CensRow)[3] <- "Census.2000"
-      p4_00 <- rbind(p4_00,CensRow)
-      raceTmp <- inner_join(p4_00, p9_10)
-    }  else {
-      raceTmp <-  p9_10
-    }
-    f.raceFin <- inner_join(raceTmp, f.ACSRace)
-    
-  } else{ #output municipality table
+      names(CensRowCTY)[3] <- "Census.2000"
+      p4_00CTY <- rbind(p4_00CTY,CensRowCTY)
+  
+if(nchar(placefips) != 0) { #output municipality table
     #call to ACS Race variables
     
-    ACSRace=codemog_api(data="b03002", db=ACS, geonum=paste("1", "08", placefips, sep=""),meta="no")
+    ACSRaceMUNI=codemog_api(data="b03002", db=ACS, geonum=paste0("1", state, placefips),meta="no")
     #Converting values to numeric
-    ACSRace[,7:ncol(ACSRace)]=as.numeric(as.character(ACSRace[,7:ncol(ACSRace)]))
+    ACSRaceMUNI[,7:ncol(ACSRaceMUNI)]=as.numeric(as.character(ACSRaceMUNI[,7:ncol(ACSRaceMUNI)]))
     
-    ACSRace2 <- ACSRace %>%
+    ACSRaceMUNI2 <- ACSRaceMUNI %>%
       select(geoname:b03002012) %>%
       mutate(TotalPop=b03002001,
              Hispanic=b03002012,
@@ -153,18 +232,18 @@ raceTab1 <- function(listID, ACS) {
              NHTwoP=percent(round(NHTwo/TotalPop,3)*100))
     
     
-    f.ACSRace <- gather(ACSRace2[, c(1,30:38)], key = "race", value=ACS, HispanicP:NHTwoP)
-    f.ACSRace$geoname <- placename
-    ACSRow <- data.frame(geoname = placename,
+    f.ACSRaceMUNI <- gather(ACSRaceMUNI2[, c(1,30:38)], key = "race", value=ACS, HispanicP:NHTwoP)
+    f.ACSRaceMUNI$geoname <- placename
+    ACSRowMUNI <- data.frame(geoname = placename,
                          race = "TotalP",
                          ACS = "100.00%")
-    f.ACSRace <- rbind(f.ACSRace,ACSRow)
+    f.ACSRaceMUNI <- rbind(f.ACSRaceMUNI,ACSRowMUNI)
     
     #call to Census 2010 API Race variables
-    p9_10=codemog_api(data="p9", geonum=paste("1", state, placefips, sep=""),meta="no")
-    p9_10[,7:ncol(p9_10)]=as.numeric(as.character(p9_10[,7:ncol(p9_10)]))
+    p9_10MUNI  <- codemog_api(data="p9", geonum=paste0("1", state, placefips),meta="no")
+    p9_10MUNI[,7:ncol(p9_10MUNI)]=as.numeric(as.character(p9_10MUNI[,7:ncol(p9_10MUNI)]))
     
-    p9_10=p9_10%>%
+    p9_10MUNI  <- p9_10MUNI %>%
       select(geoname:p9011)%>%
       mutate(TotalPop=p9001, Hispanic=p9002, NonHispanic=p9003, NHWhite=p9005, NHBlack=p9006,
              NHAIAN=p9007, NHAsian=p9008, NHNHOPI=p9009, NHOther=p9010, NHTwo=p9011,
@@ -180,21 +259,20 @@ raceTab1 <- function(listID, ACS) {
       select(-p9001:-p9011)%>%
       gather(race, Census.2010, HispanicP:NHTwoP, -geoname:-geonum)
     
-    p9_10 <- p9_10[,c(1,18,19)]
-    p9_10$geoname <- placename
+    p9_10MUNI <- p9_10MUNI[,c(1,18,19)]
+    p9_10MUNI$geoname <- placename
     
-    CensRow <- data.frame(geoname = placename,
+    CensRowMUNI <- data.frame(geoname = placename,
                           race = "TotalP",
                           Census.2010 = "100.00%")
-    p9_10 <- rbind(p9_10,CensRow)
+    p9_10MUNI <- rbind(p9_10MUNI,CensRowMUNI)
     
     #Call to Census 2000 API
-    p4_00=codemog_api(data="p4", db="c2000",geonum=paste("1", state, placefips, sep=""),meta="no")
+    p4_00MUNI <- codemog_api(data="p4", db="c2000",geonum=paste0("1", state, placefips),meta="no")
     # Correction for communities founded after 2000
-    if(nrow(p4_00) == 1) {
       Cens20K <- 1
-      p4_00[,7:ncol(p4_00)]=as.numeric(as.character(p4_00[,7:ncol(p4_00)]))
-      p4_00=p4_00%>%
+      p4_00MUNI[,7:ncol(p4_00MUNI)]=as.numeric(as.character(p4_00MUNI[,7:ncol(p4_00MUNI)]))
+      p4_00MUNI <- p4_00MUNI %>%
         select(geoname:p4011)%>%
         mutate(TotalPop=p4001, Hispanic=p4002, NonHispanic=p4003, NHWhite=p4005, NHBlack=p4006,
                NHAIAN=p4007, NHAsian=p4008, NHNHOPI=p4009, NHOther=p4010, NHTwo=p4011,
@@ -210,24 +288,22 @@ raceTab1 <- function(listID, ACS) {
         select(-p4001:-p4011)%>%
         gather(race, Census.2000, HispanicP:NHTwoP, -geoname:-geonum)
       
-      p4_00 <- p4_00[,c(1,18,19)]
-      p4_00$geoname <- placename
+      p4_00MUNI <- p4_00MUNI[,c(1,18,19)]
+      p4_00MUNI$geoname <- placename
       
-      names(CensRow)[3] <- "Census.2000"
-      p4_00 <- rbind(p4_00,CensRow)
-    } else {
-      Cens20K <- 0
-    }
+      names(CensRowMUNI)[3] <- "Census.2000"
+      p4_00MUNI <- rbind(p4_00MUNI,CensRowMUNI)
+    } 
     
-    
+ 
     # Producing Joined File
-    if(Cens20K == 1) {
-      raceTmp <- inner_join(p4_00, p9_10)
+      if(nchar(placefips) != 0) {  # MUNI
+      f.raceFin <-  plyr::join_all(list(p4_00MUNI,p9_10MUNI, f.ACSRaceMUNI, p4_00CTY,p9_10CTY, f.ACSRaceCTY), by='race', type='left')
     } else {
-      raceTmp <-  p9_10
+      f.raceFin <-  plyr::join_all(list(p4_00CTY,p9_10CTY, f.ACSRaceCTY, p4_00ST,p9_10ST, f.ACSRaceST), by='race', type='left')
     }
-    f.raceFin <- inner_join(raceTmp, f.ACSRace)
-  }
+
+  f.raceFin <- f.raceFin[,c(1:3,5,7,9,11,13)]
   
   
   f.raceFin$Race2 <-ifelse(f.raceFin$race == "TotalP","Total Population",
@@ -240,147 +316,136 @@ raceTab1 <- function(listID, ACS) {
                                                                      ifelse(f.raceFin$race == "NHNHOPIP","Non-Hispanic Native Hawaiian/Pacific Islander",
                                                                             ifelse(f.raceFin$race == "NHOtherP","Non-Hispanic Other","Non-Hispanic, Two Races")))))))))
   
-  if(nrow(p4_00) != 0){
-    m.race <- as.matrix(f.raceFin[c(1:4,6,5,7:10), c(6,3,4,5)]) #This is the matrix table
-  } else {
-    m.race <- as.matrix(f.raceFin[c(1:4,6,5,7:10), c(5,3,4)]) #This is the matrix table
-  }
+ 
+  m.race <- as.matrix(f.raceFin[,c(9,3:8)]) #This is the matrix table
+  
   
   
   
   #Column Names
   ACSName <- paste0("20",substr(ACS,6,7))
   
-  if(nrow(p4_00) != 0){
-    names_spaced <- c("Race","2000","2010",ACSName)
-  } else {
-    names_spaced <- c("Race","2010",ACSName)
-  }
+  names_spaced <- c("Race",paste0("2000",footnote_marker_number(1)), 
+                    paste0("2010",footnote_marker_number(2)),
+                    paste0(ACSName,footnote_marker_number(3)),
+                    paste0("2000",footnote_marker_number(1)),
+                    paste0("2010",footnote_marker_number(2)),
+                    paste0(ACSName,footnote_marker_number(3)))
   
+  names_spacedL <- c("Race","2000","2010",ACSName,
+                    "2000","2010",ACSName)
   
   #Span Header
   
   # create vector with colspan
   if(nchar(placefips) == 0) {
-    tblHead <- c(" " = 1, ctyname = (ncol(m.race)-1))
+    tblHead <- c(" " = 1, ctyname = 3,"Colorado" = 3)
     # set vector names
-    names(tblHead) <- c(" ", ctyname)
+    names(tblHead) <- c(" ", ctyname,"Colorado")
   } else {
-    tblHead <- c(" " = 1, placename = (ncol(m.race)-1))
+    tblHead <- c(" " = 1, placename = 3, ctyname = 3)
     # set vector names
-    names(tblHead) <- c(" ", placename)
+    names(tblHead) <- c(" ", placename, ctyname)
   }
   
   
   
+  tabHTML <- m.race %>%
+    kable(format='html', table.attr='class="cleanTable"',
+          digits=1,
+          row.names=FALSE,
+          align=c("l",rep("r",6)),
+          caption="Race Trend",
+          col.names = names_spaced,
+          escape = FALSE)  %>%
+    kable_styling(bootstrap_options = "condensed",full_width = F,font_size = 12) %>%
+    column_spec(1, width="4in") %>%
+    column_spec(2, width="0.5in") %>%
+    column_spec(3, width="0.5in") %>%
+    column_spec(4, width="0.5in") %>%
+    column_spec(5, width="0.5in") %>%
+    column_spec(6, width="0.5in") %>%
+    column_spec(7, width="0.5in") %>%
+    add_indent(c(3:9)) %>%
+    add_header_above(header=tblHead) %>%
+    footnote(general="Sources",
+             number=c("2000 Census",
+                   "2010 Census",
+                   captionSrc("ACS",ACS)))
+             
   
-  if(nrow(p4_00) != 0) { 
-    tabHTML <- m.race %>%
-      kable(format='html', table.attr='class="cleanTable"',
-            digits=1,
-            row.names=FALSE,
-            align='lrrr',
-            caption="Race Trend",
-            col.names = names_spaced,
-            escape = FALSE)  %>%
-      kable_styling(bootstrap_options = "condensed",full_width = F,font_size = 12) %>%
-      column_spec(1, width="4in") %>%
-      column_spec(2, width="0.5in") %>%
-      column_spec(3, width="0.5in") %>%
-      column_spec(4, width="0.5in") %>%
-      add_indent(c(3:9)) %>%
-      add_header_above(header=tblHead) %>%
-      add_footnote(c("Source; 2000 Census",
-                     "Source: 2010 Census",
-                     captionSrc("ACS",ACS)))
-    
+  #LATEX Table
+  # set vector names
+  tabLATEX <- kable(m.race, col.names = names_spacedL,
+                    caption="Race Trend", row.names=FALSE, align=c("l",rep("r",6)),
+                    format="latex", booktabs=TRUE)  %>%
+    kable_styling(latex_options="HOLD_position") %>%
+    column_spec(1, width="3in") %>%
+    column_spec(2, width="0.4in") %>%
+    column_spec(3, width="0.4in") %>%
+    column_spec(4, width="0.4in") %>%
+    column_spec(5, width="0.4in") %>%
+    column_spec(6, width="0.4in") %>%
+    column_spec(7, width="0.4in") %>%
+    add_indent(c(3:9)) %>%
+    add_header_above(header=tblHead) %>%
+    footnote(general="Sources",
+             c("2000: 2000 Census",
+                      "2010: 2010 Census",
+                      paste0(ACSName,": ",captionSrc("ACS",ACS))),threeparttable = T) 
+
+
+     # Output Data
     race_data <- data.frame(m.race)
     if(nchar(placefips) == 0) {
-      race_data$geoname <- ctyname
+      names(race_data) <- c("Race Category", paste0("Census 2000: ", ctyname),
+                            paste0("Census 2010: ", ctyname),paste0(toupper(ACS),": ",ctyname),
+                            "Census 2000: Colorado","Census 2010: Colorado", paste0(toupper(ACS),": Colorado"))
     } else {
-      race_data$geoname <- placename
+      names(race_data) <- c("Race Category", paste0("Census 2000: ", placename),
+                            paste0("Census 2010: ", placename),paste0(toupper(ACS),": ",placename),
+                            paste0("Census 2000: ", ctyname),
+                            paste0("Census 2010: ", ctyname),paste0(toupper(ACS),": ",ctyname))
+      
     }
-    race_data <- race_data[,c(5,1:4)]
-    names(race_data) <- c("Geography","Race Category","Census 2000", "Census 2010",toupper(ACS))
-  } else {
-    tabHTML <- m.race %>%
-      kable(format='html', table.attr='class="cleanTable"',
-            digits=1,
-            row.names=FALSE,
-            align='lrrr',
-            caption="Race Trend",
-            col.names = names_spaced,
-            escape = FALSE)  %>%
-      kable_styling(bootstrap_options = "condensed",full_width = F,font_size = 12) %>%
-      column_spec(1, width="4in") %>%
-      column_spec(2, width="0.5in") %>%
-      column_spec(3, width="0.5in") %>%
-      add_indent(c(3:9)) %>%
-      add_header_above(header=tblHead) %>%
-      add_footnote(c("Source: 2010 Census",
-                     captionSrc("ACS",ACS)))
+
+  
+    #Preparing Flextable
+    ACSName2 <- toupper(substr(ACS,1,3))
+    ACSyr <- paste0("20",substr(ACS,4,5),"-","20",substr(ACS,6,7))
+    Acs_Str <- paste0(ACSName2," ",ACSyr)
+    tab_date <- substr(captionSrc("ACS",ACS),66,87)
     
-    # Output Data
-    race_data <- data.frame(m.race)
+    f.raceFlex <- as.data.frame(m.race)
+    names(f.raceFlex) <- c("V1","V2","V3","V4","V5","V6","V7")
+    FlexOut <- regulartable(f.raceFlex) %>%
+      set_header_labels(  V1 = "Race Category", V2 = "Census 2000",
+                          V3 = "Census 2010", V4 = Acs_Str,
+                          V5 = "Census 2000",
+                          V6 = "Census 2010", V7 = Acs_Str)
+    
+    
     if(nchar(placefips) == 0) {
-      race_data$geoname <- ctyname
+      FlexOut <- add_header(FlexOut,V2=ctyname,V5="Colorado",top=TRUE)
     } else {
-      race_data$geoname <- placename
+      FlexOut <- add_header(FlexOut,V2=placename,V5=ctyname,top=TRUE)
     }
-    race_data <- race_data[,c(4,1:3)]
-    names(race_data) <- c("Geography","Race Category", "Census 2010",toupper(ACS))
-  }
-  
-  
-  #Preparing Flextable
-  Acs_Str <- substr(captionSrc("ACS",ACS),29,63)
-  tab_date <- substr(captionSrc("ACS",ACS),66,87)
-  f.race_data <- race_data[-1]
-  
-  if(ncol(f.race_data) == 4) {
-    names(f.race_data) <- c("Race","Cens00","Cens10","ACS")
-  } else {
-    names(f.race_data) <- c("Race","Cens10","ACS")
-  }
-  
-  FlexOut <- regulartable(f.race_data)
-  if(ncol(f.race_data) == 4) {  
-    FlexOut <- set_header_labels(FlexOut, Race = "Race Category", Cens00 = "Census 2000",
-                                 Cens10 = "Census 2010", ACS = Acs_Str)
     
-  } else {
-    FlexOut <- set_header_labels(FlexOut, Race = "Race Category", Cens10 = "Census 2010", ACS = Acs_Str)
-  }
+    FlexOut <- FlexOut %>% add_header(V1="Race Trend",top=TRUE) %>%
+      add_footer(V1=tab_date) %>%
+      merge_at(i=2,j=2:4,part="header") %>%
+      merge_at(i=2,j=5:7,part="header") %>%
+      align(i=1, j=1, align="left",part="header") %>%
+      align(i=2,j=2:4,align="center",part="header") %>%
+      align(i=2,j=5:7,align="center",part="header") %>%
+      align(i=3,j=1,align="left",part="header") %>%
+      align(i=3,j=2:7,align="center",part="header") %>%
+      align(i=1, align="left",part="footer") %>%
+      align(j=1, align="left", part="body") %>%
+      width(j=1, width=3.0) %>%
+      width(j=2:7, width=0.8)
   
-  if(nchar(placefips) == 0) {
-    FlexOut <- add_header(FlexOut,Race=ctyname,top=TRUE)
-  } else {
-    FlexOut <- add_header(FlexOut,Race=placename,top=TRUE)
-  }
-  
-  FlexOut <- add_header(FlexOut,Race="Race Trend",top=TRUE)
-  FlexOut <- add_footer(FlexOut,Race=tab_date)
-  FlexOut <- align(FlexOut,i=1:3, j=1, align="left",part="header")
-  FlexOut <- align(FlexOut,i=1, align="left",part="footer")
-  FlexOut <- align(FlexOut, j=1, align="left", part="body")
-  FlexOut <- autofit(FlexOut)
-  
-  
-  if(nrow(p4_00) != 0) {
-    # set vector names
-    tabLATEX <- kable(m.race, col.names = names_spaced,
-                      caption="Race Trend", row.names=FALSE, align=c("l",rep("r",3)),
-                      format="latex", booktabs=TRUE)  %>%
-      kable_styling(latex_options="HOLD_position") %>%
-      column_spec(1,width = "3in") %>%
-      column_spec(2,width = "0.4in") %>%
-      column_spec(3,width = "0.4in") %>%
-      column_spec(4,width = "0.4in") %>%
-      add_indent(c(3:9)) %>%
-      add_header_above(header=tblHead) %>%
-      footnote(c("Source; 2000 Census",
-                 "Source: 2010 Census",
-                 captionSrc("ACS",ACS)),threeparttable=T) 
+ 
     
     #Preparing Text
     if(nchar(placefips) == 0) {
@@ -388,27 +453,7 @@ raceTab1 <- function(listID, ACS) {
     } else {
       OutText <- paste0("  The Race Trend table shows the changing racial and ethnic composition of ",placename," beginning in 2000 and continuing to the present.")
     } 
-  } else {
-    # set vector names
-    tabLATEX <- kable(m.race, col.names = names_spaced,
-                      caption="Race Trend", row.names=FALSE, align=c("l",rep("r",3)),
-                      format="latex", booktabs=TRUE)  %>%
-      kable_styling(latex_options="HOLD_position")  %>%
-      row_spec(0, align = "c") %>%
-      column_spec(1,width = "4in") %>%
-      column_spec(c(2:3),width = "0.5in") %>%
-      add_indent(c(3:9)) %>%
-      add_header_above(header=tblHead) %>%
-      footnote(c("Source: 2010 Census",
-                 captionSrc("ACS",ACS)),threeparttable=T)
-    
-    #Preparing Text
-    if(nchar(placefips) == 0) {
-      OutText <- paste0("The Race Trend table shows the changing racial and ethnic composition of ",ctyname," beginning in 2010 and continuing to the present.")
-    } else {
-      OutText <- paste0("The Race Trend table shows the changing racial and ethnic composition of ",placename," beginning in 2010 and continuing to the present.")
-    }
-  }
+  
   
   outList <- list("Htable" = tabHTML, "data" = race_data,"FlexTable"=FlexOut, "Ltable" = tabLATEX,"text" = OutText)
   return(outList)

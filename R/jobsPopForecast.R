@@ -76,32 +76,87 @@ jobsPopForecast <- function(DBPool,listID, curyr, base=10){
     maxAxis <- axsJ$maxBrk
   }
 
-  Plot <-  ggplot(data=f.plotdata)+
-    geom_line(aes(x=year, y=Jobs, colour= "Jobs", linetype=Series),  size=1.50) +
-    geom_line(aes(x=year, y=Population,color="Population", linetype=Series), size=1.50) +
-    scale_colour_manual(" ", values=c("Jobs" = "#6EC4E8", "Population" = "#00953A")) +
-    scale_y_continuous(limits=c(minAxis,maxAxis), label=comma)+
-    scale_x_continuous(breaks=seq(2010,2040, 5)) +
-    theme_codemog(base_size=base)+
-    labs(title = pltTitle,
-         subtitle = ctyname,
-         caption = captionSrc("SDO",""),
-         x = "Year",
-         y= "Change") +
-    theme(plot.title = element_text(hjust = 0.5, size=14),
-          panel.background = element_rect(fill = "white", colour = "gray50"),
-          panel.grid.major = element_line(colour = "gray80"),
-          axis.text = element_text(size=12),
-          legend.position= "bottom")
+#  Plot <-  ggplot(data=f.plotdata)+
+#    geom_line(aes(x=year, y=Jobs, colour= "Jobs", linetype=Series),  size=1.50) +
+#    geom_line(aes(x=year, y=Population,color="Population", linetype=Series), size=1.50) +
+#    scale_colour_manual(" ", values=c("Jobs" = "#6EC4E8", "Population" = "#00953A")) +
+#    scale_y_continuous(limits=c(minAxis,maxAxis), label=comma)+
+#    scale_x_continuous(breaks=seq(2010,2040, 5)) +
+#    theme_codemog(base_size=base)+
+#    labs(title = pltTitle,
+#         subtitle = ctyname,
+#         caption = captionSrc("SDO",""),
+#         x = "Year",
+#         y= "Change") +
+#    theme(plot.title = element_text(hjust = 0.5, size=14),
+#          panel.background = element_rect(fill = "white", colour = "gray50"),
+#          panel.grid.major = element_line(colour = "gray80"),
+#          axis.text = element_text(size=12),
+#          legend.position= "bottom")
 
+  #Producing the tables
+  names(f.plotdata) <- c("Year","Jobs","Population","Type")
+  f.plotdata[,c(2,3)] <- sapply(f.plotdata[,c(2.3)], function(x) format(round(x,digits=0),big.mark=",",scientific=FALSE))
+  
+  m.forecast <- as.matrix(f.plotdata[seq(1, nrow(f.plotdata), 5), ])
+ 
+  f.flex <- as.data.frame(m.forecast)
+  
+  # set vector names
+  tblHead <- c(ctyname = 4)
+  names(tblHead) <- ctyname
+  
+  names_spaced <- c("Year", "Jobs", "Population","Type")
+  
+  tabHTML <- m.forecast %>%
+    kable(format='html', table.attr='class="cleanTable"',
+          digits=1,
+          row.names=FALSE,
+          align="lrrr",
+          caption="Jobs and Population Forecast",
+          col.names = names_spaced,
+          escape = FALSE)  %>%
+    kable_styling(bootstrap_options = "condensed",full_width = F,font_size = 12) %>%
+    column_spec(1, width="0.5in") %>%
+    column_spec(2, width="0.5in") %>%
+    column_spec(3, width="0.5in") %>%
+    column_spec(4, width="0.5in") %>%
+    add_header_above(header=tblHead) %>%
+    footnote(captionSrc("SDO",""))
+  
+  
+  #LATEX Table
+  # set vector names
+  tabLATEX <- kable(m.forecast, col.names = names_spaced,
+                    caption="Jobs and Population Forecast", 
+                    row.names=FALSE, align="lrrr",
+                    format="latex", booktabs=TRUE)  %>%
+    kable_styling(latex_options="HOLD_position") %>%
+    column_spec(1, width="0.5in") %>%
+    column_spec(2, width="1.5in") %>%
+    column_spec(3, width="1.5in") %>%
+    column_spec(4, width="1.5in") %>%
+    add_header_above(header=tblHead) %>%
+    footnote(captionSrc("SDO",""),threeparttable = T) 
+  
+  #Flextable
+  
+  FlexOut <- regulartable(f.flex) %>% 
+    add_header(Year="Jobs and Population Forecast",top=TRUE) %>%
+    add_footer(Year=captionSrc("SDO","")) %>%
+    merge_at(i=1,j=1:4,part="header") %>%
+    merge_at(i=1,j=1:4,part="footer") %>%
+    align(i=1, j=1, align="left",part="header") %>%
+    width(j=1:4, width=1.0) 
+  
+    
 
-  # producing the table...
+  # producing the Dataset
  
   f.plotdata$geoname <- ctyname
   f.plotdata <- f.plotdata[,c(5,1,4,2,3)]
-  names(f.plotdata) <- c("Year","Place","Type", "Jobs","Population")
-  f.plotdata$Jobs <- format(round(f.plotdata$Jobs,digits=0),big.mark=",")
-  f.plotdata$Population <- format(round(f.plotdata$Population,digits=0),big.mark=",")
+  names(f.plotdata) <- c("Place","Year","Type", "Jobs","Population")
+  
 
 #Text
   OutText <- paste0("The total jobs forecast and population forecast are for ",ctyname," shown here.")
@@ -112,7 +167,7 @@ jobsPopForecast <- function(DBPool,listID, curyr, base=10){
     OutText <- paste0(OutText," Note: Statistics for the counties in the Denver Metropolitan Statistical Area (Adams, Arapahoe, Boulder, Broomfield, Denver, Douglas and Jefferson) are combined in this section.") 
   }
   
-  outList <- list("plot" = Plot, "data" = f.plotdata,"text" = OutText)
+  outList <- list("Htable"= tabHTML,"Ltable" = tabLATEX , "FlexTable" = FlexOut, "data" = f.plotdata,"text" = OutText)
 
 
   return(outList)

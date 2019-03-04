@@ -156,13 +156,15 @@ if(nchar(placefips) != 0) {
   names_spaced <- c("Location","Count","Percent")
   
   if(nchar(placefips) != 0) {
-  capstr1 <- paste0("Employees in ",placename," living elsewhere")
-  capstr2 <- paste0("Residents of ",placename," working elsewhere")
+    capstr1 <- paste0("Employees in ",placename," living elsewhere")
+    capstr2 <- paste0("Residents of ",placename," working elsewhere")
+    tabCap <- paste0("Commuting Patterns for ",placename)
   } else {
     capstr1 <- paste0("Employees in ",ctyname," living elsewhere")
     capstr2 <- paste0("Residents of ",ctyname," working elsewhere")
+    tabCap <- paste0("Commuting Patterns for ",ctyname)
   }
-
+  
   m.work <- as.matrix(f.work_fin)
   m.live <- as.matrix(f.live_fin)
 
@@ -178,29 +180,6 @@ if(nchar(placefips) != 0) {
     column_spec(2, width = "1in") %>%
     column_spec(3, width = "1in") %>%
     footnote(captionSrc("LODES",""))
-  
- #Building FlexTable
-  Ft1 <- data.frame(m.work)
-  names(Ft1) <- c("V1","V2","V3")
-  FlexWork <- regulartable(Ft1)
-  
-  FlexWork <- set_header_labels(FlexWork, V1 = "Location", 
-                            V2="Count", V3="Percent"
-                              )
-  
-  FlexWork <- add_header(FlexWork,V1=capstr2,top=TRUE)
-  FlexWork <- add_footer(FlexWork,V1=captionSrc("LODES",""))
-  FlexWork <- merge_at(FlexWork,i=1, j = 1:3, part = "header")
-  FlexWork <- merge_at(FlexWork,i=1, j = 1:3, part = "footer")
-  FlexWork <- align(FlexWork,i=1, align="left",part="header")
-  FlexWork <- align(FlexWork,i=2, j=1, align="left",part="header")
-  FlexWork <- align(FlexWork,i=2, j=2:3, align="center",part="header")
-  FlexWork <- align(FlexWork,i=1, align="left",part="footer")
-  FlexWork <- align(FlexWork, j=1, align="left", part="body")
-  FlexWork <- autofit(FlexWork)
-  FlexWork <- width(FlexWork,j=1, width=3)
-  FlexWork <- width(FlexWork,j=2:3, width=1)
-  
 
   #formatting Live output table
   liveTabH <- m.live %>%
@@ -216,53 +195,56 @@ if(nchar(placefips) != 0) {
     column_spec(3, width = "1in") %>%
     footnote(captionSrc("LODES",""))
   
-  #Building FlexTable
-  Ft2 <- data.frame(m.live)
-  names(Ft2) <- c("V1","V2","V3")
-  FlexLive <- regulartable(Ft2)
-  
-  FlexLive <- set_header_labels(FlexLive, V1 = "Location", 
-                                V2="Count", V3="Percent"
-  )
-  
-  
-  FlexLive <- add_header(FlexLive,V1=capstr1,top=TRUE)
-  FlexLive <- add_footer(FlexLive,V1=captionSrc("LODES",""))
-  FlexLive <- merge_at(FlexLive,i=1, j = 1:3, part = "header")
-  FlexLive <- merge_at(FlexLive,i=1, j = 1:3, part = "footer")
-  FlexLive <- align(FlexLive,i=1, align="left",part="header")
-  FlexLive <- align(FlexLive,i=2, j=1, align="left",part="header")
-  FlexLive <- align(FlexLive,i=2, j=2:3, align="center",part="header")
-  FlexLive <- align(FlexLive,i=1, align="left",part="footer")
-  FlexLive <- align(FlexLive, j=1, align="left", part="body")
-  FlexLive <- autofit(FlexLive)
-  FlexLive <- width(FlexLive,j=1, width=3)
-  FlexLive <- width(FlexLive,j=2:3, width=1)
-
-  
-
-  workTabL <-kable(m.work,
-                  col.names = names_spaced,
+ #Creating Latex and Flextables
+ m.comb <- cbind(m.work,m.live)
+ 
+ # Formatting Work Output table.
+ names_spacedL <- c("Location","Count","Percent","Location","Count","Percent")
+ 
+ tblHead <- c(capstr1 = 3,capstr2 = 3)
+ # set vector names
+ names(tblHead) <- c(capstr1,capstr2)
+ 
+  combTabL <-kable(m.comb,
+                  col.names = names_spacedL,
                  row.names=FALSE,
-                 align='lrr',
-                 caption=capstr2,
+                 align='lrrlrr',
+                 caption=tabCap,
                  format="latex", booktabs=TRUE) %>%
-    kable_styling(latex_options="HOLD_position",font_size=10)  %>%
-    row_spec(0, align = "c") %>%
+    kable_styling(latex_options="hold_position",font_size=9)  %>%
+    column_spec(1, width="2in") %>%
+    column_spec(2, width = "0.5in") %>%
+    column_spec(3, width = "0.5in") %>%
+    column_spec(4, width="2in") %>%
+    column_spec(5, width = "0.5in") %>%
+    column_spec(6, width = "0.5in") %>%
+    add_header_above(header=tblHead) %>%
     footnote(captionSrc("LODES",""),threeparttable = T)
 
-
-  liveTabL <-kable(m.live,
-                  col.names = names_spaced,
-                  row.names=FALSE,
-                  align='lrr',
-                  caption=capstr1,
-                  format="latex", booktabs=TRUE) %>%
-    kable_styling(latex_options="HOLD_position",font_size=10)  %>%
-    row_spec(0, align = "c") %>%
-    footnote(captionSrc("LODES",""),threeparttable = T)
   
-  
+ 
+  #Building FlexTable
+  Ft1 <- data.frame(m.comb)
+  names(Ft1) <- c("V1","V2","V3","V4","V5","V6")
+  Flexcomb <- regulartable(Ft1) %>%
+              set_header_labels(V1 = "Location", V2="Count", V3="Percent",
+                                V4 = "Location", V5="Count", V6="Percent" ) %>%
+              add_header(V1=capstr1,V4=capstr2,top=TRUE) %>%
+              add_footer(V1=captionSrc("LODES","")) %>%
+              merge_at(i=1, j = 1:3, part = "header") %>%
+              merge_at(i=1, j = 4:6, part = "header") %>%
+              merge_at(i=1, j = 1:6, part = "footer") %>%
+              align(j=2:3, align="center", part="header") %>%
+              align(i=2, j=1, align="left",part="header") %>%
+              align(i=2, j=2:3, align="center",part="header") %>%
+              align(i=1, align="left",part="footer") %>%
+              align(j=1, align="left", part="body") %>%
+              align(j=4, align="left", part="body") %>%
+              width(j=1, width=2.5) %>%
+              width(j=2:3, width=0.8) %>%
+              width(j=4, width=2.5) %>%
+              width(j=5:6, width=0.8) 
+ 
   if(nchar(placefips) != 0) {
        f.live_fin$Geography <- placename
        f.work_fin$Geography <- placename
@@ -279,7 +261,7 @@ if(nchar(placefips) != 0) {
   # Binding List for Output
   outList <- list("plot" = outVenn, "liveTabH" = liveTabH, "data1" = f.live_fin,
                   "workTabH" = workTabH, "data2" = f.work_fin,
-                  "FlexWork" = FlexWork, "FlexLive" = FlexLive, "workTabL" = workTabL,"liveTabL" = liveTabL)
+                  "Flexcomb" = Flexcomb, "combTabL" = combTabL)
  
   return(outList)
   }

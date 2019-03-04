@@ -152,11 +152,12 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
     tpopchngc <- tpop2c - tpop1c   # Pop Change value
     
     jobsVal <-  f.Jobsc %>% summarize(totalJobs = sum(total_jobs)) #County
-    jobsValc <- jobsVal$totalJobs    
+    jobsValc <- jobsVal$totalJobs   
+    
     
     hhincc <- codemog_api(data="b19013",db=ACS, geonum=paste("1", state, ctyfips, sep=""), meta="no")
     medhhincc <- hhincc$b19013001
-    
+ 
     MedHHValuec <- codemog_api(data="b25077",db=ACS, geonum=paste("1", state, ctyfips, sep=""), meta="no")
     medhhvalc <- MedHHValuec$b25077001
     
@@ -169,14 +170,14 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
     countyData <- c(tpop2c,tpopchngc,jobsValc,medhhincc,medhhvalc,povertyc,nativec)
     
     # Building Municipal Data
-    
+ 
     if(listID$multiCty == "F") {
       #Fixing NA Values
       tpop1m <- ifelse(is.na(f.tPopyr1p$totalpopulation),0,f.tPopyr1p$totalpopulation)  # Pop 2010
       tpop2m <- ifelse(is.na(f.tPopyr2p$totalpopulation),0,f.tPopyr2p$totalpopulation)  # Pop Current Year
       tpopchngm <- tpop2m - tpop1m   # Pop Change value
       
-     jobsValm <-  ifelse(f.Jobsp$jobs == -9,"",f.Jobsp$jobs)  #The  Total Jobs Value
+      jobsValm <-  ifelse(f.Jobsp$jobs == -9,"",f.Jobsp$jobs)  #The  Total Jobs Value
       
       hhincm <- codemog_api(data="b19013",db=ACS, geonum=paste("1", state, placefips, sep=""), meta="no")
       medhhincm <- hhincm$b19013001
@@ -218,7 +219,7 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
       
       muniData <- c(tpop2m,tpopchngm,jobsValm,medhhincm,medhhvalm,povertym,nativem)
     }  
-    
+     
   }
   
   #state Values
@@ -282,14 +283,15 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
   if(lvl == "Municipalities"){
     
     # Municipality output
+    
     outTab[1,nCol] <- format(as.numeric(muniData[1]),nsmall=0, big.mark=",")
     outTab[2,nCol] <- format(as.numeric(muniData[2]),nsmall=0, big.mark=",")
     outTab[3,nCol] <- format(round(as.numeric(muniData[3]),digits=0),nsmall=0, big.mark=",")
-    outTab[3,nCol] <- ifelse(outTab[3,nCol] == "NA","",outTab[3,nCol])  # Fix for missing jobs data
     outTab[4,nCol] <- paste0("$",format(as.numeric(muniData[4]),nsmall=0, big.mark=","))
     outTab[5,nCol] <- paste0("$",format(as.numeric(muniData[5]),nsmall=0, big.mark=","))
     outTab[6,nCol] <- muniData[6]
     outTab[7,nCol] <- muniData[7]
+    outTab[3,nCol] <- ifelse(outTab[3,nCol] == "NA","",outTab[3,nCol])
     nCol <- nCol + 1
     
     #County

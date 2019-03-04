@@ -19,7 +19,7 @@ OOHouse=function(listID, ACS, state="08"){
  #   placefips <- ""
  #   placename <- ""
  # }
-  
+
 if(nchar(placefips) == 0) {
   # Raw Place data
   f.b25033 <- codemog_api(data="b25033", db=ACS, geonum=paste0("1", state, ctyfips),meta="no") # Population by housing type

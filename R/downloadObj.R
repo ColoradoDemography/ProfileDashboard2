@@ -33,9 +33,10 @@ downloadObj <- function(input, output, session, place, oname, dobj) {
                    "popa4" = " Migration by Age",
 
                    "popc1" = " Income",
-                   "popc2" = " Educational Attainment",
-                   "popc3" = " Race Trend",
-                   "popc4" = " Race Comparison",
+                   "popc2" = " Househould Income Sources",
+                   "popc3" = " Educational Attainment",
+                   "popc4" = " Race Trend",
+                   
 
                    "poph1" = " Housing Forecast",
                    "poph2" = " Housing Type",
@@ -45,8 +46,8 @@ downloadObj <- function(input, output, session, place, oname, dobj) {
                    "poph6" = " Rental Housing Values",
 
                    "popt1" = " Commuting Venn",
-                   "popt2" = " Commuting Live",
-                   "popt3" = " Commuting Work",
+                   "popt2" = " Commuting",
+                   "popt3" = " Commuting",
                    "popt4" = " Jobs and Migration",
 
                    "popei1" = " Jobs Forecast",
@@ -57,7 +58,7 @@ downloadObj <- function(input, output, session, place, oname, dobj) {
                    "popem1" = " Jobs and Pop Forecast",
                    "popem2" = " Avg Weekly Wage",
                    "popem3" = " Residential Labor Force Forecast",
-                   "popem4" = " Househould Income Sources"
+                   "popem4" = " Number of Firms"
 
   )
 

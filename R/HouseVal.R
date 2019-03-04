@@ -319,7 +319,7 @@ HouseVal <- function(listID, ACS, state="08"){
       PCT_RT_50_moe = percent(PROP_RT_50_moe*100)
     )
     
-    
+
     f.ACSPL_val <- f.ACSPL[,c(2,281:294)]
     f.ACSPL_moe <- f.ACSPL[,c(2,295:308)]
     
@@ -502,7 +502,7 @@ HouseVal <- function(listID, ACS, state="08"){
       kable_styling(latex_options="HOLD_position",font_size=10)  %>%
       row_spec(0, align = "c") %>%
       column_spec(1, width = "3in") %>%
-      column_spec(2:6, width = "0.33in") %>%
+      column_spec(2:6, width = "0.4in") %>%
       add_header_above(header=tblHead1) %>%
       footnote(captionSrc("ACS",ACS))
     
@@ -514,7 +514,7 @@ HouseVal <- function(listID, ACS, state="08"){
       kable_styling(latex_options="HOLD_position",font_size=10) %>%
       row_spec(0, align = "c") %>%
       column_spec(1, width = "3in") %>%
-      column_spec(2:6, width = "0.33in") %>%
+      column_spec(2:6, width = "0.4in") %>%
       add_header_above(header=tblHead1) %>%
       footnote(captionSrc("ACS",ACS))
     
