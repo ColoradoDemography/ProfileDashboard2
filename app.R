@@ -215,7 +215,7 @@ ui <-
                  ), #dashboardSidebar
                  dashboardBody(  tags$head( 
                    tags$meta(name="keywords", content="Colorado, demographic, county, community, municiplaity, city, population, housing, household, age, median income, jobs, wages"),
-                   #includeScript("www/dL_init.js"),
+                   includeScript("www/dL_init.js"),
                    includeScript("www/tag_manager.js"), #writes GTM connection
                    tags$link(rel = "stylesheet", type = "text/css", href = "dashboard.css"),  #Link to CSS...
                    tags$title("Colorado Demographic Profiles") #,
