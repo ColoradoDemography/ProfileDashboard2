@@ -61,7 +61,7 @@ jobsPlot=function(DBPool,listID, maxyr,base=10){
  
 
   jobs_data$Geography <- ctyname 
-  jobs_data <- jobs_data[,c(5,2,4)]
+  jobs_data <- jobs_data[,c(10,9,8)]
   jobs_data[3] <- format(jobs_data[3],big.mark=",",scientific=FALSE)
   names(jobs_data) <- c("Geography","Year","Jobs Estimate")
   
