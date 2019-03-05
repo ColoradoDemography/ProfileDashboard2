@@ -32,8 +32,6 @@ jobsPopForecast <- function(DBPool,listID, curyr, base=10){
   }
 
   jobsSQL <- paste0("SELECT * FROM estimates.jobs_forecast WHERE countyfips = '",as.numeric(ctyfips), "';")
-
-
   
   f.totalJobs <- dbGetQuery(DBPool, jobsSQL)
 
@@ -49,70 +47,50 @@ jobsPopForecast <- function(DBPool,listID, curyr, base=10){
   f.totalPop$type <- "Population"
 
 
-  x <- as.data.frame(f.totalJobs[,c(3,4)])
-  names(x) <- c("year","Jobs")
+  f.totalJobs <- f.totalJobs[,c(3,4)]
+  names(f.totalJobs) <- c("year","Jobs")
 
-  y <- as.data.frame(f.totalPop[,c(1,3)])
-  names(y) <- c("year","Population")
-  f.plotdata <- left_join(x,y,by="year")
+  f.totalPop <- f.totalPop[,c(1,3)]
+  names(f.totalPop) <- c("year","Population")
+  f.plotdata <- left_join(f.totalJobs,f.totalPop,by="year")
  
   f.plotdata$Series <-  ifelse(f.plotdata$year > curyr,"Forecast","Estimate")
-  
-  
- 
+
   f.plotdata <- f.plotdata[which(f.plotdata$year >= 2010 & f.plotdata$year <= 2040),]
+  f.plotdata$JobGrowth <- percent(signif((((f.plotdata$Jobs/lag(f.plotdata$Jobs))^(1/(f.plotdata$year-lag(f.plotdata$year)))) -1)*100),digits=1)
+  f.plotdata$PopGrowth <- percent(signif((((f.plotdata$Population/lag(f.plotdata$Population))^(1/(f.plotdata$year-lag(f.plotdata$year)))) -1)*100),digits=1)
   
+  f.plotdata$JobGrowth <- gsub("NA%","",f.plotdata$JobGrowth)
+  f.plotdata$PopGrowth <- gsub("NA%","",f.plotdata$PopGrowth)
+  
+  f.plotdata$Jobs <- format(round(f.plotdata$Jobs,digits=0),big.mark=",",scientific=FALSE)
+  f.plotdata$Population <- format(round(f.plotdata$Population,digits=0),big.mark=",",scientific=FALSE)
 
-  pltTitle <- paste0("Forecast Change in Jobs and Population\n",as.character(min(f.plotdata$year))," to ",as.character(max(f.plotdata$year)))
-
-  axsP <- setAxis(f.plotdata$Population)
-  axsJ <- setAxis(f.plotdata$Jobs)
-  #Selecting the Axis boundaries
-  if(axsP$maxBrk > axsJ$maxBrk) {
-    minAxis <- axsJ$minBrk
-    maxAxis <- axsP$maxBrk
-  } else {
-    minAxis <- axsP$minBrk
-    maxAxis <- axsJ$maxBrk
-  }
-
-#  Plot <-  ggplot(data=f.plotdata)+
-#    geom_line(aes(x=year, y=Jobs, colour= "Jobs", linetype=Series),  size=1.50) +
-#    geom_line(aes(x=year, y=Population,color="Population", linetype=Series), size=1.50) +
-#    scale_colour_manual(" ", values=c("Jobs" = "#6EC4E8", "Population" = "#00953A")) +
-#    scale_y_continuous(limits=c(minAxis,maxAxis), label=comma)+
-#    scale_x_continuous(breaks=seq(2010,2040, 5)) +
-#    theme_codemog(base_size=base)+
-#    labs(title = pltTitle,
-#         subtitle = ctyname,
-#         caption = captionSrc("SDO",""),
-#         x = "Year",
-#         y= "Change") +
-#    theme(plot.title = element_text(hjust = 0.5, size=14),
-#          panel.background = element_rect(fill = "white", colour = "gray50"),
-#          panel.grid.major = element_line(colour = "gray80"),
-#          axis.text = element_text(size=12),
-#          legend.position= "bottom")
-
+  
+  f.plotdata <-  f.plotdata[,c(1,4,2,5,3,6)]
+  
   #Producing the tables
-  names(f.plotdata) <- c("Year","Jobs","Population","Type")
-  f.plotdata[,c(2,3)] <- sapply(f.plotdata[,c(2.3)], function(x) format(round(x,digits=0),big.mark=",",scientific=FALSE))
+  names(f.plotdata) <- c("Year","Type", "Jobs", "Annual Growth Rate: Jobs","Population","Annual Growth Rate: Population")
+  
+  
+  
+  
   
   m.forecast <- as.matrix(f.plotdata[seq(1, nrow(f.plotdata), 5), ])
  
   f.flex <- as.data.frame(m.forecast)
   
   # set vector names
-  tblHead <- c(ctyname = 4)
+  tblHead <- c(ctyname = 6)
   names(tblHead) <- ctyname
   
-  names_spaced <- c("Year", "Jobs", "Population","Type")
+  names_spaced <- c("Year","Type", "Jobs", "Annual Growth Rate: Jobs","Population","Annual Growth Rate: Population")
   
   tabHTML <- m.forecast %>%
     kable(format='html', table.attr='class="cleanTable"',
           digits=1,
           row.names=FALSE,
-          align="lrrr",
+          align="llrrrr",
           caption="Jobs and Population Forecast",
           col.names = names_spaced,
           escape = FALSE)  %>%
@@ -121,6 +99,8 @@ jobsPopForecast <- function(DBPool,listID, curyr, base=10){
     column_spec(2, width="0.5in") %>%
     column_spec(3, width="0.5in") %>%
     column_spec(4, width="0.5in") %>%
+    column_spec(5, width="0.5in") %>%
+    column_spec(6, width="0.5in") %>%
     add_header_above(header=tblHead) %>%
     footnote(captionSrc("SDO",""))
   
@@ -129,33 +109,35 @@ jobsPopForecast <- function(DBPool,listID, curyr, base=10){
   # set vector names
   tabLATEX <- kable(m.forecast, col.names = names_spaced,
                     caption="Jobs and Population Forecast", 
-                    row.names=FALSE, align="lrrr",
+                    row.names=FALSE, align="llrrrrr",
                     format="latex", booktabs=TRUE)  %>%
     kable_styling(latex_options="HOLD_position") %>%
     column_spec(1, width="0.5in") %>%
-    column_spec(2, width="1.5in") %>%
-    column_spec(3, width="1.5in") %>%
-    column_spec(4, width="1.5in") %>%
+    column_spec(2, width="0.5in") %>%
+    column_spec(3, width="0.5in") %>%
+    column_spec(4, width="0.5in") %>%
+    column_spec(5, width="0.5in") %>%
+    column_spec(6, width="0.5in") %>%
     add_header_above(header=tblHead) %>%
     footnote(captionSrc("SDO",""),threeparttable = T) 
   
   #Flextable
   
   FlexOut <- regulartable(f.flex) %>% 
-    add_header(Year="Jobs and Population Forecast",top=TRUE) %>%
+    add_header(Year=paste0("Jobs and Population Forecast: ",ctyname),top=TRUE) %>%
     add_footer(Year=captionSrc("SDO","")) %>%
-    merge_at(i=1,j=1:4,part="header") %>%
-    merge_at(i=1,j=1:4,part="footer") %>%
+    merge_at(i=1,j=1:6,part="header") %>%
+    merge_at(i=1,j=1:6,part="footer") %>%
     align(i=1, j=1, align="left",part="header") %>%
-    width(j=1:4, width=1.0) 
+    width(j=1:6, width=1.0) 
   
     
 
   # producing the Dataset
- 
-  f.plotdata$geoname <- ctyname
-  f.plotdata <- f.plotdata[,c(5,1,4,2,3)]
-  names(f.plotdata) <- c("Place","Year","Type", "Jobs","Population")
+
+  f.flex$geoname <- ctyname
+  f.flex <- f.flex[,c(7,1:6)]
+  names(f.flex) <- c("Place", "Year","Type", "Jobs", "Annual Growth Rate: Jobs","Population","Annual Growth Rate: Population")
   
 
 #Text
@@ -167,7 +149,7 @@ jobsPopForecast <- function(DBPool,listID, curyr, base=10){
     OutText <- paste0(OutText," Note: Statistics for the counties in the Denver Metropolitan Statistical Area (Adams, Arapahoe, Boulder, Broomfield, Denver, Douglas and Jefferson) are combined in this section.") 
   }
   
-  outList <- list("Htable"= tabHTML,"Ltable" = tabLATEX , "FlexTable" = FlexOut, "data" = f.plotdata,"text" = OutText)
+  outList <- list("Htable"= tabHTML,"Ltable" = tabLATEX , "FlexTable" = FlexOut, "data" = f.flex,"text" = OutText)
 
 
   return(outList)

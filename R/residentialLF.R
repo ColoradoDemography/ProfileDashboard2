@@ -24,11 +24,10 @@ residentialLF <- function(DBPool,listID, curyr, base=10){
 
 
   LFSQLPL <- paste0("SELECT * FROM estimates.labor_force_participation WHERE area_code = ",as.numeric(ctyfips), ";")
-  LFSQLST <- paste0("SELECT * FROM estimates.labor_force_participation WHERE area_code = 0;")
+  
 
   # Read data files
   f.LFPlace <- dbGetQuery(DBPool, LFSQLPL)
-  f.LFState <- dbGetQuery(DBPool, LFSQLST)
 
 
   # Summing by Participation Year
@@ -36,94 +35,50 @@ residentialLF <- function(DBPool,listID, curyr, base=10){
   f.LFPlaceSum <- f.LFPlace %>%
     group_by(population_year) %>%
     summarize(LForce = sum(laborforce),
-              Pop16P = sum(cni_pop_16pl))
+              Pop16P = sum(cni_pop_16pl)) %>% 
+            mutate(LFGrowth=percent(signif((((LForce/lag(LForce))^(1/(population_year-lag(population_year)))) -1)*100),digits=1),
+                   P16Growth=percent(signif((((Pop16P/lag(Pop16P))^(1/(population_year-lag(population_year)))) -1)*100),digits=1))
   
   f.LFPlaceSum$Series <-  ifelse(f.LFPlaceSum$population_year > curyr,"Forecast","Estimate")
- 
+  f.LFPlaceSum <-  f.LFPlaceSum[which( f.LFPlaceSum$population_year >= 2010 &  f.LFPlaceSum$population_year <= 2040),]
 
 
-  # Creating 10-year data file
-  f.LFPlaceSum$year10 <- f.LFPlaceSum$population_year - (f.LFPlaceSum$population_year %%10)
-  f.LFPlaceSum10 <- f.LFPlaceSum %>%
-    group_by(year10) %>%
-    summarize(LForce = sum(LForce),
-              Pop16P = sum(Pop16P)) %>%
-    mutate(PctPart = (LForce/Pop16P) * 100)
+  f.LFPlaceSum$LFGrowth <- gsub("NA%","", f.LFPlaceSum$LFGrowth)
+  f.LFPlaceSum$P16Growth <- gsub("NA%","", f.LFPlaceSum$P16Growth)
 
-
-  f.LFStateSum <- f.LFState %>%
-    group_by(population_year) %>%
-    summarize(LForce = sum(laborforce),
-              Pop16P = sum(cni_pop_16pl))
-
-  # Creating 10-year data file
-  f.LFStateSum$year10 <- f.LFStateSum$population_year - (f.LFStateSum$population_year %%10)
-  f.LFStateSum10 <- f.LFStateSum %>%
-    group_by(year10) %>%
-    summarize(LForce = sum(LForce),
-              Pop16P = sum(Pop16P)) %>%
-    mutate(PctPart = (LForce/Pop16P) * 100)
-
-  # Building Line Chart
-  pltTitle <- "Forecast Resident Labor Force and\nPopulation, Age 16 +"
-
-   minval <- min(f.LFPlaceSum$LForce)
-   maxval <- max(f.LFPlaceSum$Pop16P)
-   yBrk <- pretty(minval:maxval)
-
-#  LFLine <-  ggplot(data=f.LFPlaceSum) +
-#    geom_line(aes(x=population_year, y=Pop16P, colour= "Population 16 +",linetype=Series), size=1.50) +
-#    geom_line(aes(x=population_year, y=LForce,color="Labor Force",linetype=Series), size=1.50) +
-#    scale_colour_manual(" ", values=c("Labor Force" = "#6EC4E8", "Population 16 +" = "#00953A")) +
-#    scale_x_continuous(breaks=seq(2010,2040, 5)) +
-#    scale_y_continuous(limits=c(minval,maxval), breaks=yBrk, label=comma)+
-#    theme_codemog(base_size=base)+
-#    labs(title = pltTitle,
-#         subtitle = ctyname,
-#         caption = captionSrc("SDO",""),
-#         x = "Year",
-#         y= "Population") +
-#    theme(plot.title = element_text(hjust = 0.5, size=16),
-#          panel.background = element_rect(fill = "white", colour = "gray50"),
-#          panel.grid.major = element_line(colour = "gray80"),
-#          axis.text = element_text(size=12),
-#          legend.position= "bottom")
-
+  f.LFPlaceSum$LForce <-format(round(f.LFPlaceSum$LForce,digits=0),big.mark=",",scientific=FALSE)
+  f.LFPlaceSum$Pop16P <-format(round(f.LFPlaceSum$Pop16P,digits=0),big.mark=",",scientific=FALSE)
+  
+  f.LFPlaceSum <-  f.LFPlaceSum[,c(1,6,2,4,3,5)]
+  names(f.LFPlaceSum) <- c("Year","Type","Labor Force","Annual Growth Rate: Labor Force","Persons Age 16+","Annual Growth Rate: Persons Age 16+")
+  m.forecast <- as.matrix(f.LFPlaceSum[seq(1, nrow(f.LFPlaceSum), 5), ])
+  
+  f.flex <- as.data.frame(m.forecast)
+  
    #Producing the tables
-
-   #line data
-   f.LFPlaceSum[,c(2,3)] <- sapply(f.LFPlaceSum[,c(2,3)], function(x) format(round(x,digits=0),big.mark=",",scientific=FALSE))
-   
-   f.LFPlaceFin <- f.LFPlaceSum
-   f.LFPlaceTab <- f.LFPlaceSum[,c(1:3)]
-   
-   f.LFPlaceFin$geoname <- ctyname
-   f.LFPlaceFin <- f.LFPlaceFin[,c(6,1:3)]
-   names(f.LFPlaceFin) <- c("Geography","Year", "Persons in Labor Force", "Persons Age 16 +")
-   
-   names(f.LFPlaceTab) <- c("V1","V2","V3")
-   m.forecast <- as.matrix(f.LFPlaceTab[seq(1, nrow(f.LFPlaceTab), 5), ])
- 
-   f.flex <- as.data.frame(m.forecast)
+   pltTitle <- "Forecast Resident Labor Force and Population, Age 16 +"
    
    # set vector names
-   tblHead <- c(ctyname = 3)
+   tblHead <- c(ctyname = 6)
    names(tblHead) <- ctyname
    
-   names_spaced <- c("Year", "Persons in Labor Force", "Persons Age 16 +")
+   names_spaced <- c("Year","Type","Labor Force","Annual Growth Rate: Labor Force","Persons Age 16+","Annual Growth Rate: Persons Age 16+")
    
    tabHTML <- m.forecast %>%
      kable(format='html', table.attr='class="cleanTable"',
            digits=1,
            row.names=FALSE,
-           align="lrrr",
+           align="llrrrr",
            caption= pltTitle,
            col.names = names_spaced,
            escape = FALSE)  %>%
      kable_styling(bootstrap_options = "condensed",full_width = F,font_size = 12) %>%
      column_spec(1, width="0.5in") %>%
-     column_spec(2, width="2in") %>%
-     column_spec(3, width="2in") %>%
+     column_spec(2, width="0.5in") %>%
+     column_spec(3, width="1in") %>%
+     column_spec(4, width="1in") %>%
+     column_spec(5, width="1in") %>%
+     column_spec(6, width="1in") %>%
      add_header_above(header=tblHead) %>%
      footnote(captionSrc("SDO",""))
    
@@ -132,33 +87,38 @@ residentialLF <- function(DBPool,listID, curyr, base=10){
    # set vector names
    tabLATEX <- kable(m.forecast, col.names = names_spaced,
                      caption= pltTitle, 
-                     row.names=FALSE, align="lrrr",
+                     row.names=FALSE, align="llrrrr",
                      format="latex", booktabs=TRUE)  %>%
      kable_styling(latex_options="HOLD_position") %>%
      column_spec(1, width="0.5in") %>%
-     column_spec(2, width="2in") %>%
-     column_spec(3, width="2in") %>%
+     column_spec(2, width="0.5in") %>%
+     column_spec(3, width="1in") %>%
+     column_spec(4, width="1in") %>%
+     column_spec(5, width="1in") %>%
+     column_spec(6, width="1in") %>%
      add_header_above(header=tblHead) %>%
      footnote(captionSrc("SDO",""),threeparttable = T) 
    
    #Flextable
    
    FlexOut <- regulartable(f.flex) %>% 
-     set_header_labels(V1 = "Year",
-                       V2 = "Persons in Labor Force",
-                       V3 = "Persons Age 16+")  %>%
-     add_header(V1=pltTitle,top=TRUE) %>%
-     add_footer(V1=captionSrc("SDO","")) %>%
+     add_header(Year=paste0(pltTitle,": ",ctyname),top=TRUE) %>%
+     add_footer(Year=captionSrc("SDO","")) %>%
      merge_at(i=1,j=1:3,part="header") %>%
      merge_at(i=1,j=1:3,part="footer") %>%
      align(i=1, j=1, align="left",part="header") %>%
-     width(j=1:3, width=1.0) 
+     width(j=1:6, width=1.0) 
 
 
+   # Final Data
+   f.flex$geoname <- ctyname
+   f.flex <- f.flex[,c(7,1:6)]
+   names(f.flex) <- c("Place","Year","Type","Labor Force","Annual Growth Rate: Labor Force","Persons Age 16+","Annual Growth Rate: Persons Age 16+")
+   
 #Text
   OutText <- paste0("This table compares the forecast residential labor force to the forecast population of person age 16 and older for ",ctyname,".")
 
-  outList <- list("Htable"= tabHTML,"Ltable" = tabLATEX , "FlexTable" = FlexOut, "data" = f.LFPlaceFin, "text" = OutText)
+  outList <- list("Htable"= tabHTML,"Ltable" = tabLATEX , "FlexTable" = FlexOut, "data" = f.flex, "text" = OutText)
 
   return(outList)
 }
