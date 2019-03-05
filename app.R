@@ -92,6 +92,15 @@ source("R/firmcount.R")
 #Production
  tPath <- "/tmp"  
 
+# Locations for Google Analtyics Java Script Files
+# Local/ Development
+
+# initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
+# tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
+
+#Production
+ initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
+tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
 
 # Current ACS database
 curACS <- "acs1317"
@@ -222,8 +231,8 @@ ui <-
                  ), #dashboardSidebar
                  dashboardBody(  tags$head( 
                    tags$meta(name="keywords", content="Colorado, demographic, county, community, municiplaity, city, population, housing, household, age, median income, jobs, wages"),
-                   #includeScript("www/dL_init.js"),
-                   includeScript("www/tag_manager.js"), #writes GTM connection
+                   includeScript(initJS),
+                   includeScript(tagManJS), #writes GTM connection
                    tags$link(rel = "stylesheet", type = "text/css", href = "dashboard.css"),  #Link to CSS...
                    tags$title("Colorado Demographic Profiles") #,
                    # includeScript("www/dataL.js") # This is the linkage to the dataLayer Output code
@@ -1226,8 +1235,8 @@ server <- function(input, output, session) {
         #Generate Report
         #knitting file and copy to final document
         
-       # tempRMD <- fixPath(fileMat[88])  #Testing
-       # tempPDF <- fixPath(fileMat[89]) 
+      #  tempRMD <- fixPath(fileMat[88])  #Testing
+      #  tempPDF <- fixPath(fileMat[89]) 
         
          tempRMD <- fileMat[88]  
          tempPDF <- fileMat[89] 
