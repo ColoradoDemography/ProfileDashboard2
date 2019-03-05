@@ -635,16 +635,16 @@ if("emply" %in% unlist(outChk)) {
 ```
 
 ```{r employment8}
-if("emply" %in% unlist(outChk)) {
-  cat("\\FloatBarrier\n")
-  popem4p <- fixPath(filemat[86])   #Firms Plot
-  include_graphics(popem4p)
-}
+#if("emply" %in% unlist(outChk)) {
+#  cat("\\FloatBarrier\n")
+#  popem4p <- fixPath(filemat[86])   #Firms Plot
+#  include_graphics(popem4p)
+#}
 ```
 
 ```{r employment9}
-if("emply" %in% unlist(outChk)) {
-  cat("\\FloatBarrier\n")
-  cat(dget(filemat[87]))
-}
+#if("emply" %in% unlist(outChk)) {
+#  cat("\\FloatBarrier\n")
+#  cat(dget(filemat[87]))
+#}
 ```
