@@ -87,20 +87,20 @@ source("R/firmcount.R")
 # The GLOBAL Variables  Add Additional lists items as sections get defined
 #File Locations ALSO LOOK AT LINE IN THE PDF OUTPUT CODE  LINE 1229
 # Local/Development
-# tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
+ tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
 
 #Production
- tPath <- "/tmp"  
+# tPath <- "/tmp"  
 
 # Locations for Google Analtyics Java Script Files
 # Local/ Development
 
-# initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
-# tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
+ initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
+ tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
 
 #Production
- initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
- tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
+# initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
+# tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
 
 # Current ACS database
 curACS <- "acs1317"
@@ -1062,8 +1062,8 @@ server <- function(input, output, session) {
                                   downloadObjUI("popei1plot"),  downloadObjUI("popei1data"))
           
           popei2.info <- tags$div(boxContent(title= "Jobs by Sector / Economic Industry Mix",
-                                             description= "Comparing the share of jobs by industry to a larger area helps to get a better understanding of the industries that higher or lower employment concentrations.  The industry mix can also help inform the average weekly wages as industries such as retail trade or 
-                                             accommodation and food pay considerably lower wages than professional and technical services or mining.",
+                                             description= "Comparing the share of jobs by industry to a larger area helps to get a better understanding of the industries with higher or lower employment concentrations.  The industry mix can also help inform the average weekly wages as industries such as retail trade or 
+                                             accommodation and food pay considerably less than professional and technical services or mining.",
                                              MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
                                              urlList = list(c("SDO Base Industries Summary","https://drive.google.com/file/d/1Ag0JdOo8XATTBiNuh80BTiuqLV4Kv72T/view"),
                                                             c("Jobs by Sector (NAICS)","https://demography.dola.colorado.gov/economy-labor-force/data/jobs-by-sector/#jobs-by-sector-naics"))),
@@ -1236,11 +1236,11 @@ server <- function(input, output, session) {
         #Generate Report
         #knitting file and copy to final document
         
-    #    tempRMD <- fixPath(fileMat[88])  #Testing
-    #    tempPDF <- fixPath(fileMat[89]) 
+        tempRMD <- fixPath(fileMat[88])  #Testing
+        tempPDF <- fixPath(fileMat[89]) 
         
-         tempRMD <- fileMat[88]  
-         tempPDF <- fileMat[89] 
+    #     tempRMD <- fileMat[88]  
+    #     tempPDF <- fileMat[89] 
         
         
         rmarkdown::render(input= tempRMD, output_file = tempPDF,
