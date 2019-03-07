@@ -1053,10 +1053,11 @@ server <- function(input, output, session) {
           
           
           #Contents of Information Tabs
-          popei1.info <- tags$div(boxContent(title= "Estimated Jobs",
-                                             description = "The Jobs Estimate Plot shows the estimated number of jobs to 2040.",
+          popei1.info <- tags$div(boxContent(title= "Estimated Firms and Jobs",
+                                             description = "The Estimated Firms and Jobs Plot shows the relationship between firms, jobs and periods of economic recession from 2001 to the present.",
                                              MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
-                                             urlList = list(c("Jobs by Sector (NAICS)","https://demography.dola.colorado.gov/economy-labor-force/data/jobs-by-sector/#jobs-by-sector-naics"))),
+                                             urlList = list(c("Firms: Department of Labor and Employment Quarterly Census of Employment and Wages","https://www.colmigateway.com/gsipub/index.asp?docid=372"),
+                                                            c("Jobs: Jobs by Sector (NAICS)","https://demography.dola.colorado.gov/economy-labor-force/data/jobs-by-sector/#jobs-by-sector-naics"))),
                                   tags$br(),
                                   downloadObjUI("popei1plot"),  downloadObjUI("popei1data"))
           
