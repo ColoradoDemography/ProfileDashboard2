@@ -80,27 +80,27 @@ source("R/tabList.R")
 source("R/tabTitle.R")
 source("R/TempFil.R")
 source("R/weeklyWages.R")
-source("R/firmcount.R")
+source("R/unemployment.R")
 
 
 
 # The GLOBAL Variables  Add Additional lists items as sections get defined
 #File Locations ALSO LOOK AT LINE IN THE PDF OUTPUT CODE  LINE 1229
 # Local/Development
-# tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
+ tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
 
 #Production
- tPath <- "/tmp"  
+# tPath <- "/tmp"  
 
 # Locations for Google Analtyics Java Script Files
 # Local/ Development
 
- #initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
- #tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
+ initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
+ tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
 
 #Production
- initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
- tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
+# initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
+# tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
 
 # Current ACS database
 curACS <- "acs1317"
@@ -1112,7 +1112,7 @@ server <- function(input, output, session) {
           popem1 <<- jobsPopForecast(DBPool=DOLAPool,listID=idList,curyr=curYr)
           popem2 <<- weeklyWages(DBPool=DOLAPool,listID=idList,curyr=curYr)
           popem3 <<- residentialLF(DBPool=DOLAPool,listID=idList,curyr=curYr)
-          popem4 <<- firmcount(DBPool=DOLAPool,listID=idList)  
+          popem4 <<- unemployment(DBPool=DOLAPool,listID=idList,curyr=curYr)  
           
           #JobsPopForecast
           # HTML Table
@@ -1138,7 +1138,7 @@ server <- function(input, output, session) {
           dput(popem3$text, fileMat[84])
          
           
-          #Firm Count
+          #Unemploymenr
           # HTML Table
           ggsave(fileMat[85],popem4$plot, device="png", height = 5 , width = 7, dpi=300)
           ggsave(fileMat[86],popem4$plot, device="png", height = 5 , width = 7, dpi=300)
@@ -1174,10 +1174,11 @@ server <- function(input, output, session) {
                                   tags$br(),
                                   downloadObjUI("popem3tabl"), downloadObjUI("popem3data"))
           
-          popem4.info <- tags$div(boxContent(title= "Number of Firms",
-                                             description = "The Firm Count data shows the number of firms located in the selected county.",
+          popem4.info <- tags$div(boxContent(title= "Labor Force Participation and Unemployment Rates",
+                                             description = "The labor force participation and employment plot compares the percentage of persons age 16 and older in the labor force to the unemployment rate.",
                                              MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
-                                             urlList = list(c("Department of Labor and Employment Quarterly Census of Employment and Wages","https://www.colmigateway.com/gsipub/index.asp?docid=372") )),
+                                             urlList = list( c("SDO County Single-Year of Age Forecasts","https://demography.dola.colorado.gov/population/data/sya-county/"),
+                                                         c("United States Bureau of Economic Analysis.","https://www.bea.gov/") )),
                                   tags$br(),
                                   downloadObjUI("popem4plot"),downloadObjUI("popem4data"))
           
@@ -1199,7 +1200,7 @@ server <- function(input, output, session) {
           
           #Append to List
      
-          popem.list <<- list(popem1.box,popem3.box,popem2.box) #,popem4.box
+          popem.list <<- list(popem1.box,popem3.box,popem2.box,popem4.box) 
           incProgress()
         }  #Employment and Demographic Forecast
         
@@ -1236,11 +1237,11 @@ server <- function(input, output, session) {
         #Generate Report
         #knitting file and copy to final document
         
-     #   tempRMD <- fixPath(fileMat[88])  #Testing
-     #   tempPDF <- fixPath(fileMat[89]) 
+        tempRMD <- fixPath(fileMat[88])  #Testing
+        tempPDF <- fixPath(fileMat[89]) 
         
-         tempRMD <- fileMat[88]  
-         tempPDF <- fileMat[89] 
+    #     tempRMD <- fileMat[88]  
+    #     tempPDF <- fileMat[89] 
         
         
         rmarkdown::render(input= tempRMD, output_file = tempPDF,
