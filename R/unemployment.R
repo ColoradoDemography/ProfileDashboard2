@@ -53,7 +53,7 @@ unemployment <- function(DBPool,listID, curyr, base=10){
     facet_grid(rows =vars(type), scales = "free_y") +
     labs(x="Year",
          y = "Rate",
-         title= paste0("Labor Force Particiaption and Unemployment Rate, 2000 to ",as.character(curyr)),
+         title= paste0("Labor Force Particiaption and Unemployment Rate\n2000 to ",as.character(curyr)),
          subtitle = ctyname,
          caption= paste0(captionSrc("SDOBEA","") ,"\nNote: Grey shading represents beginning to bottom of U.S. recessions")) +
     theme(plot.title = element_text(hjust = 0.5, size=16),
