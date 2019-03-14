@@ -59,7 +59,7 @@ source("R/jobsPopForecast.R")
 source("R/listTofips.R")
 source("R/medianAgeTab.R")
 source("R/migbyagePRO.R")
-source("R/OOHouse.R")
+source("R/HousingUnits.R")
 source("R/percent.R")
 source("R/pop_timeseries.R")
 source("R/popForecast.R")
@@ -69,7 +69,6 @@ source("R/raceTab1.R")
 source("R/raceTab2.R")
 source("R/residentialLF.R")
 source("R/roundUpNice.R")
-source("R/RTHouse.R")
 source("R/setAxis.R")
 source("R/setYrRange.R")
 source("R/simpleCap.R")
@@ -87,20 +86,20 @@ source("R/unemployment.R")
 # The GLOBAL Variables  Add Additional lists items as sections get defined
 #File Locations ALSO LOOK AT LINE IN THE PDF OUTPUT CODE  LINE 1229
 # Local/Development
-# tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
+ tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
 
 #Production
- tPath <- "/tmp"  
+# tPath <- "/tmp"  
 
 # Locations for Google Analtyics Java Script Files
 # Local/ Development
 
- #initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
- #tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
+ initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
+ tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
 
 #Production
- initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
- tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
+# initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
+# tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
 
 # Current ACS database
 curACS <- "acs1317"
@@ -824,9 +823,8 @@ server <- function(input, output, session) {
           #Generate tables, plots and text...
           poph1 <<- houseEstPRO(DBPool=DOLAPool,listID=idList,curYr=curYr)
           poph2 <<- housePRO(DBPool=DOLAPool,listID=idList, curYr=curYr) # Housing Unit Table
-          poph3 <<- OOHouse(listID=idList,ACS=curACS)  # Chars of Owner Occupied Housing
-          poph4 <<- RTHouse(listID=idList,ACS=curACS)  # Chars of Rental Housing
-          poph5 <<- HouseVal(listID=idList,ACS=curACS) # Comparative Value of Housing both OO and Rental
+          poph3 <<- HousingUnits(listID=idList,ACS=curACS)  # Type of housing
+          poph4 <<- HouseVal(listID=idList,ACS=curACS) # Comparative Value of Housing 
           
           #Housing Estimate
           ggsave(fileMat[42],poph1$plot, device="png", height = 5 , width = 7, dpi=300)
@@ -840,25 +838,18 @@ server <- function(input, output, session) {
           
           dput(poph2$Ltable, fileMat[46])
           
-          #Housing Value Owner Occupied
-          dput(poph5$HtableOO,fileMat[47])
+          #Housing Value 
+          dput(poph3$Htable,fileMat[47])
           
-          dput(poph5$LtableOO, fileMat[48])
+          dput(poph3$Ltable, fileMat[48])
           
-          #Housing Value Rental
-          dput(poph5$HtableRT,fileMat[49])
           
-          dput(poph5$LtableRT, fileMat[50])
+          #Housing Characteristics 
+          dput(poph4$Htable,fileMat[51])
           
-          #Housing Characteristics Owner Occupied
-          dput(poph3$Htable,fileMat[51])
+          dput(poph4$Ltable, fileMat[52])
           
-          dput(poph3$Ltable, fileMat[52])
-          
-          #Housing Value Rental
-          dput(poph4$Htable,fileMat[53])
-          
-          dput(poph4$Ltable, fileMat[54])
+         
           
           #Contents of Information Tabs
           poph1.info <- tags$div(boxContent(title= "Household Projection",
@@ -877,32 +868,21 @@ server <- function(input, output, session) {
                                  downloadObjUI("poph2tabl"),downloadObjUI("poph2data"))
           
           
-          poph3.info <- tags$div(boxContent(title= "Characteristics of Owner-Occupied Housing",
+          poph3.info <- tags$div(boxContent(title= "Housing Units by Type",
                                             description= "The Owner-Occupied Housing Table displays the characteristics of owner-occupied housing in a selected place.",
                                             MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("American Community Survey American Fact Finder, Series B25010, B25032, B25033, and B25037","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
                                  tags$br(),
                                  downloadObjUI("poph3tabl"),downloadObjUI("poph3data"))
           
-          poph4.info <- tags$div(boxContent(title= "Characteristics of Rental Housing",
-                                            description= "The Rental Housing Table displays the characteristics of rental housing in a selected place.",
-                                            MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
-                                            urlList = list(c("American Community Survey American Fact Finder, Series B25010, B25032, B25033, and B25037","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
-                                 tags$br(),
-                                 downloadObjUI("poph4tabl"),downloadObjUI("poph4data"))
-          poph5.info <- tags$div(boxContent(title= "Comparative Owner-Occupied Housing Values",
+          poph4.info <- tags$div(boxContent(title= "Comparative Housing Values",
                                             description= "The Comparative Housing Table compares the economic characteristics of  owner-occupied and rental housing in a selected place to the State.",
                                             MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("American Community Survey American Fact Finder, Series B25077 and B25092","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
                                  tags$br(),
-                                 downloadObjUI("poph5tabl"),downloadObjUI("poph5data"))
+                                 downloadObjUI("poph4tabl"),downloadObjUI("poph4data"))
           
-          poph6.info <- tags$div(boxContent(title= "Comparative Rental Housing Values",
-                                            description= "The Comparative Housing Table compares the economic characteristics of  owner-occupied and rental housing in a selected place to the State.",
-                                            MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
-                                            urlList = list(c("American Community Survey American Fact Finder, Series B25066 and B25071","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
-                                 tags$br(),
-                                 downloadObjUI("poph6tabl"),downloadObjUI("poph6data"))
+
           
           
           # Bind to boxes
@@ -912,22 +892,17 @@ server <- function(input, output, session) {
           poph2.box <- tabBox(width=6, height=400,
                               tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[45])))),
                               tabPanel("Sources and Downloads",poph2.info))
-          poph5.box <- tabBox(width=6, height = 325,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[47])))),
-                              tabPanel("Sources and Downloads",poph5.info))
-          poph6.box <- tabBox(width=6, height = 325,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[49])))),
-                              tabPanel("Sources and Downloads",poph6.info))
+
           poph3.box <- tabBox(width=6, height=350,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[51])))),
+                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[47])))),
                               tabPanel("Sources and Downloads",poph3.info))
           poph4.box <- tabBox(width=6, height=350,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[53])))),
+                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[51])))),
                               tabPanel("Sources and Downloads",poph4.info))
           
           
           #Append to List
-          poph.list <<- list(poph1.box,poph2.box, poph5.box, poph6.box, poph3.box,poph4.box)
+          poph.list <<- list(poph1.box,poph2.box, poph3.box,poph4.box)
           incProgress()
         }
         
@@ -1237,11 +1212,11 @@ server <- function(input, output, session) {
         #Generate Report
         #knitting file and copy to final document
         
-    #    tempRMD <- fixPath(fileMat[88])  #Testing
-    #    tempPDF <- fixPath(fileMat[89]) 
+        tempRMD <- fixPath(fileMat[88])  #Testing
+        tempPDF <- fixPath(fileMat[89]) 
         
-         tempRMD <- fileMat[88]  
-         tempPDF <- fileMat[89] 
+    #     tempRMD <- fileMat[88]  
+    #     tempPDF <- fileMat[89] 
         
         
         rmarkdown::render(input= tempRMD, output_file = tempPDF,
@@ -1317,11 +1292,7 @@ server <- function(input, output, session) {
     callModule(downloadObj, id = "poph4tabl", simpleCap(input$unit),"poph4tabl", poph4$FlexTable)
     callModule(downloadObj, id = "poph4data", simpleCap(input$unit), "poph4data", poph4$data)
     
-    callModule(downloadObj, id = "poph5tabl", simpleCap(input$unit),"poph5tabl", poph5$FlexTableOO)
-    callModule(downloadObj, id = "poph5data", simpleCap(input$unit), "poph5data", poph5$data)
-    
-    callModule(downloadObj, id = "poph6tabl", simpleCap(input$unit),"poph6tabl", poph5$FlexTableRT)
-    callModule(downloadObj, id = "poph6data", simpleCap(input$unit), "poph6data", poph5$data)
+   
     
     #commuting
     callModule(downloadObj, id = "popt1plot", simpleCap(input$unit),"popt1plot", popt1$plot)

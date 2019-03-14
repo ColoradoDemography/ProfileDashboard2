@@ -449,10 +449,9 @@ if("housing" %in% unlist(outChk)) {
 }
 cat(housingText())
 cat(dget(filemat[46]))  #Housing Unit Table
-cat(dget(filemat[48]))  #Housing Value Table Owner Occupied
-cat(dget(filemat[52]))  #Housing Characteristics Table Owner Occupied
-cat(dget(filemat[50]))  #Housing Value Table Rental
-cat(dget(filemat[54]))  #Housing Characteristics Table Rental
+cat(dget(filemat[48]))  #Housing Characteristics
+cat(dget(filemat[52]))  #Housing Values
+
 }  
 ```
 
