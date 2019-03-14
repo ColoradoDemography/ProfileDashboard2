@@ -861,7 +861,7 @@ server <- function(input, output, session) {
           
           poph2.info <- tags$div(boxContent(title= "Housing Type Table",
                                             description= "The Housing Type Table compares the categories of housing types for a selected place to the State.",
-                                            MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
+                                            MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO Housing Time Series","https://demography.dola.colorado.gov/population/data/muni-pop-housing/"),
                                                            c("American Community Survey American Fact Finder, Series B25001, B25003, and B25004","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
                                  tags$br(),
