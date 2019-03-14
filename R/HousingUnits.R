@@ -124,9 +124,12 @@ HousingUnits=function(listID, ACS, state="08"){
   
   #Combining Files, calcualting percentages and formatting values
   f.House <- left_join(f.AcsOO_Fin, f.AcsRT_Fin, by="var" ) %>%
-    left_join(., f.AcsALL_Fin,by="var") %>%
-    mutate(Pct_OO = percent((OO_VAL/ALL_VAL)*100),
-           Pct_RT = percent((RT_VAL/ALL_VAL)*100))
+    left_join(., f.AcsALL_Fin,by="var") 
+
+  
+  f.House$Pct_OO <- ifelse(f.House$ALL_VAL == 0,"",percent((f.House$OO_VAL/f.House$ALL_VAL)*100))
+  f.House$Pct_RT <- ifelse(f.House$ALL_VAL == 0,"",percent((f.House$RT_VAL/f.House$ALL_VAL)*100))
+  
   
   f.House$OO_VAL_F <-  ifelse(f.House$var == "PPH", formatC(as.numeric(f.House$OO_VAL), format="f", digits=2),
                               ifelse(f.House$var == "Med_Yr", formatC(as.numeric(f.House$OO_VAL), format="f", digits=0), formatC(as.numeric(f.House$OO_VAL),format="f", digits=0, big.mark=",")))
