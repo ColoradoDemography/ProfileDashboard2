@@ -876,7 +876,7 @@ server <- function(input, output, session) {
                                  downloadObjUI("poph3tabl"),downloadObjUI("poph3data"))
           
           poph4.info <- tags$div(boxContent(title= "Comparative Housing Values",
-                                            description= "The Comparative Housing Table compares the cost of  owner-occupied and rental housing in a selected place to the State.",
+                                            description= "The Comparative Housing Table compares the cost of  owner-occupied and rental housing in a selected place to the State or a county.",
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("American Community Survey American Fact Finder, Series B25077 and B25092","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
                                  tags$br(),
