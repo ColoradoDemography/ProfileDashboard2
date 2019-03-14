@@ -239,11 +239,11 @@ HouseVal <- function(listID, ACS, state="08"){
 
   # Revising Value Names
   f.HouseVal$value <- ifelse(f.HouseVal$value == "Med_val","Median Value of Owner-Occupied Households (Current Dollars)",
-                             ifelse(f.HouseVal$value == "PCT_OO_GE30","Percentage of Owner-Occupied Households paying 30% and More of income on housing",
+                             ifelse(f.HouseVal$value == "PCT_OO_GE30","Percentage of Owner-Occupied Households paying 30% or more of income on housing",
                                     ifelse(f.HouseVal$value == "PCT_OO_3049","Percentage of Owner-Occupied Households paying 30-49% of income on housing",
                                            ifelse(f.HouseVal$value == "PCT_OO_50","Percentage of Owner-Occupied Households paying 50% or more of income on housing",     
                                                   ifelse(f.HouseVal$value == "Med_Rent","Median Gross Rent of Rental Households (Current Dollars)",
-                                                         ifelse(f.HouseVal$value == "PCT_RT_GE30","Percentage of Rental Households paying 30% and More of income on housing",
+                                                         ifelse(f.HouseVal$value == "PCT_RT_GE30","Percentage of Rental Households paying 30% or more of income on housing",
                                                                 ifelse(f.HouseVal$value == "PCT_RT_3049","Percentage of Rental Households paying 30-49% of income on housing",
                                                                        "Percentage of Rental Households paying 50% or more of income on housing")))))))     
   
