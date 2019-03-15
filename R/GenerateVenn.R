@@ -243,24 +243,25 @@ if(nchar(placefips) != 0) {
               width(j=1, width=2.5) %>%
               width(j=2:3, width=0.8) %>%
               width(j=4, width=2.5) %>%
-              width(j=5:6, width=0.8) 
- 
-  if(nchar(placefips) != 0) {
-       f.live_fin$Geography <- placename
-       f.work_fin$Geography <- placename
-  } else {
-       f.live_fin$Geography <- ctyname
-       f.work_fin$Geography <- ctyname
-  }
-  f.live_fin <- f.live_fin[,c(4,1:3)]
-  f.work_fin <- f.work_fin[,c(4,1:3)]
+              width(j=5:6, width=0.8)
   
-  names(f.live_fin) <- c("Geography","Residence Location", "Number","Percentage")
-  names(f.work_fin) <- c("Geography","Work Location", "Number","Percentage")
+ #Building output data set
+  
+  f.data_out <- bind_cols(f.work_fin,f.live_fin)
+  
+  if(nchar(placefips) != 0) {
+    f.data_out$Geography <- placename
+  } else {
+    f.data_out$Geography <- ctyname
+  }
+  f.data_out <- f.data_out[,c(7,1:6)]
+  
+  
+  names(f.data_out) <- c("Geography",capstr1, "Number","Percentage",capstr2, "Number","Percentage")
   
   # Binding List for Output
-  outList <- list("plot" = outVenn, "liveTabH" = liveTabH, "data1" = f.live_fin,
-                  "workTabH" = workTabH, "data2" = f.work_fin,
+  outList <- list("plot" = outVenn, "liveTabH" = liveTabH, "data1" = f.summary,
+                  "workTabH" = workTabH, "data2" = f.data_out,
                   "Flexcomb" = Flexcomb, "combTabL" = combTabL)
  
   return(outList)
