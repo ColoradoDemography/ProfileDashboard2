@@ -86,20 +86,20 @@ source("R/unemployment.R")
 # The GLOBAL Variables  Add Additional lists items as sections get defined
 #File Locations ALSO LOOK AT LINE IN THE PDF OUTPUT CODE  LINE 1229
 # Local/Development
-# tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
+ tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
 
 #Production
- tPath <- "/tmp"  
+# tPath <- "/tmp"  
 
 # Locations for Google Analtyics Java Script Files
 # Local/ Development
 
-# initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
-# tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
+ initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
+ tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
 
 #Production
- initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
- tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
+# initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
+# tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
 
 # Current ACS database
 curACS <- "acs1317"
@@ -861,7 +861,7 @@ server <- function(input, output, session) {
           
           poph2.info <- tags$div(boxContent(title= "Housing Type Table",
                                             description= "The Housing Type Table compares the categories of housing types for a selected place to the State.",
-                                            MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
+                                            MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO Housing Time Series","https://demography.dola.colorado.gov/population/data/muni-pop-housing/"),
                                                            c("American Community Survey American Fact Finder, Series B25001, B25003, and B25004","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
                                  tags$br(),
@@ -869,14 +869,14 @@ server <- function(input, output, session) {
           
           
           poph3.info <- tags$div(boxContent(title= "Housing Units by Type",
-                                            description= "The Housing Unit Table displays the characteristics of owner-occupied and rental housing in a selected place.",
+                                            description= "The Owner-Occupied Housing Table displays the characteristics of owner-occupied housing in a selected place.",
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("American Community Survey American Fact Finder, Series B25010, B25032, B25033, and B25037","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
                                  tags$br(),
                                  downloadObjUI("poph3tabl"),downloadObjUI("poph3data"))
           
           poph4.info <- tags$div(boxContent(title= "Comparative Housing Values",
-                                            description= "The Comparative Housing Table compares the cost of  owner-occupied and rental housing in a selected place to the State or a county.",
+                                            description= "The Comparative Housing Table compares the economic characteristics of  owner-occupied and rental housing in a selected place to the State.",
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("American Community Survey American Fact Finder, Series B25077 and B25092","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
                                  tags$br(),
@@ -953,7 +953,7 @@ server <- function(input, output, session) {
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
                                             urlList = list(c("U.s. Census Bureau On the Map Data","https://onthemap.ces.census.gov/")) ),
                                  tags$br(),
-                                 downloadObjUI("popt3tabl"),downloadObjUI("popt3data"))
+                                 downloadObjUI("popt2tabl"),downloadObjUI("popt2data"))
           
           
           popt3.info <- tags$div(boxContent(title= "Live Outside Table",
@@ -961,7 +961,7 @@ server <- function(input, output, session) {
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
                                             urlList = list(c("U.s. Census Bureau On the Map Data","https://onthemap.ces.census.gov/")) ),
                                  tags$br(),
-                                 downloadObjUI("popt2tabl"),downloadObjUI("popt2data"))
+                                 downloadObjUI("popt3tabl"),downloadObjUI("popt3data"))
           
           popt4.info <- tags$div(boxContent(title= "Jobs and Net Migration Plot",
                                             description= "The jobs and net migration plot shows the trend between jobs and net migration for a selected place.",
@@ -1212,11 +1212,11 @@ server <- function(input, output, session) {
         #Generate Report
         #knitting file and copy to final document
         
-    #    tempRMD <- fixPath(fileMat[88])  #Testing
-    #    tempPDF <- fixPath(fileMat[89]) 
+        tempRMD <- fixPath(fileMat[88])  #Testing
+        tempPDF <- fixPath(fileMat[89]) 
         
-         tempRMD <- fileMat[88]  
-         tempPDF <- fileMat[89] 
+    #     tempRMD <- fileMat[88]  
+    #     tempPDF <- fileMat[89] 
         
         
         rmarkdown::render(input= tempRMD, output_file = tempPDF,
@@ -1298,7 +1298,7 @@ server <- function(input, output, session) {
     callModule(downloadObj, id = "popt1plot", simpleCap(input$unit),"popt1plot", popt1$plot)
     
     callModule(downloadObj, id = "popt2tabl", simpleCap(input$unit),"popt2tabl", popt1$Flexcomb)
-    callModule(downloadObj, id = "popt2data", simpleCap(input$unit),"popt2data", popt1$data1)
+    callModule(downloadObj, id = "popt2data", simpleCap(input$unit),"popt2data", popt1$data2)
     
     callModule(downloadObj, id = "popt3tabl", simpleCap(input$unit),"popt3tabl", popt1$Flexcomb)
     callModule(downloadObj, id = "popt3data", simpleCap(input$unit),"popt3data", popt1$data2)
