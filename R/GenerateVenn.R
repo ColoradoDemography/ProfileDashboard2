@@ -257,7 +257,7 @@ if(nchar(placefips) != 0) {
   f.data_out <- f.data_out[,c(7,1:6)]
   
   
-  names(f.data_out) <- c("Geography",capstr1, "Number","Percentage",capstr2, "Number","Percentage")
+  names(f.data_out) <- c("Geography",capstr2, "Number","Percentage",capstr1, "Number","Percentage")
   
   # Binding List for Output
   outList <- list("plot" = outVenn, "liveTabH" = liveTabH, "data1" = f.summary,
