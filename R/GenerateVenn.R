@@ -22,34 +22,55 @@ GenerateVenn <- function(DBPool,listID){
 if(nchar(placefips) != 0) {
   sumSQL <- paste0("SELECT * FROM data.otm_place_summary WHERE fips = '",placefips,"' ;")
   placeSQL <- paste0("SELECT * FROM data.otm_place_place WHERE fips = '",placefips,"' ;")
-} else {
-  sumSQL <- paste0("SELECT * FROM data.otm_county_summary WHERE fips = '",ctyfips,"' ;")
-  placeSQL <- paste0("SELECT * FROM data.otm_county_place WHERE fips = '",ctyfips,"' ;")
-}
- 
-    f.summary <- dbGetQuery(DBPool, sumSQL)
-    f.place <- dbGetQuery(DBPool, placeSQL)
-
-
-  if(nchar(placefips) != 0) {
-    location <- paste0(placename,"\n","All Jobs, ",as.character(f.summary$year))
-  } else {
-    location <- paste0(ctyname,"\n","All Jobs, ",as.character(f.summary$year))
-  }
   
-# FIX THIS IN THE FUTURE
-  lin_wout <- as.numeric(f.summary$workin_liveout)
-  lout_win <- as.numeric(f.summary$livein_workout)
+  f.summary <- dbGetQuery(DBPool, sumSQL)
+  f.place <- dbGetQuery(DBPool, placeSQL)
+  location <- paste0(placename,"\n","All Jobs, ",as.character(f.summary$year))
+  
+  lin_wout <- as.numeric(f.summary$livein_workout)
+  lout_win <- as.numeric(f.summary$workin_liveout)
   lin_win <-  as.numeric(f.summary$livein_workin)
-
+  
   region1 <- lout_win + lin_win #Live outside, work in
   region2 <- lin_wout + lin_win #Live in, work outside
   
   crossRegion <- lin_win 
-
- 
+  
+  
   # By default, VennDiagram outputs the larger Region value in the left hand postion.
   # This code block insures that the diagram is correct
+  
+  if(lin_wout <= lout_win){
+    diag <- draw.pairwise.venn(region1, region2, crossRegion, inverted = TRUE,
+                               lty = rep("solid", 2), cat.col = rep("black", 2),
+                               cex = 1, cat.cex = 1, cat.default.pos= "text", ext.text = FALSE,
+                               fill = c("chartreuse4", "aquamarine2"), alpha = rep(0.5, 2),
+                               euler.d=TRUE,scaled=TRUE, ind = FALSE, print.mode="raw")
+  } else{
+    diag <- draw.pairwise.venn(region1, region2, crossRegion, inverted = FALSE,
+                               lty = rep("solid", 2), cat.col = rep("black", 2),
+                               cex = 1, cat.cex = 1,  cat.default.pos= "text", ext.text  = FALSE,
+                               fill = c("chartreuse4", "aquamarine2"), alpha = rep(0.5, 2),
+                               euler.d=TRUE,scaled=TRUE, ind = FALSE, print.mode="raw")
+  }
+} else {
+  sumSQL <- paste0("SELECT * FROM data.otm_county_summary WHERE fips = '",ctyfips,"' ;")
+  placeSQL <- paste0("SELECT * FROM data.otm_county_place WHERE fips = '",ctyfips,"' ;")
+  
+  f.summary <- dbGetQuery(DBPool, sumSQL)
+  f.place <- dbGetQuery(DBPool, placeSQL)
+  
+  location <- paste0(ctyname,"\n","All Jobs, ",as.character(f.summary$year))
+  
+  lin_wout <- as.numeric(f.summary$workin_liveout)
+  lout_win <- as.numeric(f.summary$livein_workout)
+  lin_win <-  as.numeric(f.summary$livein_workin)
+  
+  region1 <- lout_win + lin_win #Live outside, work in
+  region2 <- lin_wout + lin_win #Live in, work outside
+  
+  crossRegion <- lin_win 
+  
   if(lin_wout >= lout_win){
     diag <- draw.pairwise.venn(region1, region2, crossRegion, inverted = TRUE,
                                lty = rep("solid", 2), cat.col = rep("black", 2),
@@ -63,6 +84,8 @@ if(nchar(placefips) != 0) {
                                fill = c("chartreuse4", "aquamarine2"), alpha = rep(0.5, 2),
                                euler.d=TRUE,scaled=TRUE, ind = FALSE, print.mode="raw")
   }
+}
+  
 
 
   # Formatting the labels for the output diagram
