@@ -17,7 +17,7 @@ library(rmarkdown)
 library(shiny, quietly=TRUE)
 library(shinydashboard, quietly=TRUE)
 library(shinyjs, quietly=TRUE)
-library(VennDiagram)
+library(eulerr)
 library(rgdal)
 library(geojsonio)
 library(gridExtra)
@@ -25,6 +25,7 @@ library(ggthemes)
 library(maptools)
 library(officer)
 library(flextable)
+library(ggplotify)
 
 
 # Additions for Database pool
