@@ -20,6 +20,7 @@ library(shinyjs, quietly=TRUE)
 library(eulerr)
 library(rgdal)
 library(geojsonio)
+library(grid)
 library(gridExtra)
 library(ggthemes)
 library(maptools)
@@ -87,20 +88,20 @@ source("R/unemployment.R")
 # The GLOBAL Variables  Add Additional lists items as sections get defined
 #File Locations ALSO LOOK AT LINE IN THE PDF OUTPUT CODE  LINE 1229
 # Local/Development
-# tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
+ tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
 
 #Production
- tPath <- "/tmp"  
+# tPath <- "/tmp"  
 
 # Locations for Google Analtyics Java Script Files
 # Local/ Development
 
-# initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
-# tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
+ initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
+ tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
 
 #Production
- initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
- tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
+# initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
+# tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
 
 # Current ACS database
 curACS <- "acs1317"
@@ -359,11 +360,10 @@ server <- function(input, output, session) {
   
   output$ui <- renderUI(frontPg)
   # updates Dropdown boxes and selects data level and unit
-  
   LocList <- popPlace(DOLAPool,curYr)
   CountyList <- LocList$Counties
   PlaceList <- LocList$Munis
-  #RegionList <- LocList$Region
+  
   
   observeEvent(input$level, ({
     shinyjs::hide("outputPDF")
@@ -374,37 +374,21 @@ server <- function(input, output, session) {
       outUnit <- ""
       outComp <- ""
     }
-    #  if(input$level == "Region") {  # Added 9/18
-    #           outUnit <-  RegionList
-    #        }
+    
     if(input$level == "Counties") {
       outUnit <- unique(as.list(CountyList[,3]))
-      #    outComp <- c("Selected County Only", "Counties in Planning Region", "Custom List of Counties (Select Below)","State")
     }
     if(input$level == "Municipalities") {  
       outUnit <- unique(as.list(PlaceList[,3]))
-      #    outComp <- c("Selected Municipality Only", "Similar Municipalities", "County", "Custom List of Municipalities (Select Below)", "State")
     }
     
     updateSelectInput(session, "unit", choices = outUnit)
-    #    updateSelectInput(session, "comp", choices = outComp)
   }))  #observeEvent input$level
   
   # Event for Comparison selection
   observeEvent(input$comp, {
     shinyjs::hide("outputPDF")
     
-    if((input$level == "Counties") && (input$comp == "Custom List of Counties (Select Below)")){
-      # Creating custom list
-      custList <- as.list(CountyList[which(CountyList$municipalityname != input$unit),3])
-      updateSelectInput(session, "comp2", choices = custList)
-    }
-    # Disabled in V1
-    #                if((input$level == "Municipalities") && (input$comp == "Custom List of Municipalities (Select Below)")){
-    #                  # Creating custom list
-    #                  custList <- as.list(unique(PlaceList[which(PlaceList$municipalityname != input$unit),3]))
-    #                  updateSelectInput(session, "comp2", choices = custList)
-    #                }
   }) #observeEvent input$comp
   
   # Event for click on profile button
@@ -443,18 +427,17 @@ server <- function(input, output, session) {
         #Building fipslist
         if(input$level == "Counties") {
           fipslist <<- listTofips(CountyList,input$level,input$unit)
+          placeName <- simpleCap(input$unit)
         } 
         if(input$level == "Municipalities") { 
           fipslist <<- listTofips(PlaceList,input$level,input$unit)
+          placeName <- simpleCap(input$unit)
         }
         
-        if(input$level == "Region") {  
-          fipslist <<- listTofips(RegionList,input$level,input$unit)
-        }
         #Generate profile UI objects
         
         svals <- reactiveValues(a=NULL,b=NULL,c=NULL)
-        placeName <- simpleCap(input$unit)
+        
         ln1 <- tags$h1(placeName)
         #creating ids and output flags for multiple counties and small places
         idList <- chkID(lvl=input$level,fipslist= fipslist,plName=placeName,ctyList=CountyList, plList=PlaceList)
@@ -508,8 +491,8 @@ server <- function(input, output, session) {
           #Chart/Table Objects
           popf1 <<- popTable(DBPool=DOLAPool,lvl=input$level,listID=idList,sYr=1990,eYr=curYr)
           popf2 <<- pop_timeseries(DBPool=DOLAPool,lvl=input$level,listID=idList,endyear=curYr,base=12)
-          popf3 <<- popForecast(listID=idList)
-          popf4 <<- cocPlot(DBPool=DOLAPool,listID=idList,lyr=curYr)
+          popf3 <<- popForecast(lvl=input$level,listID=idList)
+          popf4 <<- cocPlot(DBPool=DOLAPool,lvl=input$level,listID=idList,lyr=curYr)
           
           # creating output files
           #HTML table
@@ -618,7 +601,7 @@ server <- function(input, output, session) {
           #Generate tables, plots and text...
           
           popa1 <<- agePlotPRO(listID=idList, ACS=curACS, yrs=curYr)
-          popa2 <<- medianAgeTab(listID=idList, ACS=curACS)
+          popa2 <<- medianAgeTab(lvl=input$level,listID=idList, ACS=curACS)
           popa3 <<- ageForecastPRO(listID=idList,sYr=2010,mYr=2015,eYr=2025,base=12)
           popa4 <<- migbyagePRO(DBPool=DOLAPool,listID=idList)
           
@@ -949,7 +932,7 @@ server <- function(input, output, session) {
                                  tags$br(),
                                  downloadObjUI("popt1plot"))
           
-          popt2.info <- tags$div(boxContent(title= "Work Outside Table",
+          popt2.info <- tags$div(boxContent(title= "Commuting Table",
                                             description= "The work outside table shows the top ten work locations for prople living in an area but working somewhere else.",
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
                                             urlList = list(c("U.s. Census Bureau On the Map Data","https://onthemap.ces.census.gov/")) ),
@@ -957,7 +940,7 @@ server <- function(input, output, session) {
                                  downloadObjUI("popt2tabl"),downloadObjUI("popt2data"))
           
           
-          popt3.info <- tags$div(boxContent(title= "Live Outside Table",
+          popt3.info <- tags$div(boxContent(title= "Commuting Table",
                                             description= "The live outside table shows the top ten residential locations for people working in an area but living somewhere else.",
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
                                             urlList = list(c("U.s. Census Bureau On the Map Data","https://onthemap.ces.census.gov/")) ),
@@ -978,10 +961,10 @@ server <- function(input, output, session) {
                               tabPanel("Plot",renderImage({img_List12})),
                               tabPanel("Sources and Downloads",popt1.info))
           popt2.box <- tabBox(width=6, height=400,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[57])))),
+                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[59])))),
                               tabPanel("Sources and Downloads",popt3.info))
           popt3.box <- tabBox(width=6, height=400,
-                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[59])))),
+                              tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[57])))),
                               tabPanel("Sources and Downloads",popt2.info))
           popt4.box <- tabBox(width=6, height=400,
                               tabPanel("Plot",renderImage({img_List13})),
@@ -1213,11 +1196,11 @@ server <- function(input, output, session) {
         #Generate Report
         #knitting file and copy to final document
         
-    #    tempRMD <- fixPath(fileMat[88])  #Testing
-    #    tempPDF <- fixPath(fileMat[89]) 
+        tempRMD <- fixPath(fileMat[88])  #Testing
+        tempPDF <- fixPath(fileMat[89]) 
         
-         tempRMD <- fileMat[88]  
-         tempPDF <- fileMat[89] 
+    #     tempRMD <- fileMat[88]  
+    #     tempPDF <- fileMat[89] 
         
         
         rmarkdown::render(input= tempRMD, output_file = tempPDF,
