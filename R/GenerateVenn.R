@@ -131,7 +131,7 @@ if(nchar(placefips) != 0) {
   m.work <- as.matrix(f.work_fin)
   m.live <- as.matrix(f.live_fin)
 
-  workTabH <- m.work %>%
+  workTabH <- m.live %>%
     kable(format='html', table.attr='class="cleanTable"',
           row.names=FALSE,
           align='lrr',
@@ -145,7 +145,7 @@ if(nchar(placefips) != 0) {
     footnote(captionSrc("LODES",""))
 
   #formatting Live output table
-  liveTabH <- m.live %>%
+  liveTabH <- m.work %>%
     kable(format='html', table.attr='class="cleanTable"',
           row.names=FALSE,
           align='lrr',
