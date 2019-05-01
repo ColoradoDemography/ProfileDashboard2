@@ -48,9 +48,9 @@ if(nchar(placefips) != 0) {
     legstr3 <- paste0("Employed and Live in ",placename,": ", format(f.summary$livein_workin, big.mark = ",",scientific = FALSE) )
     plot_title <- paste0(placename,": All Jobs, 2015")
   } else {
-    legstr1 <- paste0("Employees in ",ctyname," living elsewhere")
-    legstr2 <- paste0("Residents of ",ctyname," working elsewhere")
-    legstr3 <- paste0("Employed and Live in ",ctyname)
+    legstr1 <- paste0("Employees in ",ctyname," living elsewhere: ", format(f.summary$workin_liveout, big.mark = ",",scientific = FALSE) )
+    legstr2 <- paste0("Residents of ",ctyname," working elsewhere: ", format(f.summary$livein_workout, big.mark = ",",scientific = FALSE) )
+    legstr3 <- paste0("Employed and Live in ",ctyname,": ", format(f.summary$livein_workin, big.mark = ",",scientific = FALSE) )
     plot_title <- paste0(ctyname,": All Jobs, 2015")
   }
   
