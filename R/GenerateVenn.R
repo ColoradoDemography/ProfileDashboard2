@@ -12,8 +12,7 @@ GenerateVenn <- function(DBPool,listID){
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
-  
-  
+
 if(nchar(placefips) != 0) {
   sumSQL <- paste0("SELECT * FROM data.otm_place_summary WHERE fips = '",placefips,"' ;")
   placeSQL <- paste0("SELECT * FROM data.otm_place_place WHERE fips = '",placefips,"' ;")
@@ -25,17 +24,17 @@ if(nchar(placefips) != 0) {
   f.summary <- dbGetQuery(DBPool, sumSQL)
   f.place <- dbGetQuery(DBPool, placeSQL)
   
-  lin_wout <- as.numeric(f.summary$workin_liveout)
-  lout_win <- as.numeric(f.summary$livein_workout)
-  lin_win <-  as.numeric(f.summary$livein_workin)
+  f.summary$workin_liveout <- as.numeric(f.summary$workin_liveout)
+  f.summary$livein_workout <- as.numeric(f.summary$livein_workout)
+  f.summary$livein_workin <-  as.numeric(f.summary$livein_workin)
   
 
-  rawVenn <- euler(c("A" = lout_win, "B" = lin_wout, "A&B" = lin_win ))
+  rawVenn <- euler(c("A" = f.summary$workin_liveout, "B" = f.summary$livein_workout, "A&B" = f.summary$livein_workin ))
   cols <- c("lightblue1", "lightyellow1","olivedrab1")
   
   
   Vdiag <- plot(rawVenn,
-                quantities = format(rawVenn$original.values, big.mark = ",",scientific = FALSE),
+             #   quantities = format(rawVenn$original.values, big.mark = ",",scientific = FALSE),
                 fill = cols,
                 fill_opacity = 0.5, border = "black",
                 labels=FALSE,
@@ -44,9 +43,9 @@ if(nchar(placefips) != 0) {
   #Building Legend
   
   if(nchar(placefips) != 0) {
-    legstr1 <- paste0("Employees in ",placename," living elsewhere")
-    legstr2 <- paste0("Residents of ",placename," working elsewhere")
-    legstr3 <- paste0("Employed and Live in ",placename)
+    legstr1 <- paste0("Employees in ",placename," living elsewhere: ", format(f.summary$workin_liveout, big.mark = ",",scientific = FALSE) )
+    legstr2 <- paste0("Residents of ",placename," working elsewhere: ", format(f.summary$livein_workout, big.mark = ",",scientific = FALSE) )
+    legstr3 <- paste0("Employed and Live in ",placename,": ", format(f.summary$livein_workin, big.mark = ",",scientific = FALSE) )
     plot_title <- paste0(placename,": All Jobs, 2015")
   } else {
     legstr1 <- paste0("Employees in ",ctyname," living elsewhere")
@@ -160,7 +159,20 @@ if(nchar(placefips) != 0) {
     footnote(captionSrc("LODES",""))
   
  #Creating Latex and Flextables
- m.comb <- cbind(m.work,m.live)
+  
+
+  f.work_fin$id <- 0
+  for(i in 1:nrow(f.work_fin)) {
+    f.work_fin[i,4] <- i
+  }
+  f.live_fin$id <- 0
+  for(i in 1:nrow(f.live_fin)) {
+    f.live_fin[i,4] <- i
+  }
+  
+  f.comb <- full_join(f.work_fin,f.live_fin,"id")
+  f.comb <- f.comb[,c(1:3,5:7)]
+  m.comb <- as.matrix(f.comb)
  
  # Formatting Work Output table.
  names_spacedL <- c("Location","Count","Percent","Location","Count","Percent")
@@ -211,7 +223,7 @@ if(nchar(placefips) != 0) {
   
  #Building output data set
   
-  f.data_out <- bind_cols(f.work_fin,f.live_fin)
+  f.data_out <- f.comb
   
   if(nchar(placefips) != 0) {
     f.data_out$Geography <- placename
