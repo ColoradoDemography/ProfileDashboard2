@@ -86,7 +86,14 @@ if(nchar(placefips) != 0) {
   # Finalizing the output data sets
   #selecting the top 10 places
 
+if(nchar(placefips) != 0) {
+  f.work_fin <- f.place[which(f.place$type == 2),c(5:7)]
+  f.live_fin <- f.place[which(f.place$type == 1),c(5:7)]
+} else {
   f.work_fin <- f.place[which(f.place$type == 1),c(5:7)]
+  f.live_fin <- f.place[which(f.place$type == 2),c(5:7)]
+}
+
   names(f.work_fin) <- c("Location","Count","Percent")
   f.work_sum <- f.work_fin %>%
       summarize(Count = sum(Count),
@@ -100,7 +107,7 @@ if(nchar(placefips) != 0) {
   f.work_fin$Location <- gsub("City City","City",f.work_fin$Location)
 
 
-  f.live_fin <- f.place[which(f.place$type == 2),c(5:7)]
+
   names(f.live_fin) <- c("Location","Count","Percent")
   f.live_sum <- f.live_fin %>%
     summarize(Count = sum(Count),
@@ -131,11 +138,11 @@ if(nchar(placefips) != 0) {
   m.work <- as.matrix(f.work_fin)
   m.live <- as.matrix(f.live_fin)
 
-  workTabH <- m.live %>%
+  workTabH <- m.work %>%
     kable(format='html', table.attr='class="cleanTable"',
           row.names=FALSE,
           align='lrr',
-          caption=capstr2,
+          caption=capstr1,
           col.names = names_spaced,
           escape = FALSE)  %>%
     kable_styling(bootstrap_options = "condensed",full_width = T) %>%
@@ -145,11 +152,11 @@ if(nchar(placefips) != 0) {
     footnote(captionSrc("LODES",""))
 
   #formatting Live output table
-  liveTabH <- m.work %>%
+  liveTabH <- m.live %>%
     kable(format='html', table.attr='class="cleanTable"',
           row.names=FALSE,
           align='lrr',
-          caption=capstr1,
+          caption=capstr2,
           col.names = names_spaced,
           escape = FALSE)  %>%
     kable_styling(bootstrap_options = "condensed",full_width = T) %>%
