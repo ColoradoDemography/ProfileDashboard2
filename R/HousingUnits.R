@@ -7,8 +7,7 @@
 #' @export
 #'
 
-HousingUnits=function(listID, ACS, state="08"){
-  
+HousingUnits=function(listID, ACS, state="08"){ 
   # Collecting place ids from  idList, setting default values
   
   ctyfips <- listID$ctyNum
