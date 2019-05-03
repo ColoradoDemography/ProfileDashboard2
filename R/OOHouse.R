@@ -7,7 +7,8 @@
 #' @export
 #'
 
-OOHouse=function(listID, ACS, state="08"){ 
+OOHouse=function(listID, ACS, state="08"){
+  
   # Collecting place ids from  idList, setting default values
   
   ctyfips <- listID$ctyNum
@@ -19,6 +20,7 @@ OOHouse=function(listID, ACS, state="08"){
  #   placename <- ""
  # }
 
+browser()
 if(nchar(placefips) == 0) {
   # Raw Place data
   f.b25033 <- codemog_api(data="b25033", db=ACS, geonum=paste0("1", state, ctyfips),meta="no") # Population by housing type
@@ -32,14 +34,36 @@ if(nchar(placefips) == 0) {
   f.b25010 <- codemog_api(data="b25010", db=ACS, geonum=paste0("1", state, placefips),meta="no") # Persons per Household
   
 }
-  f.AcsPl <- cbind(f.b25033[,c(1,9:14)], f.b25032[,c(9:19)],f.b25037[,c(1,9)],f.b25010[,c(1,9)])
+#All Housing Units
+f.AcsALL <- cbind(f.b25037[,c(1,8)],f.b25010[,c(1,8)])
 
-  f.AcsPl <- f.AcsPl[,c(1:18,20,22)]
+f.AcsALL <- f.AcsALL[,c(1:18,20,22)]
 
-  f.AcsPl[,2:20] <-as.numeric(as.character(f.AcsPl[,2:20]))
+f.AcsALL[,2:20] <-as.numeric(as.character(f.AcsALL[,2:20]))
 
 
-  f.AcsPl <- f.AcsPl %>% mutate(
+f.AcsALL <- f.AcsALL %>% mutate(
+  Med_Yr = b25037001,
+  PPH = b25010001)
+
+
+f.AcsALLL <- f.AcsALL[,c(1,21:34)] %>% gather(var, ACS, People_TOT:PPH, -geoname)
+
+f.AcsALL_Fin <- f.AcsALLL
+
+f.AcsALL_Fin <- f.AcsALL_Fin[,c(2,1,3)]
+names(f.AcsALL_Fin) <- c("var","Place","Pl_VAL")
+
+
+#Owner Occupied
+  f.AcsOO <- cbind(f.b25033[,c(1,9:14)], f.b25032[,c(9:19)],f.b25037[,c(1,9)],f.b25010[,c(1,9)])
+
+  f.AcsOO <- f.AcsOO[,c(1:18,20,22)]
+
+  f.AcsOO[,2:20] <-as.numeric(as.character(f.AcsOO[,2:20]))
+
+
+  f.AcsOO <- f.AcsOO %>% mutate(
     People_TOT = b25033002,
     People_1 = b25033003,
     People_2_4 = b25033004,
@@ -56,18 +80,47 @@ if(nchar(placefips) == 0) {
     PPH = b25010002)
 
 
-  f.AcsPlL <- f.AcsPl[,c(1,21:34)] %>% gather(var, ACS, People_TOT:PPH, -geoname)
+  f.AcsOOL <- f.AcsOO[,c(1,21:34)] %>% gather(var, ACS, People_TOT:PPH, -geoname)
 
-  f.AcsPl_Fin <- f.AcsPlL
+  f.AcsOO_Fin <- f.AcsOOL
 
-  f.AcsPl_Fin <- f.AcsPl_Fin[,c(2,1,3)]
-  names(f.AcsPl_Fin) <- c("var","Place","Pl_VAL")
+  f.AcsOO_Fin <- f.AcsOO_Fin[,c(2,1,3)]
+  names(f.AcsOO_Fin) <- c("var","Place","Pl_VAL")
+  
+  #Rental
+  f.AcsRt <- cbind(f.b25033[,c(1,15:20)], f.b25032[,c(20:30)],f.b25037[,c(1,10)],f.b25010[,c(1,10)])
+  
+  f.AcsRt <- f.AcsRt[,c(1:18,20,22)]
+  
+  f.AcsRt[,2:20] <-as.numeric(as.character(f.AcsRt[,2:20]))
+  
+  
+  f.AcsRt <- f.AcsRt %>% mutate(
+    People_TOT = b25033008,
+    People_1 = b25033009,
+    People_2_4 = b25033010,
+    People_5 = b25033011,
+    People_MH = b25033012,
+    People_OTH = b25033013,
+    Units_TOT = b25032013,
+    Units_1 = b25032014 + b25032015,
+    Units_2_4 = b25032016 + b25032017,
+    Units_5 = b25032018 + b25032019 + b25032020 + b25032021,
+    Units_MH = b25032022,
+    Units_OTH = b25032023,
+    Med_Yr = b25037003,
+    PPH = b25010003)
+  
+  f.AcsRtL <- f.AcsRt[,c(1,21:34)] %>% gather(var, ACS, People_TOT:PPH, -geoname)
+  names(f.AcsRtL) <- c("geoname","var", "Pl_VAL")
+  
+  
 
   #calculating proportions
 
   # Splitting File
   #People
-  PlPval <- f.AcsPl_Fin[c(1:6),]
+  PlPval <- f.AcsOO_Fin[c(1:6),]
 
   Ptot <- as.numeric(PlPval[1,3])
 
@@ -75,23 +128,23 @@ if(nchar(placefips) == 0) {
 
 
   #units
-  PlUval <- f.AcsPl_Fin[c(7:12),]
+  PlUval <- f.AcsOO_Fin[c(7:12),]
   Utot <- as.numeric(PlUval[1,3])
 
   PlUval$Pl_VAL_P <- as.numeric(PlUval$Pl_VAL)/as.numeric(Utot)
 
 
   # Remainder
-  PlRval <- f.AcsPl_Fin[c(13,14),]
+  PlRval <- f.AcsOO_Fin[c(13,14),]
   PlRval$Pl_VAL_P <- NA
 
 
   # reassembling fils
-  f.AcsPl_Fin <- rbind(PlPval,PlUval,PlRval)
+  f.AcsOO_Fin <- rbind(PlPval,PlUval,PlRval)
 
 
   # Joining Fles
-  f.OOHouse <- f.AcsPl_Fin
+  f.OOHouse <- f.AcsOO_Fin
 
   f.OOHouse$Pl_VAL_F <-  ifelse(f.OOHouse$var == "PPH", formatC(as.numeric(f.OOHouse$Pl_VAL), format="f", digits=2),
                                 ifelse(f.OOHouse$var == "Med_Yr", formatC(as.numeric(f.OOHouse$Pl_VAL), format="f", digits=0), formatC(as.numeric(f.OOHouse$Pl_VAL),format="f", digits=0, big.mark=",")))

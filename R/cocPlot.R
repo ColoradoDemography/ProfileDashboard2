@@ -6,8 +6,7 @@
 #' @return ggplot2 graphic and data file
 #' @export
 
-cocPlot <- function(DBPool,listID,fyr=2000,lyr,base=12) {
-  
+cocPlot <- function(DBPool,lvl,listID,fyr=2000,lyr,base=12) {
   # Collecting place ids from  idList, setting default values
   
   ctyfips <- listID$ctyNum
@@ -19,17 +18,16 @@ cocPlot <- function(DBPool,listID,fyr=2000,lyr,base=12) {
     placename <- ""
   }  
 
-  cocStr <- "SELECT countyfips, year, totalpopulation, births, deaths, netmigration FROM estimates.county_profiles;"
+  cocStr <- paste0("SELECT countyfips, year, totalpopulation, births, deaths, netmigration FROM estimates.county_profiles WHERE countyfips = ",as.numeric(ctyfips),";")
   
   f.coccty <-  dbGetQuery(DBPool,cocStr) %>%
-    filter(countyfips == as.numeric(ctyfips) & year >= fyr & year <= lyr) %>%
+    filter(year >= fyr & year <= lyr) %>%
     mutate( totalpopulation = as.numeric(totalpopulation),
             births=as.numeric(births),
             deaths=as.numeric(deaths),
             netmigration=as.numeric(netmigration),
-            naturalIncrease=births-deaths)
-  
-  
+            naturalincrease=births-deaths)
+
   f.cocLong <- gather(f.coccty, TypeChange, Pop, c(births,deaths,netmigration))
   f.cocLong$TypeChange <- ifelse(f.cocLong$TypeChange =="netmigration","Net Migration",
                                  ifelse(f.cocLong$TypeChange =="births", "Births","Deaths"))
@@ -62,23 +60,23 @@ cocPlot <- function(DBPool,listID,fyr=2000,lyr,base=12) {
           legend.position= "bottom")
   
   f.coccty$place <- ctyname
+  
   f.coccty2 <- f.coccty[,c(8,2:7)]
+
+  f.coccty5 <- tail(f.coccty2,6)
   names(f.coccty2)  <- c("Place","Year","Total Population","Births","Deaths", "Net Migration","Natural Increase")
   
   
   #Creating text 
-
-  f.coccty5 <- tail(f.coccty,6)
-  f.coccty5 <- f.coccty5[,c(8,2:7)]
-  names(f.coccty5)  <- c("Place","Year","Total Population","Births","Deaths", "NetMigration","NaturalIncrease")
+  
   firstyr <- as.numeric(f.coccty5[2,2])
   lastyr <- as.numeric(f.coccty5[6,2])
   
   totChng <- as.numeric(f.coccty5[6,3] -  f.coccty5[1,3])
   
   f.sum <- f.coccty5 %>%
-    summarise(sumNat = sum(NaturalIncrease),
-              sumMig = sum(NetMigration))
+    summarise(sumNat = sum(naturalincrease),
+              sumMig = sum(netmigration))
   
   chgDir <- ifelse(totChng > 0,"increased",
                    ifelse(totChng < 0,"decreased", "stayed the same"))

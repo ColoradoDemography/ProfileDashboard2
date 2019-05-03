@@ -16,11 +16,11 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
- # if(listID$PlFilter == "T") {
- #   placefips <- ""
- #   placename <- ""
- # }
-
+  # if(listID$PlFilter == "T") {
+  #   placefips <- ""
+  #   placename <- ""
+  # }
+  
   if(nchar(placefips) == 0) { # County data call
     ctyfips <- as.numeric(ctyfips)
     #Creating Place data File
@@ -34,9 +34,9 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
       group_by(agecat, add=TRUE) %>%
       mutate(age_Pct = percent((totalpopulation/sum(popTot))*100)) %>%
       mutate(age_Prop = (totalpopulation/sum(popTot))*100)
-  
+    
     f.place$county <- ctyname
-  
+    
     #Creating State Data file
     f.state =county_sya(state, yrs)%>%
       mutate(agecat=age_cat(., "age", groups=agegroup))%>%
@@ -48,7 +48,7 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
       group_by(agecat, add=TRUE) %>%
       mutate(age_Pct = percent((totalpopulation/sum(popTot))*100)) %>%
       mutate(age_Prop = (totalpopulation/sum(popTot))*100)
-  
+    
     # Creating Plot data file
     f.AgePlot <- rbind(f.place, f.state)
     f.AgePlot$geoname <- f.AgePlot$county
@@ -57,7 +57,7 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
     
     subTitle <- ctyname
     f.AgePlot$geoname <- factor(f.AgePlot$geoname, levels=c(ctyname, "Colorado"))
-
+    
     x <- left_join(f.place, f.state, by="agecat")
     f.AgePlot2 <- x[,c(4,5,7,12,14)]
     f.AgePlot2$totalpopulation.x <- format(round(f.AgePlot2$totalpopulation.x,digits=0),big.mark=",")
@@ -65,7 +65,7 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
     names(f.AgePlot2) <- c("Age Category",  paste0("Population: ",ctyname), paste0("Population Percentage: ",ctyname),
                            "Population: Colorado", "Population Percentage: Colorado")
   }
-
+  
   if(nchar(placefips) != 0) { # this is municipal Call from the ACS
     state <- "08"
     f.place <- codemog_api(data="b01001",db=ACS,geonum=paste("1",state , placefips,sep=""),meta="no")
@@ -82,15 +82,15 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
         a7079 = b01001022 + b01001023 + b01001046 + b01001047,
         a8084 = b01001024 + b01001048,
         a85 = b01001025 + b01001049) %>%
-        select(geoname:geonum,a0009:a85)%>%
+      select(geoname:geonum,a0009:a85)%>%
       gather(ageLevel, value, a0009:a85, factor_key=TRUE)%>%  #Needed to change this part of the call
       mutate(agecat=ordered(as.factor(ageLevel), 
-             levels=c("a0009", "a1019", "a2029", "a3039", "a4049",
-                      "a5059", "a6069", "a7079", "a8084", "a85"),
-            labels=c("0 to 9", "10 to 19", "20 to 29", "30 to 39", "40 to 49",
-                     "50 to 59", "60 to 69", "70 to 79", "80 to 84", "85 and over")),
-            age_Value = value,
-            age_Prop = (value/sum(value))*100)
+                            levels=c("a0009", "a1019", "a2029", "a3039", "a4049",
+                                     "a5059", "a6069", "a7079", "a8084", "a85"),
+                            labels=c("0 to 9", "10 to 19", "20 to 29", "30 to 39", "40 to 49",
+                                     "50 to 59", "60 to 69", "70 to 79", "80 to 84", "85 and over")),
+             age_Value = value,
+             age_Prop = (value/sum(value))*100)
     f.place2 <- f.place2[,c(1,10:12)] 
     f.place2$geoname <- placename
     
@@ -141,12 +141,12 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
     
     
   }
-
+  
   #Preparing Plot
-
+  
   barCol <- c("#6EC4E8","#00953A")
   pltTitle <- paste0("Population Distribution by Age\nfor ",yrs)
-
+  
   maxAxis <- round(max(f.AgePlot$age_Prop),digits=0) + 2
   valSeq <- seq(0,maxAxis,4)
   
@@ -167,14 +167,14 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
           panel.background = element_rect(fill = "white", colour = "gray50"),
           panel.grid.major = element_line(colour = "gray80"),
           legend.position= "bottom")
-
+  
   # Generating text
   if(nchar(placefips) != 0) {
     OutText <- paste0(" The age distribution of the population of ",placename," and ",ctyname," are shown here.")
   } else {
     OutText <- paste0(" The age distribution of the population of ",ctyname," and Colorado are shown here.")
   }
-
+  
   outList <- list("plot" = AgePlot, "data" = f.AgePlot2, "text" = OutText)
   return(outList)
 }

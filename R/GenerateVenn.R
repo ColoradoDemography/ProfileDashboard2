@@ -5,6 +5,7 @@
 #' @export
 #'
 GenerateVenn <- function(DBPool,listID){
+
   # Collecting place ids from  idList, setting default values
 
   ctyfips <- listID$ctyNum

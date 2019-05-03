@@ -9,7 +9,6 @@
 #' @export
 #'
 chkID <- function(lvl,fipslist,plName,ctyList,plList) {
-
   multiCty <- "F"
   PlFilter <- "T"
 

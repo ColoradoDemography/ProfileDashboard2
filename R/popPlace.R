@@ -11,6 +11,15 @@ popPlace <- function(DBPool,curyr) {
 
   #Regions
     regList <- list(
+      "Denver PMSA",
+      "Denver-Boulder Metro Area",
+      "Denver-Boulder-Greely CMSA",
+      "10 County Denver Metro Area",
+      "Central Mountains",	
+      "Eastern Plains",
+      "Front Range",
+      "San Luis Valley",
+      "Western Slope",
       "Region  1: Northern Eastern Plains",
       "Region  2: Northern Front Range",
       "Region  3: Denver Metropolitan Area",
@@ -76,6 +85,8 @@ popPlace <- function(DBPool,curyr) {
     names(f.plac)[7] <- "countyname"
     f.plac <- f.plac[,c(2,1,3:7)]
     f.plac <- f.plac[order(f.plac$municipalityname),]
+ 
+    
     
   loc <- list("Counties" = f.cLookup, "Munis" = f.plac, "Region" = regList)
   return(loc)

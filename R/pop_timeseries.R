@@ -49,21 +49,7 @@ pop_timeseries=function(DBPool,lvl,listID, beginyear=2000,endyear, base=10){
         d$placename <- ctyname
    }
   
-  # Region
-  if(lvl == "Region") {
-    popReg <- data.frame()
-    for(i in 1:length(ctynum)) {
-      sqlRegPop <-  paste0("SELECT countyfips, year, totalpopulation FROM estimates.county_profiles WHERE (countyfips = ",as.numeric(ctynum[i]),") 
-                            and (year >= ",beginyear,") and (year <= ",endyear,");")
-      popReg <- rbind(popReg,dbGetQuery(DBPool, sqlRegPop))
-    }
-    d <- popReg %>% 
-      group_by(year) %>%
-      summarize(totalpopulation=sum(as.numeric(totalpopulation))) 
-    d$placeName  <- ctyname
-    d <- d[,c(3,1,2)]
-  }
-        
+  
 
   d <- d[which(d$totalpopulation != 0),]
   
@@ -74,8 +60,8 @@ pop_timeseries=function(DBPool,lvl,listID, beginyear=2000,endyear, base=10){
     xaxs$yBrk[length(xaxs$yBrk)] <- endyear
   }
   
-  
-  d2 <- d[,c(4,2,3)]
+    d2 <- d
+
   names(d2) <- c("Geography","Year","Total Population")
   
   p=d%>%

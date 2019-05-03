@@ -10,9 +10,8 @@
 
 statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
   #outputs the top table in the dashboard
-  
+
   # Collecting place ids from  idList, setting default values
-  
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
@@ -26,19 +25,12 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
   strCtyProf <- "SELECT * FROM estimates.county_profiles;"
   strJobs <- "SELECT * FROM estimates.jobs_by_sector WHERE sector_id = '0';"
   
-  # Region
-  if(lvl =="Region") {
-    regNum <- as.numeric(substr(ctyname,7,9))
-    sqlStrPop1 <- paste0("SELECT reg_num, year, totalpopulation FROM estimates.county_profile_region WHERE reg_num = ",as.numeric(regNum)," and year = ", sYr,";")
-    sqlStrPop2 <- paste0("SELECT reg_num, year, totalpopulation FROM estimates.county_profile_region WHERE reg_num = ",as.numeric(regNum)," and year = ", eYr,";")
-    sqlStrJobs <- paste0("SELECT area_code, population_year, total_jobs FROM estimates.jobs_by_sector_region WHERE area_code = ",as.numeric(regNum)," and population_year = ",eYr,
-                         " and sector_id = '0';")
-  }  
   
   if(lvl == "Counties") {  #Counties
     sqlStrPop1 <- paste0("SELECT countyfips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE countyfips = ",as.numeric(ctyfips)," and year = ", sYr," and placefips = 0;")
     sqlStrPop2 <- paste0("SELECT countyfips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE countyfips = ",as.numeric(ctyfips)," and year = ", eYr," and placefips = 0;")
-    sqlStrJobs <- paste0("SELECT ctyfips, placefips, geoname, year, jobs FROM estimates.muni_jobs_long WHERE ctyfips = ",as.numeric(ctyfips)," and year = ", eYr, ";")
+    sqlStrJobs <- paste0("SELECT area_code, population_year, total_jobs FROM estimates.jobs_by_sector WHERE area_code = ",as.numeric(ctyfips)," and population_year = ",eYr,
+                         " and sector_id = '0';")
     }
   
   if(lvl == "Municipalities") {  #Municialities
@@ -54,10 +46,11 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
     sqlStrJobs <- paste0("SELECT ctyfips, placefips, geoname, year, jobs FROM estimates.muni_jobs_long WHERE placefips = ",as.numeric(placefips)," and year = ", eYr, ";")
   }
   
-  
-  f.tPopyr1p <-  dbGetQuery(DBPool, sqlStrPop1)
-  f.tPopyr2p <-  dbGetQuery(DBPool, sqlStrPop2)
-  f.Jobsp <- dbGetQuery(DBPool, sqlStrJobs)
+
+      f.tPopyr1p <-  dbGetQuery(DBPool, sqlStrPop1)
+      f.tPopyr2p <-  dbGetQuery(DBPool, sqlStrPop2)
+      f.Jobsp <- dbGetQuery(DBPool, sqlStrJobs)
+ 
   
   if(lvl == "Municipalities") { #Pulling the County level data for Municipalities
     f.tPopyr1c <-  dbGetQuery(DBPool, c_sqlStrPop1)
@@ -69,55 +62,7 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
   cty_jobs <- dbGetQuery(DBPool, strJobs)
   
   
-  if(lvl == "Region") { # Building data values for Region
-    #Fixing NA Values
-    tpop1r <- ifelse(is.na(f.tPopyr1p$totalpopulation),0,f.tPopyr1p$totalpopulation)  # Pop 2010
-    tpop2r <- ifelse(is.na(f.tPopyr2p$totalpopulation),0,f.tPopyr2p$totalpopulation)  # Pop Current Year
-    tpopchngr <- tpop2r - tpop1r   # Pop Change value
-    
-    jobsValr <-  f.Jobsp$total_jobs  #The  Total Jobs Value
-    
-    # Creating table values for region
-    hhincr  <- data.frame()
-    MedHHValuer <- data.frame()
-    Povertyr <- data.frame()
-    Nativer <- data.frame()
-    
-    for(i in 1:length(ctyfips)) {
-      hhincr <- rbind(hhincr,codemog_api(data="b19013",db=ACS, geonum=paste("1", state, ctyfips[i], sep=""), meta="no"))
-      MedHHValuer <- rbind(MedHHValuer,codemog_api(data="b25077",db=ACS, geonum=paste("1", state, ctyfips[i], sep=""), meta="no"))
-      Povertyr <- rbind(Povertyr,codemog_api(data="b17001",db=ACS, geonum=paste("1", state, ctyfips[i], sep=""), meta="no"))
-      Nativer <- rbind(Nativer,codemog_api(data="b05002",db=ACS, geonum=paste("1", state, ctyfips[i], sep=""), meta="no"))
-    }
-    #Median HH Income
-    HHincome <- hhincr %>% summarize(med_hhinr  = median(as.numeric(b19013001)))
-    medhhincr <-  HHincome$med_hhinr 
-    
-    #Median Household Value
-    MedHHValue <-  MedHHValuer %>% summarize(med_hhval  = median(as.numeric(b25077001)))
-    medhhvalr <- MedHHValue$med_hhval
-    
-    #Percentage in poverty
-    poverty <- Povertyr %>% summarize(npov = sum(as.numeric(b17001002)),
-                                      totpop = sum(as.numeric(b17001001))) %>%
-      mutate(pctPovertyr = percent((npov/totpop)*100))
-    
-    povertyr <- poverty$pctPovertyr
-    
-    #Percent Native Coloradoan
-    
-    native <- Nativer %>% summarize(nnat = sum(as.numeric(b05002003)),
-                                    totpop = sum(as.numeric(b05002001))) %>%
-      mutate(pctNativer = percent((nnat/totpop)*100))
-    
-    nativer <- native$pctNativer
-    
-    regionData <- c(tpop2r,tpopchngr,jobsValr,medhhincr,medhhvalr,povertyr,nativer)
-  }
-  
-  
-  
-  
+
   #Counties
   if(lvl == "Counties") {
     #Fixing NA Values
@@ -142,7 +87,7 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
     
     countyData <- c(tpop2c,tpopchngc,jobsValc,medhhincc,medhhvalc,povertyc,nativec)
   }
-  
+
   # Municipalities
   if(lvl == "Municipalities") {   
     
@@ -337,26 +282,7 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
   }   
   
   
-  if(lvl == "Region"){
-    #Region
-    outTab[1,nCol] <- format(as.numeric(regionData[1]),nsmall=0, big.mark=",")
-    outTab[2,nCol] <- format(as.numeric(regionData[2]),nsmall=0, big.mark=",")
-    outTab[3,nCol] <- format(round(as.numeric(regionData[3]),digits=0),nsmall=0, big.mark=",")
-    outTab[4,nCol] <- paste0("$",format(as.numeric(regionData[4]),nsmall=0, big.mark=","))
-    outTab[5,nCol] <- paste0("$",format(as.numeric(regionData[5]),nsmall=0, big.mark=","))
-    outTab[6,nCol] <- regionData[6]
-    outTab[7,nCol] <- regionData[7]
-    nCol <- nCol + 1
-    
-    #State
-    outTab[1,nCol] <- format(as.numeric(stateData[1]),nsmall=0, big.mark=",")
-    outTab[2,nCol] <- format(as.numeric(stateData[2]),nsmall=0, big.mark=",")
-    outTab[3,nCol] <- format(round(as.numeric(stateData[3]),digits=0),nsmall=0, big.mark=",")
-    outTab[4,nCol] <- paste0("$",format(as.numeric(stateData[4]),nsmall=0, big.mark=","))
-    outTab[5,nCol] <- paste0("$",format(as.numeric(stateData[5]),nsmall=0, big.mark=","))
-    outTab[6,nCol] <- stateData[6]
-    outTab[7,nCol] <- stateData[7]
-  } 
+  
   
   # Create Column headings
 
@@ -482,7 +408,7 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
     OutTxt <- "Note: For municipalities in multiple counties, comparison data from the largest county is displayed."
   }
   
-  outList <- list("Htable" = outHTML, "FlexTable" = FlexOut, "Ltable" = outLATEX, "text" = OutTxt)
+  outList <- list("Htable" = outHTML, "FlexTable" = FlexOut, "Ltable" = outLATEX, "text" = OutTxt, "data"=f.Flex)
   return(outList)
   
   
