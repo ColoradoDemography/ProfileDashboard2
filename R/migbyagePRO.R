@@ -13,12 +13,7 @@ migbyagePRO <- function(DBPool,listID, base=10) {
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
-  if(listID$PlFilter == "T") {
-    placefips <- ""
-    placename <- ""
-  }
-  
-
+ 
   
   sqlPlace <- paste0("SELECT fips, county, agegroup, netmig0010 FROM data.netmigrbyage WHERE fips = ",as.numeric(ctyfips),";")
   f.migPlace <- dbGetQuery(DBPool, sqlPlace)
