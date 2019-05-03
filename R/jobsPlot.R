@@ -17,10 +17,7 @@ jobsPlot=function(DBPool,listID, maxyr,base=10){
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
-  if(listID$PlFilter == "T") {
-    placefips <- ""
-    placename <- ""
-  }
+  
   
   # Jobs Data
   jobsStr <- paste0("SELECT * FROM estimates.jobs_by_sector WHERE area_code = ", as.numeric(ctyfips), " AND sector_id = '0';")
