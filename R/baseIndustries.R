@@ -11,7 +11,6 @@
 
 baseIndustries <- function(DBPool,listID, curyr, oType,base=10){
   
-
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
