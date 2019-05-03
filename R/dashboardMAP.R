@@ -18,10 +18,7 @@ dashboardMAP <- function(DBPool,lvl,listID){
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
-  #if(listID$PlFilter == "T") {
-  #  placefips <- ""
-  #  placename <- ""
-  #}
+  
   
   
   if(lvl == "Municipalities"){
