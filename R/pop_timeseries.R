@@ -27,7 +27,6 @@ pop_timeseries=function(DBPool,lvl,listID, beginyear=2000,endyear, base=10){
   placefips <- listID$plNum
   placename <- listID$plName
  
-
   # Checking length of fips to idenify municipality data series
   if(lvl == "Municipalities") {
     sqlStrPop1 <- paste0("SELECT countyfips, placefips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE (placefips = ",as.numeric(placefips),"  and (year >= ",beginyear,") and (year <= ",endyear,"));")
