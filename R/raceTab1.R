@@ -13,7 +13,6 @@
 #'
 raceTab1 <- function(listID, ACS) {
   # Collecting place ids from  idList, setting default values
-  
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
