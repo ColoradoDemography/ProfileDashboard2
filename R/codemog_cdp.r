@@ -15,6 +15,7 @@
 #' export
 #' 
 codemog_cdp <- function(datacall="table",data, db="c2010", geonum="108", sumlev=NULL, state="08", type="csv", meta="yes", geography="geonum"){
+  
   if (!require(readr)) {
     install.packages("readr")
     library(readr)
