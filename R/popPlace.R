@@ -8,7 +8,6 @@
 
 
 popPlace <- function(DBPool,curyr) {
-
   #Regions
     regList <- list(
       "Denver PMSA",
