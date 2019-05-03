@@ -491,7 +491,7 @@ server <- function(input, output, session) {
           #Chart/Table Objects
           popf1 <<- popTable(DBPool=DOLAPool,lvl=input$level,listID=idList,sYr=1990,eYr=curYr)
           popf2 <<- pop_timeseries(DBPool=DOLAPool,lvl=input$level,listID=idList,endyear=curYr,base=12)
-          popf3 <<- popForecast(lvl=input$level,listID=idList)
+          popf3 <<- popForecast(listID=idList)
           popf4 <<- cocPlot(DBPool=DOLAPool,lvl=input$level,listID=idList,lyr=curYr)
           
           # creating output files
@@ -601,7 +601,7 @@ server <- function(input, output, session) {
           #Generate tables, plots and text...
           
           popa1 <<- agePlotPRO(listID=idList, ACS=curACS, yrs=curYr)
-          popa2 <<- medianAgeTab(lvl=input$level,listID=idList, ACS=curACS)
+          popa2 <<- medianAgeTab(listID=idList, ACS=curACS)
           popa3 <<- ageForecastPRO(listID=idList,sYr=2010,mYr=2015,eYr=2025,base=12)
           popa4 <<- migbyagePRO(DBPool=DOLAPool,listID=idList)
           
