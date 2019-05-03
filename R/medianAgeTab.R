@@ -9,7 +9,7 @@
 #' @export
 
 medianAgeTab <- function(listID, ACS, state="08"){
-  browser()
+
   # Collecting place ids from  idList, setting default values
   
   ctyfips <- listID$ctyNum

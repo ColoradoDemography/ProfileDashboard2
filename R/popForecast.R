@@ -11,7 +11,7 @@
 popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
 
   # Collecting place ids from  idList, setting default values
-  browser()
+
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
