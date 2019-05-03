@@ -11,15 +11,11 @@
 
 educPRO <- function(listID, ACS){
   # Collecting place ids from  idList, setting default values
-  
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
- # if(listID$PlFilter == "T") {
- #   placefips <- ""
- #   placename <- ""
- # }
+ 
   
   
   state="08"
