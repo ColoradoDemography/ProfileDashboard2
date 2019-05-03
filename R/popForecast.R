@@ -8,7 +8,7 @@
 #' @return ggplot2 graphic and data file
 #' @export
 
-popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
+popForecast <- function(lvl,listID, byr=2000,eyr=2050, base=10) {
 
   # Collecting place ids from  idList, setting default values
   
@@ -21,11 +21,20 @@ popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
     placename <- ""
   }
 
+
   fips=as.numeric(ctyfips)
-  yrs <- seq(byr,eyr,2)
-  d <- county_sya(fips, yrs) %>%
-    group_by(county, datatype, year) %>%
-    summarize(Tot_pop = sum(as.numeric(totalpopulation)))
+  yrs <- seq(byr,eyr, by=2)
+  
+  if(lvl == "Region") {
+    d <- county_sya(fips, yrs)  %>%
+      group_by(datatype, year) %>%
+      summarize(Tot_pop = sum(as.numeric(totalpopulation)))
+  } else {
+    d <- county_sya(fips, yrs)  %>%
+      group_by(county, datatype, year) %>%
+      summarize(Tot_pop = sum(as.numeric(totalpopulation)))
+  }
+
   
   
   yaxs <- setAxis(d$Tot_pop)
@@ -49,8 +58,15 @@ popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
           legend.title=element_blank())
   
   # Creating Output data file
-  d[4] <- round(d[4],digits=0)
-  d$county <- ctyname
+  if(lvl == "Region") {
+    d[3] <- round(d[3],digits=0)
+    d$Place <- ctyname
+    d <- d[,c(4,1:3)]
+  } else{
+    d[4] <- round(d[4],digits=0)
+    d$county <- ctyname
+  }
+  
   
   #Output text
  
@@ -63,8 +79,6 @@ popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
   gr20102020 <- as.numeric(d10[which(d10$year == 2020),5])
   gr20202030 <- as.numeric(d10[which(d10$year == 2030),5])
   gr20302040 <- as.numeric(d10[which(d10$year == 2040),5])
-  
-  
   
   
   grDir <- ifelse(gr20102020 > gr20302040,"decrease",
@@ -87,5 +101,7 @@ popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
   names(d) <- c("Geography","Data Type","Year","Total Population")
   
   outList <- list("plot" = p,"data" = d,"text" = OutText)
+  
+
   return(outList)
 }
