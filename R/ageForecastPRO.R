@@ -16,8 +16,7 @@
 ageForecastPRO=function(listID, sYr, mYr, eYr, base=12, agegroup="ten"){
 
   
-  # Collecting place ids from  idList, setting default values
-  
+  # Collecting place ids from  idList, setting default values  
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
