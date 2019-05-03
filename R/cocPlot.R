@@ -7,8 +7,7 @@
 #' @export
 
 cocPlot <- function(DBPool,lvl,listID,fyr=2000,lyr,base=12) {
-  # Collecting place ids from  idList, setting default values
-  
+  # Collecting place ids from  idList, setting default values 
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
