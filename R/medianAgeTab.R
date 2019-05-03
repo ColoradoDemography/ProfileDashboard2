@@ -17,7 +17,6 @@ medianAgeTab <- function(listID, ACS, state="08"){
   placefips <- listID$plNum
   placename <- listID$plName
  
-
   # Preparing Plot 9/2018
     # extracting data
 
