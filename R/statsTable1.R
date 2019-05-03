@@ -10,7 +10,6 @@
 
 statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
   #outputs the top table in the dashboard
-
   # Collecting place ids from  idList, setting default values
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
