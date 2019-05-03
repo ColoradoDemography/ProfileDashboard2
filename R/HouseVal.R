@@ -15,7 +15,6 @@
 #'
 
 HouseVal <- function(listID, ACS, state="08"){
-  
   # Collecting place ids from  idList, setting default values
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
