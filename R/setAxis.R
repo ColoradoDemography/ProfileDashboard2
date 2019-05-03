@@ -16,11 +16,7 @@ setAxis <- function(inValue) {
   minBrk <- min(yBrk)
   maxBrk <- max(yBrk)
   
- # if(maxBrk  == maxval){
- #   addval <- maxBrk + 20
- #   maxBrk <- addval
- #   yBrk <- append(yBrk,addval)
- # }
+ 
   outList <- list("minBrk" = minBrk, "maxBrk" = maxBrk, "yBrk" = yBrk)
  return(outList)
 }
