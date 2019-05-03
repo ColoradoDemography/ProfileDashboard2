@@ -5,7 +5,6 @@
 #' @param id is the data name and creates the module/namespace ID
 #' @return output button type (plot, table  or data)
 #' @export
-
 downloadObjUI <- function(id) {
   ns <- NS(id)
   #Identifying data object and type
