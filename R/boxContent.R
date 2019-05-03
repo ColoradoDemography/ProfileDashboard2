@@ -16,6 +16,7 @@
 #' @export
 #'
 boxContent <- function(title,description, source, MSA, stats, muni, multiCty, PlFilter, urlList) {
+  
   outList <- list()
   i <- 1
   ui00 <- ""
