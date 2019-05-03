@@ -14,10 +14,7 @@ weeklyWages <- function(DBPool,listID, curyr,base=10){
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
-  if(listID$PlFilter == "T") {
-    placefips <- ""
-    placename <- ""
-  }
+  
 
   wagePLSQL <- paste0("SELECT * FROM estimates.weekly_wages WHERE fips = '",as.numeric(ctyfips), "';")
   wageSTSQL <- paste0("SELECT * FROM estimates.weekly_wages WHERE fips = '0';")
