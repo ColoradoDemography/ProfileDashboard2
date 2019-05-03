@@ -9,7 +9,6 @@
 #' @export
 
 agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
-  
   # Collecting place ids from  idList, setting default values
   
   ctyfips <- listID$ctyNum
