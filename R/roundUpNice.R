@@ -13,7 +13,6 @@ roundUpNice <- function(x, Unit) {
   } else {
     z <- Unit*ceiling(x/Unit)
   }
-
   return(z)
 }
 
