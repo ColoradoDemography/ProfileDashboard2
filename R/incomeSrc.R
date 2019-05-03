@@ -13,8 +13,7 @@ incomeSrc <- function(level, listID, ACS) {
   
   fipslist <- listID$ctyNum
   fipsname <- listID$ctyName
- 
-  
+   
  #Gathering Data
 
   f.b19051 <- codemog_api(data="b19051",db=ACS,geonum=paste0("1",state , fipslist),meta="no")
