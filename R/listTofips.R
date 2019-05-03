@@ -9,7 +9,6 @@
 
 listTofips <- function(df, level, inList1){
   # Function to produce a vector of FIPS codes from an input list of names and codes
-
   fipsl <- vector()
   switch(level,
          "Region" = {
