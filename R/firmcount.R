@@ -18,7 +18,6 @@
 firmcount=function(DBPool,listID, base=10){
  
   # Collecting place ids from  idList, setting default values
-
   ctyfips <- listID$ctyNum
   ctynum <- as.numeric(ctyfips)
   ctyname <- listID$ctyName
