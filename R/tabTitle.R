@@ -5,6 +5,7 @@
 #' @export
 #'
 tabTitle <-function(item) {
+  
   outTitle <- switch(item,
                      "stats" = "Basic Statistics",
                      "popf" = "Population Trends",
