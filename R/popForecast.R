@@ -16,11 +16,7 @@ popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
-  if(listID$PlFilter == "T") {
-    placefips <- ""
-    placename <- ""
-  }
-
+ 
 
   fips=as.numeric(ctyfips)
   yrs <- seq(byr,eyr, by=2)
