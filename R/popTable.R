@@ -17,7 +17,6 @@ popTable <- function(DBPool,lvl,listID,sYr,eYr) {
   placefips <- listID$plNum
   placename <- listID$plName
  
-
   #outputs the Population Growth Rate table in the population section..
   
   state <- "Colorado"
