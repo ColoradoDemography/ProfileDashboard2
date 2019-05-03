@@ -9,17 +9,14 @@
 #' @export
 
 medianAgeTab <- function(listID, ACS, state="08"){
-  
+  browser()
   # Collecting place ids from  idList, setting default values
   
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
- # if(listID$PlFilter == "T") {
- #   placefips <- ""
- #   placename <- ""
- # }
+ 
 
   # Preparing Plot 9/2018
     # extracting data
@@ -29,8 +26,10 @@ medianAgeTab <- function(listID, ACS, state="08"){
   }  else {
     sexbyage <- codemog_api(data="b01001",db=ACS, geonum=paste("1", state, placefips, sep=""), meta="no")
   }
- 
   sexbyage[8:ncol(sexbyage)] <- sapply(sexbyage[8:ncol(sexbyage)],as.numeric)
+
+ 
+  
   
   # Creating decades
   sexbyaged <- sexbyage %>%
@@ -75,9 +74,9 @@ medianAgeTab <- function(listID, ACS, state="08"){
   
   # Split into male and female files for counts
 
-  malebyageC <- sexbyaged[,c(1:7, 9, 57:65)]
-  femalebyageC <- sexbyaged[,c(1:7, 33, 66:74)]
-  
+    malebyageC <- sexbyaged[,c(1:7, 9, 57:65)]
+    femalebyageC <- sexbyaged[,c(1:7, 33, 66:74)]
+ 
   malebyageCL <- malebyageC %>%
     gather(ageLevel, value, b01001002:m8000, factor_key=TRUE) %>%  
     mutate(agecat=ordered(as.factor(ageLevel), 
@@ -97,13 +96,14 @@ medianAgeTab <- function(listID, ACS, state="08"){
   
   # Split into male and female files for percentages
 
+    malebyageP <- sexbyaged[,c(1:7, 75:83)]
+    femalebyageP <- sexbyaged[,c(1:7, 84:92)]
+ 
+      # find max value
+    maxm <- max(malebyageP[8:16])
+    maxf <- max(femalebyageP[8:16])
+ 
   
-  malebyageP <- sexbyaged[,c(1:7, 75:83)]
-  femalebyageP <- sexbyaged[,c(1:7, 84:92)]
-  
-  # find max value
-  maxm <- max(malebyageP[8:16])
-  maxf <- max(femalebyageP[8:16])
   maxpct <- max(maxm,maxf)
   
   maxval <- (10*ceiling(maxpct/10)) + 10
@@ -158,11 +158,11 @@ medianAgeTab <- function(listID, ACS, state="08"){
           panel.grid.major = element_line(colour = "gray80"),
           legend.position= "bottom")
   
-  
+ 
   # Merging files
-
-  maleC <- malebyageCL[,c(1,9,10)]
-  maleP <- malebyagePL[,c(1,9,10)]
+    maleC <- malebyageCL[,c(1,9,10)]
+    maleP <- malebyagePL[,c(1,9,10)]
+  
   
   #Modify maleP 
   maleT <- maleP %>% summarize(value = sum(value))
@@ -170,7 +170,7 @@ medianAgeTab <- function(listID, ACS, state="08"){
   maleT$geoname <- ctyname
   maleT <- maleT[,c(3,2,1)]
   maleP <- rbind(maleP,maleT)
-  
+ 
   male <- left_join(maleC,maleP,by="agecat")
   male <- male[,c(1,3,2,5)]
   names(male) <- c("Geography","Age","Count","Percent")
@@ -179,8 +179,8 @@ medianAgeTab <- function(listID, ACS, state="08"){
   male$Percent <- percent(abs(male$Percent))
   
   
-  femaleC <- femalebyageCL[,c(1,9,10)]
-  femaleP <- femalebyagePL[,c(1,9,10)]
+    femaleC <- femalebyageCL[,c(1,9,10)]
+    femaleP <- femalebyagePL[,c(1,9,10)]
   
   femaleT <- femaleP %>% summarize(value = sum(value))
   femaleT$agecat <- "Total"
@@ -207,15 +207,14 @@ medianAgeTab <- function(listID, ACS, state="08"){
   }
   
 
-  sexbyage1 <-  sexbyagedf[1,] 
-  sexbyage2 <-  sexbyagedf[2:10,] 
-  sexbyagedf <- rbind(sexbyage2,sexbyage1)
+  sexbyagedf <- sexbyagedf[c(2:10,1),]
   
-  
+ # Median Age
+
+ 
   #County  Age
   medAgecty <- codemog_api(data="b01002",db=ACS, geonum=paste("1", state, ctyfips, sep=""), meta="no")
   medAgectyMOE <- codemog_api(data="b01002_moe",db=ACS, geonum=paste("1", state, ctyfips, sep=""), meta="no")
-
   medAgecty2 <- gather(medAgecty[1,8:10])
   medAgecty2$key <- c("Total","Male","Female")
   names(medAgecty2)[2] <- "MedAge_c"
@@ -226,20 +225,6 @@ medianAgeTab <- function(listID, ACS, state="08"){
 
   f.ctyAge <- left_join(medAgecty2, medAgecty2MOE, by = "key")
 
-  #State Age
-  medAgeST  <- codemog_api(data="b01002",db=ACS, geonum=paste("1", state,  sep=""), meta="no")
-  medAgeSTMOE  <- codemog_api(data="b01002_moe",db=ACS, geonum=paste("1", state,  sep=""), meta="no")
-
-  medAgeST2 <- gather(medAgeST[1,8:10])
-  medAgeST2$key <- c("Total","Male","Female")
-  names(medAgeST2)[2] <- "MedAge_s"
-
-  medAgeST2MOE <- gather(medAgeSTMOE[1,8:10])
-  medAgeST2MOE$key <- c("Total","Male","Female")
-  names(medAgeST2MOE)[2] <- "MOE_s"
-
-  f.stateAge <- left_join(medAgeST2, medAgeST2MOE, by = "key")
-  
   if(nchar(placefips) != 0) {
     #place  Age
     medAgeplace <- codemog_api(data="b01002",db=ACS, geonum=paste("1", state, placefips, sep=""), meta="no")
@@ -255,39 +240,53 @@ medianAgeTab <- function(listID, ACS, state="08"){
     
     f.placeAge <- left_join(medAgeplace2, medAgeplace2MOE, by = "key")
   }
+  
+  
+  #State Age
+  medAgeST  <- codemog_api(data="b01002",db=ACS, geonum=paste("1", state,  sep=""), meta="no")
+  medAgeSTMOE  <- codemog_api(data="b01002_moe",db=ACS, geonum=paste("1", state,  sep=""), meta="no")
+  
+  medAgeST2 <- gather(medAgeST[1,8:10])
+  medAgeST2$key <- c("Total","Male","Female")
+  names(medAgeST2)[2] <- "MedAge_s"
+  
+  medAgeST2MOE <- gather(medAgeSTMOE[1,8:10])
+  medAgeST2MOE$key <- c("Total","Male","Female")
+  names(medAgeST2MOE)[2] <- "MOE_s"
+  
+  f.stateAge <- left_join(medAgeST2, medAgeST2MOE, by = "key")
 
   #Creating Copmbined table and Calcualting tests
-  if(nchar(placefips) == 0) {
-    f.ageTab <- left_join(f.ctyAge, f.stateAge, by = "key")
-    #Calculating significant differences
-    f.ageTab$MedAge_c <- as.numeric(f.ageTab$MedAge_c)
-    f.ageTab$MOE_c <- as.numeric(f.ageTab$MOE_c)
-    f.ageTab$MedAge_s <- as.numeric(f.ageTab$MedAge_s)
-    f.ageTab$MOE_s <- as.numeric(f.ageTab$MOE_s)
-    
-    f.ageTab$ZScore <- (abs(f.ageTab$MedAge_c - f.ageTab$MedAge_s)/
-                          sqrt((f.ageTab$MOE_c^2) + (f.ageTab$MOE_s^2)))
-    f.ageTab$Sig_Diff <- ifelse(f.ageTab$ZScore < 1,"No","Yes")
-    f.ageTab$Difference <- ifelse(f.ageTab$Sig_Diff == "Yes", ifelse(f.ageTab$MedAge_c < f.ageTab$MedAge_s,"Younger","Older"),"")
-    
-    m.ageTab <- as.matrix(f.ageTab[,c(1:5,7,8)])
-  } else {
-    f.ageTab <- left_join(f.placeAge, f.ctyAge, by = "key")
-    #Calculating significant differences
-    f.ageTab$MedAge_p <- as.numeric(f.ageTab$MedAge_p)
-    f.ageTab$MOE_p <- as.numeric(f.ageTab$MOE_p)
-    f.ageTab$MedAge_c <- as.numeric(f.ageTab$MedAge_c)
-    f.ageTab$MOE_c <- as.numeric(f.ageTab$MOE_c)
-    
-    f.ageTab$ZScore <- (abs(f.ageTab$MedAge_p - f.ageTab$MedAge_c)/
-                          sqrt((f.ageTab$MOE_p^2) + (f.ageTab$MOE_c^2)))
-    f.ageTab$Sig_Diff <- ifelse(f.ageTab$ZScore < 1,"No","Yes")
-    f.ageTab$Difference <- ifelse(f.ageTab$Sig_Diff == "Yes", ifelse(f.ageTab$MedAge_p < f.ageTab$MedAge_c,"Younger","Older"),"")
-    
-    m.ageTab <- as.matrix(f.ageTab[,c(1:5,7,8)])
-    
-  }
 
+     if(nchar(placefips) == 0) {
+      f.ageTab <- left_join(f.ctyAge, f.stateAge, by = "key")
+      #Calculating significant differences
+      f.ageTab$MedAge_c <- as.numeric(f.ageTab$MedAge_c)
+      f.ageTab$MOE_c <- as.numeric(f.ageTab$MOE_c)
+      f.ageTab$MedAge_s <- as.numeric(f.ageTab$MedAge_s)
+      f.ageTab$MOE_s <- as.numeric(f.ageTab$MOE_s)
+      
+      f.ageTab$ZScore <- (abs(f.ageTab$MedAge_c - f.ageTab$MedAge_s)/
+                            sqrt((f.ageTab$MOE_c^2) + (f.ageTab$MOE_s^2)))
+      f.ageTab$Sig_Diff <- ifelse(f.ageTab$ZScore < 1,"No","Yes")
+      f.ageTab$Difference <- ifelse(f.ageTab$Sig_Diff == "Yes", ifelse(f.ageTab$MedAge_c < f.ageTab$MedAge_s,"Younger","Older"),"")
+      
+      m.ageTab <- as.matrix(f.ageTab[,c(1:5,7,8)])
+    } else {
+      f.ageTab <- left_join(f.placeAge, f.ctyAge, by = "key")
+      #Calculating significant differences
+      f.ageTab$MedAge_p <- as.numeric(f.ageTab$MedAge_p)
+      f.ageTab$MOE_p <- as.numeric(f.ageTab$MOE_p)
+      f.ageTab$MedAge_c <- as.numeric(f.ageTab$MedAge_c)
+      f.ageTab$MOE_c <- as.numeric(f.ageTab$MOE_c)
+      
+      f.ageTab$ZScore <- (abs(f.ageTab$MedAge_p - f.ageTab$MedAge_c)/
+                            sqrt((f.ageTab$MOE_p^2) + (f.ageTab$MOE_c^2)))
+      f.ageTab$Sig_Diff <- ifelse(f.ageTab$ZScore < 1,"No","Yes")
+      f.ageTab$Difference <- ifelse(f.ageTab$Sig_Diff == "Yes", ifelse(f.ageTab$MedAge_p < f.ageTab$MedAge_c,"Younger","Older"),"")
+      
+      m.ageTab <- as.matrix(f.ageTab[,c(1:5,7,8)])
+    }
   
 
   #Column Names
@@ -473,7 +472,7 @@ if(nchar(placename) == 0)  {
   
 
   
-  outList <- list("plot" = pyramid, "Htable" = tabHTML, "Ltable" = tabLATEX, "text" = medText, "FlexTable" = FlexOut, "data" = sexbyagedf)
+  outList <- list("plot" = pyramid, "Htable" = tabHTML, "Ltable" = tabLATEX, "text" = medText, "FlexTable" = FlexOut, "data" = sexbyagedf, "data2" = f.Flex)
   return(outList)
 
 }

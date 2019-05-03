@@ -8,10 +8,10 @@
 #' @return ggplot2 graphic and data file
 #' @export
 
-popForecast <- function(lvl,listID, byr=2000,eyr=2050, base=10) {
+popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
 
   # Collecting place ids from  idList, setting default values
-  
+  browser()
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
@@ -25,15 +25,11 @@ popForecast <- function(lvl,listID, byr=2000,eyr=2050, base=10) {
   fips=as.numeric(ctyfips)
   yrs <- seq(byr,eyr, by=2)
   
-  if(lvl == "Region") {
-    d <- county_sya(fips, yrs)  %>%
-      group_by(datatype, year) %>%
-      summarize(Tot_pop = sum(as.numeric(totalpopulation)))
-  } else {
+  
     d <- county_sya(fips, yrs)  %>%
       group_by(county, datatype, year) %>%
       summarize(Tot_pop = sum(as.numeric(totalpopulation)))
-  }
+  
 
   
   
@@ -58,14 +54,9 @@ popForecast <- function(lvl,listID, byr=2000,eyr=2050, base=10) {
           legend.title=element_blank())
   
   # Creating Output data file
-  if(lvl == "Region") {
-    d[3] <- round(d[3],digits=0)
-    d$Place <- ctyname
-    d <- d[,c(4,1:3)]
-  } else{
     d[4] <- round(d[4],digits=0)
     d$county <- ctyname
-  }
+  
   
   
   #Output text
