@@ -6,7 +6,6 @@
 #' @return a numeric vector of the years between StartYr and EndYr accounting for odd years
 #' @export
 setYrRange <- function(StartYr,EndYr) {
-
   sRem <- StartYr %% 5
   eRem <- EndYr %% 5
 
