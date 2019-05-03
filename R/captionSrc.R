@@ -6,7 +6,6 @@
 #' @export
 #'
 captionSrc <- function(type, dataSrc) {
-
   dateStr <- paste0(", Print Date: ",as.character(format(Sys.Date(),"%m/%d/%Y")))
 
   if(type == "SDO") {
