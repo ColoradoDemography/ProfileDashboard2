@@ -16,10 +16,7 @@ jobsByIndustry <- function(DBPool,listID, curyr, base=10){
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
-  if(listID$PlFilter == "T") {
-    placefips <- ""
-    placename <- ""
-  }
+ 
   
   options(warn=-1)  # Suppressing warning messages produced by VennDiagram
 
