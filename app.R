@@ -463,7 +463,7 @@ server <- function(input, output, session) {
           
           img_List1 <- list(src = fileMat[4], contentType = 'image/png', width = 400, height = 300)
           
-          Stats.info <- tags$div(class="dInfo","Individual plots and data may be downloaded by selecting the 'Sources and Downloads' tabl in each display box.",tags$br(),
+          Stats.info <- tags$div(class="dInfo","Individual plots and data may be downloaded by selecting the 'Sources and Downloads' tab in each display box.",tags$br(),
                                  "Note: County data is displayed for municipalities and places with fewer than 200 people.",tags$br(), tags$br(),
                                  "General information is available here:", tags$br(),
                                  tags$ul(
