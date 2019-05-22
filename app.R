@@ -100,7 +100,7 @@ source("R/unemployment.R")
 # tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
 
 #Production
- initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
+ initJS <- "/srv/shiny-server/ProfileDashboard2/dL_init.js"
  tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
 
 # Current ACS database
