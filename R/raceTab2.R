@@ -17,7 +17,10 @@ raceTab2 <- function(listID, ACS) {
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
- 
+ # if(listID$PlFilter == "T") {
+ #   placefips <- ""
+ #   placename <- ""
+ # }
   
   
   state="08"
@@ -255,7 +258,7 @@ if(nchar(placefips) == 0){
     column_spec(6, width ="0.5in") %>%
     add_indent(c(3:9)) %>%
     add_header_above(header=tblHead) %>%
-    footnote(captionSrc("ACS",ACS))
+    kableExtra::footnote(captionSrc("ACS",ACS))
 
 
   race_data <- data.frame(m.race)
@@ -321,7 +324,7 @@ if(nchar(placefips) == 0){
       column_spec(6, width ="0.4in") %>%
       add_indent(c(3:9)) %>%
       add_header_above(header=tblHead) %>%
-      footnote(captionSrc("ACS",ACS),threeparttable = T)
+      kableExtra::footnote(captionSrc("ACS",ACS),threeparttable = T)
 
     #Preparing Text
     if(nchar(placefips) == 0) {

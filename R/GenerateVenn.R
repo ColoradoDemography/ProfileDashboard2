@@ -149,7 +149,7 @@ if(nchar(placefips) != 0) {
     column_spec(1, width = "3in") %>%
     column_spec(2, width = "1in") %>%
     column_spec(3, width = "1in") %>%
-    footnote(captionSrc("LODES",""))
+    kableExtra::footnote(captionSrc("LODES",""))
 
   #formatting Live output table
   liveTabH <- m.live %>%
@@ -163,7 +163,7 @@ if(nchar(placefips) != 0) {
     column_spec(1, width = "3in") %>%
     column_spec(2, width = "1in") %>%
     column_spec(3, width = "1in") %>%
-    footnote(captionSrc("LODES",""))
+    kableExtra::footnote(captionSrc("LODES",""))
   
  #Creating Latex and Flextables
   
@@ -202,7 +202,7 @@ if(nchar(placefips) != 0) {
     column_spec(5, width = "0.5in") %>%
     column_spec(6, width = "0.5in") %>%
     add_header_above(header=tblHead) %>%
-    footnote(captionSrc("LODES",""),threeparttable = T)
+    kableExtra::footnote(captionSrc("LODES",""),threeparttable = T)
 
   
  

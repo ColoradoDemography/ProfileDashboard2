@@ -17,7 +17,10 @@ housePRO=function(DBPool,listID, curYr){
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
-
+#  if(listID$PlFilter == "T") {
+#    placefips <- ""
+#    placename <- ""
+#  }
 state <- "08"
 
   if(nchar(placefips) == 0) {
@@ -110,7 +113,7 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
     column_spec(2, width ="0.5in") %>%
     add_indent(c(2,3,4,6,7,8)) %>%
    # add_header_above(header=tblHead1) %>%
-    footnote(captionSrc("SDO",curYr))
+    kableExtra::footnote(captionSrc("SDO",curYr))
   
   # preparing FlexTable
   
@@ -147,7 +150,7 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
         column_spec(2, width ="0.5in") %>%
         add_indent(c(2,3,4,6,7,8)) %>%
         add_header_above(header=tblHead1) %>%
-        footnote(captionSrc("SDO",curYr),threeparttable = T)
+        kableExtra::footnote(captionSrc("SDO",curYr),threeparttable = T)
 
   names(f.HHPl) <- c(tabTitle,"Value")  
 

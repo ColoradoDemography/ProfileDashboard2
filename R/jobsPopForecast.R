@@ -15,7 +15,10 @@ jobsPopForecast <- function(DBPool,listID, curyr, base=10){
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
-  
+  if(listID$PlFilter == "T") {
+    placefips <- ""
+    placename <- ""
+  }
   
   #fips is the 3-digit character string
 
@@ -99,7 +102,7 @@ jobsPopForecast <- function(DBPool,listID, curyr, base=10){
     column_spec(5, width="0.5in") %>%
     column_spec(6, width="0.5in") %>%
     add_header_above(header=tblHead) %>%
-    footnote(captionSrc("SDO",""))
+    kableExtra::footnote(captionSrc("SDO",""))
   
   
   #LATEX Table
@@ -116,7 +119,7 @@ jobsPopForecast <- function(DBPool,listID, curyr, base=10){
     column_spec(5, width="0.5in") %>%
     column_spec(6, width="0.5in") %>%
     add_header_above(header=tblHead) %>%
-    footnote(captionSrc("SDO",""),threeparttable = T) 
+    kableExtra::footnote(captionSrc("SDO",""),threeparttable = T) 
   
   #Flextable
   

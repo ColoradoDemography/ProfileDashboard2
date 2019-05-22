@@ -10,6 +10,7 @@
 
 statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
   #outputs the top table in the dashboard
+
   # Collecting place ids from  idList, setting default values
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
@@ -131,7 +132,7 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
       
       Povertym <- codemog_api(data="b17001",db=ACS, geonum=paste("1", state, placefips, sep=""), meta="no")
       povertym <- percent(as.numeric(Povertym$b17001002)/as.numeric(Povertym$b17001001)*100)
-      
+   
       Nativem <- codemog_api(data="b05002",db=ACS, geonum=paste("1", state, placefips, sep=""), meta="no")
       nativem <- percent(as.numeric(Nativem$b05002003)/as.numeric(Nativem$b05002001)*100)
       
@@ -305,7 +306,7 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
       column_spec(2, width = "0.4in") %>%
       column_spec(3, width = "0.4in") %>%
       column_spec(4, width = "0.4in") %>%
-      footnote(symbol=c("Source: State Demography Office",captionSrc("ACS",ACS)))
+      kableExtra::footnote(symbol=c("Source: State Demography Office",captionSrc("ACS",ACS)))
   } else {
     outHTML <-  kable(outTab, format='html', table.attr='class="cleanTab"',
                       digits=1,
@@ -318,7 +319,7 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
       column_spec(1, width = "4in") %>%
       column_spec(2, width = "0.4in") %>%
       column_spec(3, width = "0.4in") %>%
-      footnote(symbol=c("Source: State Demography Office",captionSrc("ACS",ACS)))
+      kableExtra::footnote(symbol=c("Source: State Demography Office",captionSrc("ACS",ACS)))
   } 
   
   #Generate Flextable

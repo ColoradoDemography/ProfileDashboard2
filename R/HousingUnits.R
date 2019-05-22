@@ -211,7 +211,7 @@ HousingUnits=function(listID, ACS, state="08"){
     add_indent(c(2:6)) %>%
     add_header_above(header=tblHead2) %>%
     add_header_above(header=tblHead1) %>%
-    footnote(captionSrc("ACS",ACS))
+    kableExtra::footnote(captionSrc("ACS",ACS))
   
   
   
@@ -231,7 +231,7 @@ HousingUnits=function(listID, ACS, state="08"){
     add_indent(c(2:6)) %>%
     add_header_above(header=tblHead2) %>%
     add_header_above(header=tblHead1) %>%
-    footnote(captionSrc("ACS",ACS),threeparttable = T)
+    kableExtra::footnote(captionSrc("ACS",ACS),threeparttable = T)
   
   # preparing FlexTable
   

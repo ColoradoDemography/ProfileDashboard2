@@ -285,7 +285,7 @@ HouseVal <- function(listID, ACS, state="08"){
     column_spec(1, width = "3in") %>%
     column_spec(column=2:3, width = "0.33in") %>%
     add_header_above(header=tblHead1) %>%
-    footnote(captionSrc("ACS",ACS))
+    kableExtra::footnote(captionSrc("ACS",ACS))
   
   # Building Latex Tables
   Housing_tab2 <- m.HouseVal  %>%
@@ -298,7 +298,7 @@ HouseVal <- function(listID, ACS, state="08"){
     column_spec(1, width = "4in") %>%
     column_spec(2:3, width = "0.33in") %>%
     add_header_above(header=tblHead1) %>%
-    footnote(captionSrc("ACS",ACS)) 
+    kableExtra::footnote(captionSrc("ACS",ACS)) 
   
   #Building FlexTables
   f.HouseVal2 <- f.HouseVal

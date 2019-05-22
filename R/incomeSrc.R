@@ -13,7 +13,8 @@ incomeSrc <- function(level, listID, ACS) {
   
   fipslist <- listID$ctyNum
   fipsname <- listID$ctyName
-   
+ 
+  
  #Gathering Data
 
   f.b19051 <- codemog_api(data="b19051",db=ACS,geonum=paste0("1",state , fipslist),meta="no")
@@ -251,7 +252,7 @@ incomeSrc <- function(level, listID, ACS) {
       add_indent(c(2:7)) %>%
       add_header_above(header=tblHead2) %>%
       add_header_above(header=tblHead1) %>%
-      footnote(captionSrc("ACS",ACS))
+      kableExtra::footnote(captionSrc("ACS",ACS))
     
     f.outData <- as.data.frame(m.IncFin)
     names(f.outData) <- c(paste0("Income Source: ",fipsname),"Households: Estimate",
@@ -303,7 +304,7 @@ incomeSrc <- function(level, listID, ACS) {
       add_indent(c(2:7)) %>%
       add_header_above(header=tblHead2) %>%
       add_header_above(header=tblHead1) %>%
-      footnote(captionSrc("ACS",ACS),threeparttable = T)
+      kableExtra::footnote(captionSrc("ACS",ACS),threeparttable = T)
     
     # Text
     

@@ -13,6 +13,7 @@
 #'
 raceTab1 <- function(listID, ACS) {
   # Collecting place ids from  idList, setting default values
+  
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
@@ -367,7 +368,7 @@ if(nchar(placefips) != 0) { #output municipality table
     column_spec(7, width="0.5in") %>%
     add_indent(c(3:9)) %>%
     add_header_above(header=tblHead) %>%
-    footnote(general="Sources",
+    kableExtra::footnote(general="Sources",
              number=c("2000 Census",
                    "2010 Census",
                    captionSrc("ACS",ACS)))
@@ -388,7 +389,7 @@ if(nchar(placefips) != 0) { #output municipality table
     column_spec(7, width="0.4in") %>%
     add_indent(c(3:9)) %>%
     add_header_above(header=tblHead) %>%
-    footnote(general="Sources",
+    kableExtra:: footnote(general="Sources",
              c("2000: 2000 Census",
                       "2010: 2010 Census",
                       paste0(ACSName,": ",captionSrc("ACS",ACS))),threeparttable = T) 

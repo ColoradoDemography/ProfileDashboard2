@@ -176,7 +176,7 @@ if(nchar(placefips) == 0) {
       add_indent(c(2:6)) %>%
       add_header_above(header=tblHead2) %>%
       add_header_above(header=tblHead1) %>%
-      footnote(captionSrc("ACS",ACS))
+      kableExtra::footnote(captionSrc("ACS",ACS))
     
     # preparing FlexTable
     f.house_data <- data.frame(m.RTHouse)
@@ -227,7 +227,7 @@ if(nchar(placefips) == 0) {
       add_indent(c(2:6)) %>%
       add_header_above(header=tblHead2) %>%
       add_header_above(header=tblHead1) %>%
-      footnote(captionSrc("ACS",ACS),threeparttable = T)
+      kableExtra::footnote(captionSrc("ACS",ACS),threeparttable = T)
 
     
     outList <- list("Htable" = Housing_tab, "Ltable" = tabOut, "data" = f.RTHouse,"FlexTable" = FlexOut)

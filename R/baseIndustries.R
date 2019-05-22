@@ -11,6 +11,7 @@
 
 baseIndustries <- function(DBPool,listID, curyr, oType,base=10){
   
+
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
@@ -166,7 +167,7 @@ baseIndustries <- function(DBPool,listID, curyr, oType,base=10){
       column_spec(1, width = "2in") %>%
       column_spec(2, width = "0.75in") %>%
       column_spec(3, width = "0.75in") %>%
-      footnote(captionSrc("SDO",""))
+      kableExtra::footnote(captionSrc("SDO",""))
 
     jobsTabL <- m.jobs%>% kable(digits=1,
                                row.names=FALSE,
@@ -179,7 +180,7 @@ baseIndustries <- function(DBPool,listID, curyr, oType,base=10){
       column_spec(1, width = "2in") %>%
       column_spec(2, width = "0.75in") %>%
       column_spec(3, width = "0.75in") %>%
-      footnote(captionSrc("SDO",""))
+      kableExtra::footnote(captionSrc("SDO",""))
  
   #preparing data
 

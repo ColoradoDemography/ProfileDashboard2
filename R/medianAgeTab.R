@@ -17,6 +17,7 @@ medianAgeTab <- function(listID, ACS, state="08"){
   placefips <- listID$plNum
   placename <- listID$plName
  
+
   # Preparing Plot 9/2018
     # extracting data
 
@@ -327,7 +328,7 @@ medianAgeTab <- function(listID, ACS, state="08"){
     column_spec(6, width = "1in") %>%
     column_spec(7, width = "0.75in") %>%
     add_header_above(header=tblHead) %>%
-    footnote(captionSrc("ACS",ACS))
+    kableExtra::footnote(captionSrc("ACS",ACS))
   
   # Building FlexTable
   f.Flex <- as.data.frame(m.ageTab)
@@ -392,7 +393,7 @@ if(nchar(placename) == 0)  {
     column_spec(6, width = "0.75in") %>%
     column_spec(7, width = "0.5in") %>%
     add_header_above(header=tblHead) %>%
-    footnote(captionSrc("ACS",ACS),threeparttable = T)
+    kableExtra::footnote(captionSrc("ACS",ACS),threeparttable = T)
 
   PlAge <- as.numeric(m.ageTab[3,2])
   StAge <- as.numeric(m.ageTab[3,4])

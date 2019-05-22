@@ -17,6 +17,7 @@ popTable <- function(DBPool,lvl,listID,sYr,eYr) {
   placefips <- listID$plNum
   placename <- listID$plName
  
+
   #outputs the Population Growth Rate table in the population section..
   
   state <- "Colorado"
@@ -147,7 +148,7 @@ popTable <- function(DBPool,lvl,listID,sYr,eYr) {
         column_spec(6, width = "0.5in") %>%
         column_spec(7, width = "0.5in") %>%
         add_header_above(header=tblHead)  %>%
-        footnote(captionSrc("SDO",""))
+        kableExtra::footnote(captionSrc("SDO",""))
     }  else { 
       OutHTML  <- 
         kable(x.OutTab,format='html', table.attr='class="myTable"',
@@ -163,7 +164,7 @@ popTable <- function(DBPool,lvl,listID,sYr,eYr) {
         column_spec(4, width = "0.5in") %>%
         column_spec(5, width = "0.5in") %>%
         add_header_above(header=tblHead)  %>%
-        footnote(captionSrc("SDO",""))
+        kableExtra::footnote(captionSrc("SDO",""))
     }
     
     # Creating Final Data Set and Flex table
@@ -233,7 +234,7 @@ popTable <- function(DBPool,lvl,listID,sYr,eYr) {
         row_spec(0, align="c") %>%
         column_spec(column=1:7, width="0.4in") %>%
         add_header_above(header=tblHead)  %>%
-        footnote(captionSrc("SDO",""),threeparttable=T)
+        kableExtra::footnote(captionSrc("SDO",""),threeparttable=T)
     }  else { 
       OutLATEX <- x.OutTab %>%
         kable(digits=1,
@@ -246,7 +247,7 @@ popTable <- function(DBPool,lvl,listID,sYr,eYr) {
         row_spec(0, align="c") %>%
         column_spec(column=1:5, width="0.4in") %>%
         add_header_above(header=tblHead)  %>%
-        footnote(captionSrc("SDO",""),threeparttable=T)
+        kableExtra::footnote(captionSrc("SDO",""),threeparttable=T)
     }
     
     # Building text
