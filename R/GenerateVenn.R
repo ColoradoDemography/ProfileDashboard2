@@ -24,10 +24,17 @@ if(nchar(placefips) != 0) {
   f.summary <- dbGetQuery(DBPool, sumSQL)
   f.place <- dbGetQuery(DBPool, placeSQL)
   
-  f.summary$workin_liveout <- as.numeric(f.summary$workin_liveout)
-  f.summary$livein_workout <- as.numeric(f.summary$livein_workout)
-  f.summary$livein_workin <-  as.numeric(f.summary$livein_workin)
   
+if(nchar(placefips) != 0) {  
+     f.summary$workin_liveout <- as.numeric(f.summary$workin_liveout)
+     f.summary$livein_workout <- as.numeric(f.summary$livein_workout)
+     f.summary$livein_workin <-  as.numeric(f.summary$livein_workin)
+   }  else {
+     x <- as.numeric(f.summary$workin_liveout) 
+     f.summary$workin_liveout <- as.numeric(f.summary$livein_workout)
+     f.summary$livein_workout <- x
+     f.summary$livein_workin <-  as.numeric(f.summary$livein_workin)
+   }
 
   rawVenn <- euler(c("A" = f.summary$workin_liveout, "B" = f.summary$livein_workout, "A&B" = f.summary$livein_workin ))
   cols <- c("lightblue1", "lightyellow1","olivedrab1")
@@ -41,16 +48,14 @@ if(nchar(placefips) != 0) {
                 counts = TRUE)
   
   #Building Legend
+    legstr1 <- paste0("Employed in Selected Area, Live Outside: ", format(f.summary$workin_liveout, big.mark = ",",scientific = FALSE) )
+    legstr2 <- paste0("Live in Selected Area, Employed Outside: ", format(f.summary$livein_workout, big.mark = ",",scientific = FALSE) )
+    legstr3 <- paste0("Employed and Live in Selected Area: ", format(f.summary$livein_workin, big.mark = ",",scientific = FALSE) )
+
   
   if(nchar(placefips) != 0) {
-    legstr1 <- paste0("Employees in ",placename," living elsewhere: ", format(f.summary$workin_liveout, big.mark = ",",scientific = FALSE) )
-    legstr2 <- paste0("Residents of ",placename," working elsewhere: ", format(f.summary$livein_workout, big.mark = ",",scientific = FALSE) )
-    legstr3 <- paste0("Employed and Live in ",placename,": ", format(f.summary$livein_workin, big.mark = ",",scientific = FALSE) )
-    plot_title <- paste0(placename,": All Jobs, 2015")
+      plot_title <- paste0(placename,": All Jobs, 2015")
   } else {
-    legstr1 <- paste0("Employees in ",ctyname," living elsewhere: ", format(f.summary$workin_liveout, big.mark = ",",scientific = FALSE) )
-    legstr2 <- paste0("Residents of ",ctyname," working elsewhere: ", format(f.summary$livein_workout, big.mark = ",",scientific = FALSE) )
-    legstr3 <- paste0("Employed and Live in ",ctyname,": ", format(f.summary$livein_workin, big.mark = ",",scientific = FALSE) )
     plot_title <- paste0(ctyname,": All Jobs, 2015")
   }
   

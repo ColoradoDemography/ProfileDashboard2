@@ -1,7 +1,7 @@
 #' popTable The population table showing the annual growth rate in the Population Section
 #' Updates 1/2019 to remove county_profiles call and PostgreSQL code
 #'
-#' @param lvl the data level, Counties, Municipalities 
+#' @param lvl the data level, Counties, Municipalities and region
 #' @param listID the list containing place id and Place names
 #' @param sYr Start Year
 #' @param eYr End year
@@ -96,6 +96,24 @@ popTable <- function(DBPool,lvl,listID,sYr,eYr) {
     mPlace <- as.matrix(placX[,c(3,2,5,6)])
   }
 
+  # Region  
+  if(lvl == "Region") {
+    popReg <- data.frame()
+    for(i in 1:length(ctyfips)) {
+      regPopSQL <- paste0("SELECT countyfips, year, totalpopulation FROM estimates.county_muni_timeseries WHERE countyfips = ",as.numeric(ctynum[i])," AND placefips = 0;")
+      regPop <-  dbGetQuery(DBPool, regPopSQL)
+      popReg <- bind_rows(popReg,regPop)
+    }
+    mReg <- popReg %>% 
+      group_by(year) %>%
+      summarize(totalpopulation=sum(as.numeric(totalpopulation),na.rm=TRUE)) %>%
+      filter(year %in% yrs)%>%
+      arrange(year)%>%
+      mutate(year=as.numeric(year),
+             growthRate=percent(signif((((totalpopulation/lag(totalpopulation))^(1/(year-lag(year)))) -1)*100),digits=1),
+             Population=comma(totalpopulation))
+    mReg$Population  <- ifelse(mReg$totalpopulation == 0, " ",mReg$Population)
+  }
   
   if(lvl == "Municipalities") { #if a placename is present
     m.OutTab <- cbind(mPlace,mCty,mCO)
@@ -105,7 +123,10 @@ popTable <- function(DBPool,lvl,listID,sYr,eYr) {
     m.OutTab <- cbind(mCty,mCO)
     m.OutTab <- m.OutTab[,c(1,3,4,6,7)] 
   } 
-  
+  if(lvl == "Region"){
+    m.OutTab <- cbind(mReg,mCO)
+    m.OutTab <- m.OutTab[,c(1,4,3,6,7)] 
+  }
   
  
   m.OutTab$year <- as.character(m.OutTab$year)
