@@ -147,7 +147,7 @@ if(nchar(placefips) != 0) {
     kable(format='html', table.attr='class="cleanTable"',
           row.names=FALSE,
           align='lrr',
-          caption=capstr1,
+          caption=capstr2,
           col.names = names_spaced,
           escape = FALSE)  %>%
     kable_styling(bootstrap_options = "condensed",full_width = T) %>%
@@ -161,7 +161,7 @@ if(nchar(placefips) != 0) {
     kable(format='html', table.attr='class="cleanTable"',
           row.names=FALSE,
           align='lrr',
-          caption=capstr2,
+          caption=capstr1,
           col.names = names_spaced,
           escape = FALSE)  %>%
     kable_styling(bootstrap_options = "condensed",full_width = T) %>%
@@ -191,7 +191,7 @@ if(nchar(placefips) != 0) {
  
  tblHead <- c(capstr1 = 3,capstr2 = 3)
  # set vector names
- names(tblHead) <- c(capstr1,capstr2)
+ names(tblHead) <- c(capstr2,capstr1)
  
   combTabL <-kable(m.comb,
                   col.names = names_spacedL,
