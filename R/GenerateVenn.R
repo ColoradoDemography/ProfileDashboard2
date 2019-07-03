@@ -135,8 +135,8 @@ if(nchar(placefips) != 0) {
     capstr2 <- paste0("Residents of ",placename," working elsewhere")
     tabCap <- paste0("Commuting Patterns for ",placename)
   } else {
-    capstr1 <- paste0("Employees in ",ctyname," living elsewhere")
-    capstr2 <- paste0("Residents of ",ctyname," working elsewhere")
+    capstr2 <- paste0("Employees in ",ctyname," living elsewhere")
+    capstr1 <- paste0("Residents of ",ctyname," working elsewhere")
     tabCap <- paste0("Commuting Patterns for ",ctyname)
   }
   
@@ -147,7 +147,7 @@ if(nchar(placefips) != 0) {
     kable(format='html', table.attr='class="cleanTable"',
           row.names=FALSE,
           align='lrr',
-          caption=capstr2,
+          caption=capstr1,
           col.names = names_spaced,
           escape = FALSE)  %>%
     kable_styling(bootstrap_options = "condensed",full_width = T) %>%
@@ -161,7 +161,7 @@ if(nchar(placefips) != 0) {
     kable(format='html', table.attr='class="cleanTable"',
           row.names=FALSE,
           align='lrr',
-          caption=capstr1,
+          caption=capstr2,
           col.names = names_spaced,
           escape = FALSE)  %>%
     kable_styling(bootstrap_options = "condensed",full_width = T) %>%
@@ -191,7 +191,7 @@ if(nchar(placefips) != 0) {
  
  tblHead <- c(capstr1 = 3,capstr2 = 3)
  # set vector names
- names(tblHead) <- c(capstr2,capstr1)
+ names(tblHead) <- c(capstr1,capstr2)
  
   combTabL <-kable(m.comb,
                   col.names = names_spacedL,
