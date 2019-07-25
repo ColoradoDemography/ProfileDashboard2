@@ -178,7 +178,7 @@ raceTab1 <- function(listID, ACS) {
     p4_00ST <- rbind(p4_00ST,CensRowST)
     
   # County  
-      browser()
+    
     # Fixing for Broomfield...
     if(ctyfips != "014") {
     p4_00CTY <- codemog_api(data="p4", db="c2000",geonum=paste0("1", state, ctyfips),meta="no")
