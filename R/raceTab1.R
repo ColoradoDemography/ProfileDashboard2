@@ -13,7 +13,7 @@
 #'
 raceTab1 <- function(listID, ACS) {
   # Collecting place ids from  idList, setting default values
-  
+
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
@@ -178,6 +178,9 @@ raceTab1 <- function(listID, ACS) {
     p4_00ST <- rbind(p4_00ST,CensRowST)
     
   # County  
+      browser()
+    # Fixing for Broomfield...
+    if(ctyfips != "014") {
     p4_00CTY <- codemog_api(data="p4", db="c2000",geonum=paste0("1", state, ctyfips),meta="no")
     p4_00CTY[,7:ncol(p4_00CTY)]=as.numeric(as.character(p4_00CTY[,7:ncol(p4_00CTY)]))
     p4_00CTY <- p4_00CTY %>%
@@ -198,6 +201,14 @@ raceTab1 <- function(listID, ACS) {
       
       p4_00CTY <- p4_00CTY[,c(1,18,19)]
       p4_00CTY$geoname <- ctyname
+    } else {
+      p4_00CTY <- data.frame(geoname = ctyname,
+                race = c("HispanicP","NonHispanicP","NHWhiteP","NHBlack", "NHAIANP","NHAsianP","NHNHOPIP","NHOtherP","NHTwoP"),
+                                   Census.2000 = NA)
+      
+      CensRowCTY$Census.2010 <- " "
+    }
+      
       
       names(CensRowCTY)[3] <- "Census.2000"
       p4_00CTY <- rbind(p4_00CTY,CensRowCTY)
@@ -336,7 +347,10 @@ if(nchar(placefips) != 0) { #output municipality table
                                                                             ifelse(f.raceFin$race == "NHOtherP","Non-Hispanic Other","Non-Hispanic, Two Races")))))))))
   
  
-  m.race <- as.matrix(f.raceFin[,c(9,3:8)]) #This is the matrix table
+# removing NA
+ f.raceFin[is.na(f.raceFin)] <- " "
+ 
+   m.race <- as.matrix(f.raceFin[,c(9,3:8)]) #This is the matrix table
   
   
   
