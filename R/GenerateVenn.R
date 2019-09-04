@@ -1,5 +1,5 @@
 #' GenerateVenn Generates a Venn diagram using LODES data
-#' V2 revised 2/15/2018 AB
+#' V3 revised 9/4/2019 AB
 #' @param listID Id list with fips and location names
 #' @return ggplot2 graphic, formatted datatables, and datasets
 #' @export
@@ -21,22 +21,15 @@ if(nchar(placefips) != 0) {
   placeSQL <- paste0("SELECT * FROM data.otm_county_place WHERE fips = '",ctyfips,"' ;")
 }
   # reading Data 
-  f.summary <- dbGetQuery(DBPool, sumSQL)
-  f.place <- dbGetQuery(DBPool, placeSQL)
-  
-  
-if(nchar(placefips) != 0) {  
-     f.summary$workin_liveout <- as.numeric(f.summary$workin_liveout)
-     f.summary$livein_workout <- as.numeric(f.summary$livein_workout)
-     f.summary$livein_workin <-  as.numeric(f.summary$livein_workin)
-   }  else {
-     x <- as.numeric(f.summary$workin_liveout) 
-     f.summary$workin_liveout <- as.numeric(f.summary$livein_workout)
-     f.summary$livein_workout <- x
-     f.summary$livein_workin <-  as.numeric(f.summary$livein_workin)
-   }
+   f.summary <- dbGetQuery(DBPool, sumSQL)
+   f.place <- dbGetQuery(DBPool, placeSQL)
 
-  rawVenn <- euler(c("A" = f.summary$workin_liveout, "B" = f.summary$livein_workout, "A&B" = f.summary$livein_workin ))
+     f.summary$livein_workout <- as.numeric(f.summary$livein_workout)
+     f.summary$liveout_workin <- as.numeric(f.summary$liveout_workin)
+     f.summary$livein_workin <-  as.numeric(f.summary$livein_workin)
+  
+
+  rawVenn <- euler(c("A" = f.summary$liveout_workin, "B" = f.summary$livein_workout, "A&B" = f.summary$livein_workin ))
   cols <- c("lightblue1", "lightyellow1","olivedrab1")
   
   
@@ -48,15 +41,15 @@ if(nchar(placefips) != 0) {
                 counts = TRUE)
   
   #Building Legend
-    legstr1 <- paste0("Employed in Selected Area, Live Outside: ", format(f.summary$workin_liveout, big.mark = ",",scientific = FALSE) )
+    legstr1 <- paste0("Employed in Selected Area, Live Outside: ", format(f.summary$liveout_workin, big.mark = ",",scientific = FALSE) )
     legstr2 <- paste0("Live in Selected Area, Employed Outside: ", format(f.summary$livein_workout, big.mark = ",",scientific = FALSE) )
     legstr3 <- paste0("Employed and Live in Selected Area: ", format(f.summary$livein_workin, big.mark = ",",scientific = FALSE) )
 
   
   if(nchar(placefips) != 0) {
-      plot_title <- paste0(placename,": All Jobs, 2015")
+      plot_title <- paste0(placename,": All Jobs, 2017")
   } else {
-    plot_title <- paste0(ctyname,": All Jobs, 2015")
+    plot_title <- paste0(ctyname,": All Jobs, 2017")
   }
   
   
