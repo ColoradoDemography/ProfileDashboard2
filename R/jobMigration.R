@@ -13,19 +13,19 @@
 #' @export
 #'
 jobMigration <- function(DBPool,listID, maxyr, base=10){
-  
+
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
-  
+ 
 
   jobsSQL <- paste0("SELECT * FROM estimates.bea_jobs WHERE fips = ",as.numeric(ctyfips), ";")
   jobslyr <- paste0("jobs_",maxyr)
 
     f.jobsBea <- dbGetQuery(DBPool, jobsSQL)
 
- 
+
 
 
   #Jobs
@@ -34,11 +34,15 @@ jobMigration <- function(DBPool,listID, maxyr, base=10){
   f.jobs1yr <- gather(f.jobsBea, year,jobs, jobs_1970:jobslyr)
   f.jobs1yr$year <- as.numeric(gsub("jobs_","",f.jobs1yr$year))
   
+  minBea <- min(f.jobs1yr$year)
+  maxBea <- max(f.jobs1yr$year)
+  
   # Calculating  5-year value
   f.jobs1yr$year5 <- f.jobs1yr$year - (f.jobs1yr$year %%5)
  
   maxYear5 <- max(f.jobs1yr$year5)
   maxYear1 <- max(f.jobs1yr$year)
+  
   f.jobs1yr$year5 <- ifelse(f.jobs1yr$year >  maxYear5,maxYear1,f.jobs1yr$year5)
   
   #creating a lagged difference
@@ -56,6 +60,8 @@ jobMigration <- function(DBPool,listID, maxyr, base=10){
   
   f.migr1yr <- dbGetQuery(DBPool, ctySQL)
 
+  f.migr1yr <- f.migr1yr[which(f.migr1yr$year >= minBea & f.migr1yr$year <= maxBea),]
+  
   # Calculating  5-year value
   f.migr1yr$year5 <- f.migr1yr$year - (f.migr1yr$year %%5)
   
