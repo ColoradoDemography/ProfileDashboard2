@@ -165,8 +165,7 @@ if(nchar(placefips) != 0) {
   
  #Creating Latex and Flextables
   
-
-  f.work_fin$id <- 0
+   f.work_fin$id <- 0
   for(i in 1:nrow(f.work_fin)) {
     f.work_fin[i,4] <- i
   }
@@ -175,12 +174,23 @@ if(nchar(placefips) != 0) {
     f.live_fin[i,4] <- i
   }
   
-  f.comb <- full_join(f.work_fin,f.live_fin,"id")
-  f.comb <- f.comb[,c(1:3,5:7)]
-  m.comb <- as.matrix(f.comb)
+  f.comb2 <- full_join(f.work_fin,f.live_fin,"id")
+  f.comb2 <- f.comb2[,c(1:3,5:7)]
+  m.comb2 <- as.matrix(f.comb2)
+  
+
+  m.capstr1 <- matrix(c(capstr1,"",""),nrow=1,ncol=3)
+  m.workmat <- as.matrix(f.work_fin[,1:3])
+  m.workmat <- rbind(m.capstr1,m.workmat)
+  
+  m.capstr2 <- matrix(c(capstr2,"",""),nrow=1,ncol=3)
+  m.livemat <- as.matrix(f.live_fin[,1:3])
+  m.livemat <- rbind(m.capstr2,m.livemat)  
+ 
+  m.comb <- rbind(m.workmat,m.livemat)
  
  # Formatting Work Output table.
- names_spacedL <- c("Location","Count","Percent","Location","Count","Percent")
+ names_spacedL <- c("Location","Count","Percent")
  
  tblHead <- c(capstr1 = 3,capstr2 = 3)
  # set vector names
@@ -189,23 +199,20 @@ if(nchar(placefips) != 0) {
   combTabL <-kable(m.comb,
                   col.names = names_spacedL,
                  row.names=FALSE,
-                 align='lrrlrr',
+                 align='lrr',
                  caption=tabCap,
                  format="latex", booktabs=TRUE) %>%
     kable_styling(latex_options="hold_position",font_size=9)  %>%
-    column_spec(1, width="2in") %>%
+    column_spec(1, width="3in") %>%
     column_spec(2, width = "0.5in") %>%
     column_spec(3, width = "0.5in") %>%
-    column_spec(4, width="2in") %>%
-    column_spec(5, width = "0.5in") %>%
-    column_spec(6, width = "0.5in") %>%
-    add_header_above(header=tblHead) %>%
+    row_spec(c(1,14),bold = T) %>%
     kableExtra::footnote(captionSrc("LODES",""),threeparttable = T)
 
   
  
   #Building FlexTable
-  Ft1 <- data.frame(m.comb)
+  Ft1 <- data.frame(m.comb2)
   names(Ft1) <- c("V1","V2","V3","V4","V5","V6")
   Flexcomb <- regulartable(Ft1) %>%
               set_header_labels(V1 = "Location", V2="Count", V3="Percent",
@@ -228,7 +235,7 @@ if(nchar(placefips) != 0) {
   
  #Building output data set
   
-  f.data_out <- f.comb
+  f.data_out <- f.comb2
   
   if(nchar(placefips) != 0) {
     f.data_out$Geography <- placename
