@@ -8,6 +8,7 @@
 
 
 popPlace <- function(DBPool,curyr) {
+
   #Regions
     regList <- list(
       "Denver PMSA",
@@ -64,6 +65,7 @@ popPlace <- function(DBPool,curyr) {
     f.pLookup <- f.pLookup[which(!is.na(f.pLookup$placefips)),] #Remove Disbanded Areas
     
     f.pLookup$municipalityname <- gsub(' \\(Part\\)','',f.pLookup$municipalityname)
+    f.pLookup$municipalityname <- gsub(' \\(part\\)','',f.pLookup$municipalityname)
     f.pLookup$municipalityname <- gsub('Sprgs','Springs',f.pLookup$municipalityname)
     f.pLookup$municipalityname <- gsub('/G','',f.pLookup$municipalityname)
     
