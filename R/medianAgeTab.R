@@ -290,11 +290,9 @@ medianAgeTab <- function(listID, ACS, state="08"){
   
 
   #Column Names
-  if(nchar(placename) == 0)  {
-    names_spaced <- c("Gender","Median Age","MOE","Median Age","MOE","Signficant Difference?","Difference from State")
-  } else {
-    names_spaced <- c("Gender","Median Age","MOE","Median Age","MOE","Signficant Difference?","Difference from County")
-  }
+ 
+  names_spaced <- c("Gender","Median Age","MOE","Median Age","MOE","Signficant","Direction")
+ 
   #Span Header
   if(nchar(placefips) == 0) {
     # create vector with colspan
@@ -368,14 +366,12 @@ medianAgeTab <- function(listID, ACS, state="08"){
   
 if(nchar(placename) == 0)  {
   names(f.ageTab2) <- c("Gender", paste0("Median Age: ",ctyname), paste0("MOE: ",ctyname),
-                        "Median Age: Colorado", "MOE: Colorado", "Sig. Difference","Difference from State")
+                        "Median Age: Colorado", "MOE: Colorado", "Significant","Difference")
 } else {
   names(f.ageTab2) <- c("Gender", paste0("Median Age: ",placename), paste0("MOE: ",placename),
-                        paste0("Median Age: ",ctyname), paste0("MOE: ",ctyname), "Sig. Difference","Difference from County")
+                        paste0("Median Age: ",ctyname), paste0("MOE: ",ctyname), "Significant","Difference")
 }
   
-
-
 
   tabLATEX <- m.ageTab %>% kable(digits=1,
                   row.names=FALSE,
@@ -390,7 +386,7 @@ if(nchar(placename) == 0)  {
     column_spec(3, width = "0.5in") %>%
     column_spec(4, width = "0.5in") %>%
     column_spec(5, width = "0.5in") %>%
-    column_spec(6, width = "0.75in") %>%
+    column_spec(6, width = "0.5in") %>%
     column_spec(7, width = "0.5in") %>%
     add_header_above(header=tblHead) %>%
     kableExtra::footnote(captionSrc("ACS",ACS),threeparttable = T)
