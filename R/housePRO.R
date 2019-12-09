@@ -17,6 +17,10 @@ housePRO=function(DBPool,listID, curYr){
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
+# Fixing placeFIPS for the City of Castle Pines
+  if(placefips == "12387") {
+    placefips = "12390"
+  }
 #  if(listID$PlFilter == "T") {
 #    placefips <- ""
 #    placename <- ""
