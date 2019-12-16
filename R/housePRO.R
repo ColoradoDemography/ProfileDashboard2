@@ -69,13 +69,13 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
                    ifelse(f.HHPl$housing == "totalhousingunits", "Total Housing Units",
                    ifelse(f.HHPl$housing == "householdsize", "Persons per Household",       
                    ifelse(f.HHPl$housing == "occupiedhousingunits", "Occupied Housing Units",
-                   ifelse(f.HHPl$housing == "vacanthousingunits", "Vacant Housing Units","Vacancy Rate")))))))
+                   ifelse(f.HHPl$housing == "vacanthousingunits", "Vacant Housing Units","Vacancy Rate (Per 100 Units)")))))))
 
 
  
   f.HHPl[c(1:3,5:7),2] <- comma(as.numeric(f.HHPl[c(1:3,5:7),2]))
   f.HHPl[8,2] <- round(as.numeric(f.HHPl[8,2]), 2)
-  f.HHPl[4,2] <- percent(as.numeric(f.HHPl[4,2]))
+  f.HHPl[4,2] <- round(as.numeric(f.HHPl[4,2]),digits=1)
 
   m.House <- as.matrix(f.HHPl)
 
@@ -119,6 +119,21 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
    # add_header_above(header=tblHead1) %>%
     kableExtra::footnote(captionSrc("SDO",curYr))
   
+  
+  
+  Ltable <- m.House %>% 
+    kable(format="latex", #booktabs=TRUE,
+        row.names=FALSE,
+        col.names = names_spaced,
+        align="lr",
+        caption=tabTitle)  %>%
+        kable_styling(latex_options="HOLD_position", font_size=10) %>%
+        column_spec(1, width = "3.5in") %>%
+        column_spec(2, width ="0.5in") %>%
+        add_indent(c(2,3,4,6,7,8)) %>%
+        add_header_above(header=tblHead1) %>%
+        kableExtra::footnote(captionSrc("SDO",curYr),threeparttable=T)
+  
   # preparing FlexTable
   
   FlexOut <- regulartable(f.HHPl)
@@ -144,17 +159,7 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
   FlexOut <- width(FlexOut,j=1, width=3)
   FlexOut <- width(FlexOut,j=2, width=1)
 
-   Ltable <- m.House %>% kable(
-        col.names = names_spaced,
-        align="lrr",
-        caption=tabTitle, row.names=FALSE,
-        format="latex", booktabs=TRUE)  %>%
-        kable_styling(latex_options="HOLD_position", font_size=10) %>%
-        column_spec(1, width = "3.5in") %>%
-        column_spec(2, width ="0.5in") %>%
-        add_indent(c(2,3,4,6,7,8)) %>%
-        add_header_above(header=tblHead1) %>%
-        kableExtra::footnote(captionSrc("SDO",curYr),threeparttable = T)
+   
 
   names(f.HHPl) <- c(tabTitle,"Value")  
 
