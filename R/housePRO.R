@@ -69,13 +69,13 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
                    ifelse(f.HHPl$housing == "totalhousingunits", "Total Housing Units",
                    ifelse(f.HHPl$housing == "householdsize", "Persons per Household",       
                    ifelse(f.HHPl$housing == "occupiedhousingunits", "Occupied Housing Units",
-                   ifelse(f.HHPl$housing == "vacanthousingunits", "Vacant Housing Units","Vacancy Rate (Per 100 Units)")))))))
+                   ifelse(f.HHPl$housing == "vacanthousingunits", "Vacant Housing Units","Vacancy Rate")))))))
 
 
  
   f.HHPl[c(1:3,5:7),2] <- comma(as.numeric(f.HHPl[c(1:3,5:7),2]))
   f.HHPl[8,2] <- round(as.numeric(f.HHPl[8,2]), 2)
-  f.HHPl[4,2] <- round(as.numeric(f.HHPl[4,2]),digits=1)
+  f.HHPl[4,2] <- percent(as.numeric(f.HHPl[4,2]))
 
   m.House <- as.matrix(f.HHPl)
 
