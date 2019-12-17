@@ -89,17 +89,17 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
 
   if(nchar(placefips) == 0) {
   # create vector with colspan
-  tblHead1 <- c(" " = 1, ctyname = 2)
+  tblHead1 <- c(ctyname = 1)
 
   # set vector names
-  names(tblHead1) <- c(" ", ctyname)
+  names(tblHead1) <- c(ctyname)
   tabTitle <- paste0("Housing Units: ",ctyname, ", ",curYr)
   } else {
     # create vector with colspan
-    tblHead1 <- c(" " = 1, placename = 2)
+    tblHead1 <- c(placename = 1)
     
     # set vector names
-    names(tblHead1) <- c(" ", placename)
+    names(tblHead1) <- c(placename)
     tabTitle <- paste0("Housing Units: ",placename,", ",curYr)
   }
 
@@ -119,20 +119,20 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
    # add_header_above(header=tblHead1) %>%
     kableExtra::footnote(captionSrc("SDO",curYr))
   
-  
-  
+
+
   Ltable <- m.House %>% 
-    kable(format="latex", #booktabs=TRUE,
-        row.names=FALSE,
-        col.names = names_spaced,
-        align="lr",
-        caption=tabTitle)  %>%
-        kable_styling(latex_options="HOLD_position", font_size=10) %>%
-        column_spec(1, width = "3.5in") %>%
-        column_spec(2, width ="0.5in") %>%
-        add_indent(c(2,3,4,6,7,8)) %>%
-        add_header_above(header=tblHead1) %>%
-        kableExtra::footnote(captionSrc("SDO",curYr),threeparttable=T)
+   kable(     row.names=FALSE,
+              align="lr",
+              col.names = names_spaced,
+              caption=tabTitle,
+              format ="latex", booktabs=TRUE) %>%
+        kable_styling(latex_options="HOLD_position") %>%
+        row_spec(0, align="c") %>%
+        column_spec(column=1, width="3.0in") %>%
+        column_spec(column=2, width= "0.5in") %>%
+        add_header_above(header=tblHead1)  %>%
+        kableExtra::footnote(captionSrc("SDO",""),threeparttable=T)
   
   # preparing FlexTable
   
