@@ -5,7 +5,6 @@
 #' @export
 
 TempFil <- function(oDir) {
-  
   oMatrix <- matrix(data=NA,nrow=90)
 
   x <- oDir
@@ -18,8 +17,8 @@ TempFil <- function(oDir) {
 
   
  #Copying Dola Image
-  file.copy("www/co_dola_div_localgov_300_rgb.png",oDir)
-  oMatrix[90] <- file.path(paste0(oDir,"/","co_dola_div_localgov_300_rgb.png"))
+  file.copy("www/co_dola__NoText-dept.png",oDir)
+  oMatrix[90] <- file.path(paste0(oDir,"/","co_dola__NoText-dept.png"))
 
   
   
