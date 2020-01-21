@@ -1,6 +1,6 @@
 #' Colorado Demographic Profiles
 #' @author  Adam Bickford, Colorado State Demography Office, November 2017-March 2018
-#' Release Version 2.0 10/31/2018
+#' Release Version 3.0 01/21/2020
 
 rm(list = ls())
 library(tidyverse, quietly=TRUE)
@@ -104,8 +104,8 @@ source("R/unemployment.R")
  tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
 
 # Current ACS database
-curACS <- "acs1317"
-curYr <- 2017
+curACS <- "acs1418"
+curYr <- 2018
 fipslist <<- ""
 
 # Set up database pool 1/23/19
