@@ -281,8 +281,10 @@ if(nchar(placefips) != 0) { #output municipality table
     #Call to Census 2000 API
    
     
-    
-    # Bizarro Adjustment for City of Creede
+  
+  p4_00MUNI <- codemog_api(data="p4", db="c2000",geonum=paste0("1", state, placefips),meta="no")
+  
+    # Bizarro Adjustment for City of Creede, Centennial and City of Castle Pines
     if(placefips == "14765") {
        p4_00MUNI <- data.frame(geoname = "City of Creede", state = "8", county = "", place = "14765", tract = "", bg = "",
                      geonum = "10814765", p4001 = 377, p4002 = 6, p4003 = 371, p4004 = 364, p4005 = 361, p4006 = 0,
@@ -295,13 +297,40 @@ if(nchar(placefips) != 0) { #output municipality table
                     p4055 = 0, p4056 = 0, p4057 = 0, p4058 = 0, p4059 = 0, p4060 = 0, p4061 = 0, p4062 = 0,
                     p4063 = 0, p4064 = 0, p4065 = 0, p4066 = 0, p4067 = 0, p4068 = 0, p4069 = 0, p4070 = 0,
                     p4071 = 0, p4072 = 0, p4073 = 0)
-    } else {
-      p4_00MUNI <- codemog_api(data="p4", db="c2000",geonum=paste0("1", state, placefips),meta="no")
-     p4_00MUNI[,7:ncol(p4_00MUNI)]=as.numeric(as.character(p4_00MUNI[,7:ncol(p4_00MUNI)]))
-    }
+        } 
+     if(placefips == "12815") {
+       p4_00MUNI <- data.frame(geoname = "Centennial", state = "8", county = "", place = "12815", tract = "", bg = "",
+                     geonum = "10812815", p4001 = 0, p4002 = 0, p4003 = 0, p4004 = 0, p4005 = 0, p4006 = 0,
+                     p4007 = 0, p4008 = 0, p4009 = 0, p4010 = 0, p4011 = 0, p4012 = 0, p4013 = 0, p4014 = 0, 
+                     p4015 = 0, p4016 = 0, p4017 = 0, p4018 = 0, p4019 = 0, p4020 = 0, p4021 = 0, p4022 = 0,
+                     p4023 = 0, p4024 = 0, p4025 = 0, p4026 = 0, p4027 = 0, p4028 = 0, p4029 = 0, p4030 = 0,
+                    p4031 = 0, p4032 = 0, p4033 = 0, p4034 = 0, p4035 = 0, p4036 = 0, p4037 = 0, p4038 = 0,
+                    p4039 = 0, p4040 = 0, p4041 = 0, p4042 = 0, p4043 = 0, p4044 = 0, p4045 = 0, p4046 = 0,
+                    p4047 = 0, p4048 = 0, p4049 = 0, p4050 = 0, p4051 = 0, p4052 = 0, p4053 = 0, p4054 = 0,
+                    p4055 = 0, p4056 = 0, p4057 = 0, p4058 = 0, p4059 = 0, p4060 = 0, p4061 = 0, p4062 = 0,
+                    p4063 = 0, p4064 = 0, p4065 = 0, p4066 = 0, p4067 = 0, p4068 = 0, p4069 = 0, p4070 = 0,
+                    p4071 = 0, p4072 = 0, p4073 = 0)
+     } 
+ 
+     if(placefips == "12390") {
+       p4_00MUNI <- data.frame(geoname = "City of Castle Pines", state = "8", county = "", place = "12390", tract = "", bg = "",
+                     geonum = "10812390", p4001 = 0, p4002 = 0, p4003 = 0, p4004 = 0, p4005 = 0, p4006 = 0,
+                     p4007 = 0, p4008 = 0, p4009 = 0, p4010 = 0, p4011 = 0, p4012 = 0, p4013 = 0, p4014 = 0, 
+                     p4015 = 0, p4016 = 0, p4017 = 0, p4018 = 0, p4019 = 0, p4020 = 0, p4021 = 0, p4022 = 0,
+                     p4023 = 0, p4024 = 0, p4025 = 0, p4026 = 0, p4027 = 0, p4028 = 0, p4029 = 0, p4030 = 0,
+                    p4031 = 0, p4032 = 0, p4033 = 0, p4034 = 0, p4035 = 0, p4036 = 0, p4037 = 0, p4038 = 0,
+                    p4039 = 0, p4040 = 0, p4041 = 0, p4042 = 0, p4043 = 0, p4044 = 0, p4045 = 0, p4046 = 0,
+                    p4047 = 0, p4048 = 0, p4049 = 0, p4050 = 0, p4051 = 0, p4052 = 0, p4053 = 0, p4054 = 0,
+                    p4055 = 0, p4056 = 0, p4057 = 0, p4058 = 0, p4059 = 0, p4060 = 0, p4061 = 0, p4062 = 0,
+                    p4063 = 0, p4064 = 0, p4065 = 0, p4066 = 0, p4067 = 0, p4068 = 0, p4069 = 0, p4070 = 0,
+                    p4071 = 0, p4072 = 0, p4073 = 0)
+     }   
+  
+  
     # Correction for communities founded after 2000
-      Cens20K <- 1
-     
+ 
+    p4_00MUNI[,7:ncol(p4_00MUNI)]=as.numeric(as.character(p4_00MUNI[,7:ncol(p4_00MUNI)]))
+     Cens20K <- 1
       p4_00MUNI <- p4_00MUNI %>%
         select(geoname:p4011)%>%
         mutate(TotalPop=p4001, Hispanic=p4002, NonHispanic=p4003, NHWhite=p4005, NHBlack=p4006,
@@ -324,11 +353,13 @@ if(nchar(placefips) != 0) { #output municipality table
       names(CensRowMUNI)[3] <- "Census.2000"
       p4_00MUNI <- rbind(p4_00MUNI,CensRowMUNI)
     } 
+   
+
     
  
     # Producing Joined File
-      if(nchar(placefips) != 0) {  # MUNI
-      f.raceFin <-  plyr::join_all(list(p4_00MUNI,p9_10MUNI, f.ACSRaceMUNI, p4_00CTY,p9_10CTY, f.ACSRaceCTY), by='race', type='left')
+    if(nchar(placefips) != 0) {  # MUNI
+          f.raceFin <-  plyr::join_all(list(p4_00MUNI,p9_10MUNI, f.ACSRaceMUNI, p4_00CTY,p9_10CTY, f.ACSRaceCTY), by='race', type='left')
     } else {
       f.raceFin <-  plyr::join_all(list(p4_00CTY,p9_10CTY, f.ACSRaceCTY, p4_00ST,p9_10ST, f.ACSRaceST), by='race', type='left')
     }
@@ -348,6 +379,10 @@ if(nchar(placefips) != 0) { #output municipality table
   
  
 # removing NA
+if((placefips == "12390")||(placefips == "12815")) {
+  f.raceFin[c(1:10),3] <- NA
+}
+  
  f.raceFin[is.na(f.raceFin)] <- " "
  
    m.race <- as.matrix(f.raceFin[,c(9,3:8)]) #This is the matrix table
