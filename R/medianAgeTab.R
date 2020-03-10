@@ -11,7 +11,7 @@
 medianAgeTab <- function(listID, ACS, state="08"){
 
   # Collecting place ids from  idList, setting default values
-  
+
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
@@ -420,6 +420,10 @@ if(nchar(placename) == 0)  {
     if(sDiffa == "No" & sDiffm == "No" && sDifff == "Yes") {
       medText <- paste0(" The median age of ",ctyname," is not significantly different from the state.")
       medText <- paste0(medText, " Women in ",ctyname," are significantly ", diffDirf," than women in the state but men are not sigificnatly older or younger than men in the state.")
+    }
+    if(sDiffa == "No" & sDiffm == "Yes" && sDifff == "Yes") {
+      medText <- paste0(" The median age of ",ctyname," is not significantly different from the state.")
+      medText <- paste0(medText, " Women in ",ctyname," are significantly ", diffDirf," than women in the state.  Men in ",ctyname," are significantly ", diffDirf," than men in the state.")
     }
     if(sDiffa == "No" & sDiffm == "Yes" && sDifff == "No") {
       medText <- paste0(" The median age of ",ctyname," is not significantly different from the state.")
