@@ -29,7 +29,7 @@ if(nchar(placefips) != 0) {
      f.summary$livein_workin <-  as.numeric(f.summary$livein_workin)
      
   # Extracting Year Value
-     YRValue <- unlist(uniq(f.summary$year))
+     YRValue <- unlist(unique(f.summary$year))
 
   rawVenn <- euler(c("A" = f.summary$liveout_workin, "B" = f.summary$livein_workout, "A&B" = f.summary$livein_workin ))
   cols <- c("lightblue1", "lightyellow1","olivedrab1")
