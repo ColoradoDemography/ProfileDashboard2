@@ -1,5 +1,5 @@
 #' GenerateVenn Generates a Venn diagram using LODES data
-#' V3 revised 9/4/2019 AB
+#' V3 revised 12/14/2020 AB
 #' @param listID Id list with fips and location names
 #' @return ggplot2 graphic, formatted datatables, and datasets
 #' @export
@@ -27,7 +27,9 @@ if(nchar(placefips) != 0) {
      f.summary$livein_workout <- as.numeric(f.summary$livein_workout)
      f.summary$liveout_workin <- as.numeric(f.summary$liveout_workin)
      f.summary$livein_workin <-  as.numeric(f.summary$livein_workin)
-  
+     
+  # Extracting Year Value
+     YRValue <- unlist(uniq(f.summary$year))
 
   rawVenn <- euler(c("A" = f.summary$liveout_workin, "B" = f.summary$livein_workout, "A&B" = f.summary$livein_workin ))
   cols <- c("lightblue1", "lightyellow1","olivedrab1")
@@ -47,9 +49,9 @@ if(nchar(placefips) != 0) {
 
   
   if(nchar(placefips) != 0) {
-      plot_title <- paste0(placename,": All Jobs, 2017")
+      plot_title <- paste0(placename,": All Jobs, ",YRValue)
   } else {
-    plot_title <- paste0(ctyname,": All Jobs, 2017")
+    plot_title <- paste0(ctyname,": All Jobs, ",YRValue)
   }
   
   
