@@ -19,8 +19,8 @@ weeklyWages <- function(DBPool,listID, curyr,base=10){
     placename <- ""
   }
 
-  wagePLSQL <- paste0("SELECT * FROM estimates.weekly_wages WHERE fips = '",as.numeric(ctyfips), "';")
-  wageSTSQL <- paste0("SELECT * FROM estimates.weekly_wages WHERE fips = '0';")
+  wagePLSQL <- paste0("SELECT * FROM estimates.weekly_wages WHERE fips = '",as.numeric(ctyfips), "' AND year <= ", curyr,";")
+  wageSTSQL <- paste0("SELECT * FROM estimates.weekly_wages WHERE fips = '0' AND year <= ",curyr,";")
 
   
   # Read data files
@@ -47,18 +47,21 @@ weeklyWages <- function(DBPool,listID, curyr,base=10){
 
   f.plot <- rbind(f.wagePL, f.wageST)
 
-  maxYr <- as.numeric(max(f.plot$year))
-  f.plot <- f.plot[which(f.plot$year %in% seq(2001,maxYr,2)),]
-
   axs <- setAxis(f.plot$wages)
   axs$maxBrk <- axs$maxBrk + 50
 
-  
+  if(max(f.plot$year) %% 2 ==0) {  #even year
+       yrRng = seq(2002,max(f.plot$year),2)
+  } else {
+    yrRng = seq(2001,max(f.plot$year),2) 
+       }
 
+  f.plot <- f.plot %>% filter(year %in% yrRng)
+  
   f.plot$geoname <- factor(f.plot$geoname,levels=c(ctyname,"Colorado"))
  
 
-  pltTitle <- paste0("Average Weekly Wage,\nin Nominal (",max(f.plot$year),") Dollars")
+  pltTitle <- "Average Weekly Wage,\nin Nominal Dollars"
   
   Plot <- f.plot %>%
     ggplot(aes(x=year, y=wages, colour=geoname, group=geoname))+
@@ -92,8 +95,7 @@ weeklyWages <- function(DBPool,listID, curyr,base=10){
 
   
   # Text
-  OutText <- paste0("The unadjusted (nominal) average weekly wages for ",ctyname," and Colorado are shown here.")
-  OutText <- paste0(OutText," In 2016 dollars, wages in Colorado have been essentially unchanged since 2010.")
+  OutText <- paste0("The unajdusted (nominal) average weekly wages for ",ctyname," and Colorado are shown here.")
   OutText <- paste0(OutText," The gain or loss of a major employer such as a mine or a hospital can have a significant impact on a county’s average weekly wage.")
   OutText <- paste0(OutText," These wages are shown only for jobs located within that county and do not include most proprietors.")
   OutText <- paste0(OutText," Household income can be influenced by the average weekly wage, but in areas that have")
