@@ -105,7 +105,7 @@ source("R/unemployment.R")
  tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
 
 # Current ACS database
-curACS <- "acs1418"
+curACS <- "acs1519"
 curYr <- 2018
 fipslist <<- ""
 
@@ -477,7 +477,7 @@ server <- function(input, output, session) {
           stats.box1 <- tabBox(width=8, height=350,
                                tabPanel("Table",tags$div(class="Row1Tab",HTML(dget(fileMat[1])))),
                                tabPanel("Information",Stats.info))
-          stats.box2 <- box(width=4, height=350,renderImage({img_List1}))
+          stats.box2 <- box(width=4, height=350,renderImage({img_List1},deleteFile=FALSE))
           
           
           #building List
@@ -581,13 +581,13 @@ server <- function(input, output, session) {
                               tabPanel("Table",tags$div(class="cleanTab", HTML(dget(fileMat[6])))),
                               tabPanel("Sources and Downloads",popf1.info))
           popf2.box <- tabBox(width=6, height=400,
-                              tabPanel("Plot", renderImage({img_List2})),
+                              tabPanel("Plot", renderImage({img_List2},deleteFile=FALSE)),
                               tabPanel("Sources and Downloads",popf2.info))
           popf3.box <- tabBox(width=6, height=400,
-                              tabPanel("Plot",renderImage({img_List3})),
+                              tabPanel("Plot",renderImage({img_List3},deleteFile=FALSE)),
                               tabPanel("Sources and Downloads", popf3.info))
           popf4.box <- tabBox(width=6, height=400,
-                              tabPanel("Plot",renderImage({img_List4})),
+                              tabPanel("Plot",renderImage({img_List4},deleteFile=FALSE)),
                               tabPanel("Sources and Downloads",popf4.info))
           
           
@@ -696,17 +696,17 @@ server <- function(input, output, session) {
           
           # Bind to boxes
           popa1.box <- tabBox(width=6, height=400,
-                              tabPanel("Plot", renderImage({img_List5})),
+                              tabPanel("Plot", renderImage({img_List5},deleteFile=FALSE)),
                               tabPanel("Sources and Downloads",popa1.info))
           popa2.box <- tabBox(width=6, height=400,
-                              tabPanel("Plot", renderImage({img_List6})),
+                              tabPanel("Plot", renderImage({img_List6},deleteFile=FALSE)),
                               #    tabPanel("Table", tags$div(class="cleanTab", HTML(popa2$table))),
                               tabPanel("Sources and Downloads",popa2.info))
           popa3.box <- tabBox(width=6, height=400,
-                              tabPanel("Plot",renderImage({img_List7})),
+                              tabPanel("Plot",renderImage({img_List7},deleteFile=FALSE)),
                               tabPanel("Sources and Downloads", popa3.info))
           popa4.box <- tabBox(width=6, height=400,
-                              tabPanel("Plot",renderImage({img_List8})),
+                              tabPanel("Plot",renderImage({img_List8},deleteFile=FALSE)),
                               tabPanel("Sources and Downloads",popa4.info))
           
           
@@ -785,10 +785,10 @@ server <- function(input, output, session) {
           
           # Bind to boxes
           popc1.box <- tabBox(width=6, height=400,
-                              tabPanel("Plot",renderImage({img_List9})),
+                              tabPanel("Plot",renderImage({img_List9},deleteFile=FALSE)),
                               tabPanel("Sources and Downloads",popc1.info))
           popc2.box <- tabBox(width=6, height=400,
-                              tabPanel("Plot",renderImage({img_List10})),
+                              tabPanel("Plot",renderImage({img_List10},deleteFile=FALSE)),
                               tabPanel("Sources and Downloads",popc2.info))
           popc3.box <- tabBox(width=6, height=500,
                               tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[36])))),
@@ -872,7 +872,7 @@ server <- function(input, output, session) {
           
           # Bind to boxes
           poph1.box <- tabBox(width=6, height=400,
-                              tabPanel("Plot",renderImage({img_List11})),
+                              tabPanel("Plot",renderImage({img_List11},deleteFile=FALSE)),
                               tabPanel("Sources and Downloads",poph1.info))
           poph2.box <- tabBox(width=6, height=400,
                               tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[45])))),
@@ -959,7 +959,7 @@ server <- function(input, output, session) {
           # Bind to boxes
           
           popt1.box <- tabBox(width=6, height=400,
-                              tabPanel("Plot",renderImage({img_List12})),
+                              tabPanel("Plot",renderImage({img_List12},deleteFile=FALSE)),
                               tabPanel("Sources and Downloads",popt1.info))
           popt2.box <- tabBox(width=6, height=400,
                               tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[59])))),
@@ -968,7 +968,7 @@ server <- function(input, output, session) {
                               tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[57])))),
                               tabPanel("Sources and Downloads",popt2.info))
           popt4.box <- tabBox(width=6, height=400,
-                              tabPanel("Plot",renderImage({img_List13})),
+                              tabPanel("Plot",renderImage({img_List13},deleteFile=FALSE)),
                               tabPanel("Sources and Downloads",popt4.info))
           
           #Append to List
@@ -1049,13 +1049,13 @@ server <- function(input, output, session) {
                                   downloadObjUI("popei4tabl"),downloadObjUI("popei4data"))
           # Bind to boxes
           popei1.box <- tabBox(width=6, height=400,
-                               tabPanel("Plot",renderImage({img_List14})),
+                               tabPanel("Plot",renderImage({img_List14},deleteFile=FALSE)),
                                tabPanel("Sources and Downloads",popei1.info))
           popei2.box <- tabBox(width=6, height=400,
-                               tabPanel("Plot",renderImage({img_List15})),
+                               tabPanel("Plot",renderImage({img_List15},deleteFile=FALSE)),
                                tabPanel("Sources and Downloads",popei2.info))
           popei3.box <- tabBox(width=6, height=400,
-                               tabPanel("Plot",renderImage({img_List16})),
+                               tabPanel("Plot",renderImage({img_List16},deleteFile=FALSE)),
                                tabPanel("Sources and Downloads",popei3.info))
           popei4.box <- tabBox(width=6, height=400,
                                tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[73])))),
@@ -1148,13 +1148,13 @@ server <- function(input, output, session) {
                                tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[76])))),
                                tabPanel("Sources and Downloads",popem1.info))
           popem2.box <- tabBox(width=6, height=400,
-                               tabPanel("Plot",renderImage({img_List18})),
+                               tabPanel("Plot",renderImage({img_List18},deleteFile=FALSE)),
                                tabPanel("Sources and Downloads",popem2.info))
           popem3.box <- tabBox(width=6, height=400,
                                tabPanel("Table",tags$div(class="cleanTab",HTML(dget(fileMat[82])))),
                                tabPanel("Sources and Downloads",popem3.info))
           popem4.box <- tabBox(width=6, height=400,
-                               tabPanel("Plot",renderImage({img_List19})),
+                               tabPanel("Plot",renderImage({img_List19},deleteFile=FALSE)),
                                tabPanel("Sources and Downloads",popem4.info))
           
           
