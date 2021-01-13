@@ -14,7 +14,10 @@ weeklyWages <- function(DBPool,listID, curyr,base=10){
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
-  
+  if(listID$PlFilter == "T") {
+    placefips <- ""
+    placename <- ""
+  }
 
   wagePLSQL <- paste0("SELECT * FROM estimates.weekly_wages WHERE fips = '",as.numeric(ctyfips), "';")
   wageSTSQL <- paste0("SELECT * FROM estimates.weekly_wages WHERE fips = '0';")
@@ -50,14 +53,12 @@ weeklyWages <- function(DBPool,listID, curyr,base=10){
   axs <- setAxis(f.plot$wages)
   axs$maxBrk <- axs$maxBrk + 50
 
+  
+
   f.plot$geoname <- factor(f.plot$geoname,levels=c(ctyname,"Colorado"))
  
 
-  pltTitle <- paste0("Average Weekly Wage,\nin Real (",max(f.plot$year),") Dollars")
-  f.plot$year <- factor(f.plot$year,labels=c("2001","2003", "2005",
-                                              "2007","2009",
-                                              "2011","2013","2015",
-                                              "2017"))
+  pltTitle <- paste0("Average Weekly Wage,\nin Nominal (",max(f.plot$year),") Dollars")
   
   Plot <- f.plot %>%
     ggplot(aes(x=year, y=wages, colour=geoname, group=geoname))+
@@ -68,7 +69,7 @@ weeklyWages <- function(DBPool,listID, curyr,base=10){
               position = position_dodge(width = 1),
               inherit.aes = TRUE) +
     scale_y_continuous(limits=c(axs$minBrk,axs$maxBrk), label=dollar)+
-    scale_x_discrete() +
+  #  scale_x_discrete() +
     scale_fill_manual(values=c("#6EC4E8","#00953A"),
                       name="Geography")+
     theme_codemog(base_size=base)+
@@ -91,7 +92,7 @@ weeklyWages <- function(DBPool,listID, curyr,base=10){
 
   
   # Text
-  OutText <- paste0("The inflation adjusted (real) average weekly wages for ",ctyname," and Colorado are shown here.")
+  OutText <- paste0("The unadjusted (nominal) average weekly wages for ",ctyname," and Colorado are shown here.")
   OutText <- paste0(OutText," In 2016 dollars, wages in Colorado have been essentially unchanged since 2010.")
   OutText <- paste0(OutText," The gain or loss of a major employer such as a mine or a hospital can have a significant impact on a county’s average weekly wage.")
   OutText <- paste0(OutText," These wages are shown only for jobs located within that county and do not include most proprietors.")
