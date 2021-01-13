@@ -106,7 +106,7 @@ source("R/unemployment.R")
 
 # Current ACS database
 curACS <- "acs1519"
-curYr <- 2018
+curYr <- 2019
 fipslist <<- ""
 
 # Set up database pool 1/23/19
