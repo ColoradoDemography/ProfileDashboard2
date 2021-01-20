@@ -1,4 +1,4 @@
-#' medianAgeTab Creates table showing the Median Age by Gender
+#' medianAgeTab Creates table showing the Median Age by Sex
 #' for a selected place and county or for a copunty and for the state
 #' Revised to produce Population Pyramid
 #' 
@@ -116,7 +116,7 @@ medianAgeTab <- function(listID, ACS, state="08"){
                                    "pct_m5059", "pct_m6069", "pct_m7079", "pct_m8000"),
                           labels=c("0 to 9", "10 to 19", "20 to 29", "30 to 39", "40 to 49",
                                    "50 to 59", "60 to 69", "70 to 79", "80 and over")))
-  malebyagePL$gender <- "Male"
+  malebyagePL$Sex <- "Male"
   malebyagePL$value <- malebyagePL$value * -1
   
   femalebyagePL <- femalebyageP %>%
@@ -126,12 +126,12 @@ medianAgeTab <- function(listID, ACS, state="08"){
                                    "pct_f5059", "pct_f6069", "pct_f7079", "pct_f8000"),
                           labels=c("0 to 9", "10 to 19", "20 to 29", "30 to 39", "40 to 49",
                                    "50 to 59", "60 to 69", "70 to 79", "80 and over")))
-  femalebyagePL$gender = "Female"
+  femalebyagePL$Sex = "Female"
   
   sexbyagePL <- rbind(malebyagePL,femalebyagePL)
   
-  sexbyagePL$gender <- factor(sexbyagePL$gender,labels=c("Female","Male"))
-  pltTitle <- "Age by Gender"
+  sexbyagePL$Sex <- factor(sexbyagePL$Sex,labels=c("Female","Male"))
+  pltTitle <- "Age by Sex"
   
   if(nchar(placefips) == 0) {  # Output for places
     subTitle <- ctyname
@@ -141,10 +141,10 @@ medianAgeTab <- function(listID, ACS, state="08"){
   
   barCol <- c("#6EC4E8","#00953A")
   
-  pyramid <- ggplot(sexbyagePL, aes(x = agecat, y = value, fill = gender)) + 
-    geom_bar(data = subset(sexbyagePL, color="black", gender == "Female"), stat = "identity") + 
-    geom_bar(data = subset(sexbyagePL, color="black", gender == "Male"), stat = "identity") + 
-    scale_fill_manual(values=barCol, name="Gender") +
+  pyramid <- ggplot(sexbyagePL, aes(x = agecat, y = value, fill = Sex)) + 
+    geom_bar(data = subset(sexbyagePL, color="black", Sex == "Female"), stat = "identity") + 
+    geom_bar(data = subset(sexbyagePL, color="black", Sex == "Male"), stat = "identity") + 
+    scale_fill_manual(values=barCol, name="Sex") +
     scale_y_continuous(breaks=seq(-maxval,maxval,10),labels = paste0(as.character(c(seq(maxval, 10, -10), seq(0,maxval,10))), "%")) + 
     coord_flip() +
     labs(title = pltTitle,
@@ -291,7 +291,7 @@ medianAgeTab <- function(listID, ACS, state="08"){
 
   #Column Names
  
-  names_spaced <- c("Gender","Median Age","MOE","Median Age","MOE","Signficant","Direction")
+  names_spaced <- c("Sex","Median Age","MOE","Median Age","MOE","Signficant","Direction")
  
   #Span Header
   if(nchar(placefips) == 0) {
@@ -313,7 +313,7 @@ medianAgeTab <- function(listID, ACS, state="08"){
           digits=1,
           row.names=FALSE,
           align='lrrrrrr',
-          caption="Median Age by Gender  Comparison",
+          caption="Median Age by Sex  Comparison",
           col.names = names_spaced,
           escape = FALSE)  %>%
     kable_styling(bootstrap_options = "condensed",full_width = F,font_size = 10) %>%
@@ -330,23 +330,23 @@ medianAgeTab <- function(listID, ACS, state="08"){
   
   # Building FlexTable
   f.Flex <- as.data.frame(m.ageTab)
-  names(f.Flex) <- c("Gender","Age.1","MOE.1","Age.2","MOE.2","SD","Diff")
+  names(f.Flex) <- c("Sex","Age.1","MOE.1","Age.2","MOE.2","SD","Diff")
   FlexOut <- regulartable(f.Flex)
-  FlexOut <- set_header_labels(FlexOut, Gender = "Gender", 
+  FlexOut <- set_header_labels(FlexOut, Sex = "Sex", 
                                Age.1 = "Estimate", MOE.1 = "Margin of Error", 
                                Age.2 = "Estimate", MOE.2 = "Margin of Error",
                                SD="Signficant Difference?", Diff="Direction of Difference")
   if(nchar(placefips) == 0) {
-    FlexOut <- add_header(FlexOut,Gender = "", Age.1= ctyname, MOE.1="",
+    FlexOut <- add_header(FlexOut,Sex = "", Age.1= ctyname, MOE.1="",
                              Age.2 = "Colorado", MOE.2 = "",
                              SD = "", Diff = "",top=TRUE)
   } else {
-    FlexOut <- add_header(FlexOut,Gender = "", Age.1 = placename, MOE.1 = "",
+    FlexOut <- add_header(FlexOut,Sex = "", Age.1 = placename, MOE.1 = "",
                           Age.2 = ctyname, MOE.2 ="",
                           SD = "", Diff = "",top=TRUE)
   }
-  FlexOut <- add_header(FlexOut,Gender ="Median Age by Gender", top=TRUE)
-  FlexOut <- add_footer(FlexOut,Gender=captionSrc("ACS",ACS))
+  FlexOut <- add_header(FlexOut,Sex ="Median Age by Sex", top=TRUE)
+  FlexOut <- add_footer(FlexOut,Sex=captionSrc("ACS",ACS))
   FlexOut <- merge_at(FlexOut,i=1,j = 1:7,part="header")
   FlexOut <- merge_at(FlexOut,i=2,j = 2:3, part="header")
   FlexOut <- merge_at(FlexOut,i=2,j = 4:5, part="header")
@@ -365,10 +365,10 @@ medianAgeTab <- function(listID, ACS, state="08"){
 
   
 if(nchar(placename) == 0)  {
-  names(f.ageTab2) <- c("Gender", paste0("Median Age: ",ctyname), paste0("MOE: ",ctyname),
+  names(f.ageTab2) <- c("Sex", paste0("Median Age: ",ctyname), paste0("MOE: ",ctyname),
                         "Median Age: Colorado", "MOE: Colorado", "Significant","Difference")
 } else {
-  names(f.ageTab2) <- c("Gender", paste0("Median Age: ",placename), paste0("MOE: ",placename),
+  names(f.ageTab2) <- c("Sex", paste0("Median Age: ",placename), paste0("MOE: ",placename),
                         paste0("Median Age: ",ctyname), paste0("MOE: ",ctyname), "Significant","Difference")
 }
   
@@ -377,7 +377,7 @@ if(nchar(placename) == 0)  {
                   row.names=FALSE,
                   col.names = names_spaced,
                   align='lrrrrrr',
-                  caption="Median Age by Gender Comparison",  
+                  caption="Median Age by Sex Comparison",  
                   format="latex", booktabs=TRUE)  %>%
     kable_styling(latex_options="HOLD_position",font_size=10)  %>%
     row_spec(0, align="c") %>%
