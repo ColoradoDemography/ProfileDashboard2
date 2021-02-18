@@ -642,12 +642,13 @@ server <- function(input, output, session) {
                                    tags$br(),
                                    downloadObjUI("popa1plot"), downloadObjUI("popa1data"))
             
-            popa2.info <- tags$div(boxContent(title= "Age by Gender, Median Age Data",
+            popa2.info <- tags$div(boxContent(title= "Age by sex, Median Age Data",
                                               description = "The Age by Gender Plor and Median Age Table compares the median age by gender for a location to the state.",
                                               MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
-                                              urlList = list(c("American Community Survey American Fact Finder, Series B01002","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
+                                              urlList = list(c("American Community Survey data.census.gov, Series B01002","https://data.census.gov/cedsci/")) ),
                                    tags$br(),
                                    downloadObjUI("popa2plot"),downloadObjUI("popa2tabl"),downloadObjUI("popa2data"))
+
             
             popa3.info <- tags$div(boxContent(title= "Population Forecast by Age",
                                               description = "The Population Forecast by Age Plot displays the age distribution between 2010 and 2025.",
