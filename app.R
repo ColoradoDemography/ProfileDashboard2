@@ -837,7 +837,7 @@ server <- function(input, output, session) {
          
           
           #Contents of Information Tabs
-          poph1.info <- tags$div(boxContent(title= "Household Projection",
+                    poph1.info <- tags$div(boxContent(title= "Household Projection",
                                             description = "The household projection displays the estimated number of households between 2010 and 2050.",
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO Household Projections --County","https://demography.dola.colorado.gov/housing-and-households/data/household-projections/")) ),
@@ -848,7 +848,7 @@ server <- function(input, output, session) {
                                             description= "The Housing Type Table compares the categories of housing types for a selected place to the State.",
                                             MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO Housing Time Series","https://demography.dola.colorado.gov/population/data/muni-pop-housing/"),
-                                                           c("American Community Survey American Fact Finder, Series B25001, B25003, and B25004","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
+                                                           c("American Community Survey data.census.gov, Series B25001, B25003, and B25004","https://data.census.gov/cedsci/")) ),
                                  tags$br(),
                                  downloadObjUI("poph2tabl"),downloadObjUI("poph2data"))
           
@@ -856,17 +856,17 @@ server <- function(input, output, session) {
           poph3.info <- tags$div(boxContent(title= "Housing Units by Type",
                                             description= "The Owner-Occupied Housing Table displays the characteristics of owner-occupied housing in a selected place.",
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
-                                            urlList = list(c("American Community Survey American Fact Finder, Series B25010, B25032, B25033, and B25037","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
+                                            urlList = list(c("American Community Survey data.census.gov, Series B25010, B25032, B25033, and B25037","https://data.census.gov/cedsci/")) ),
                                  tags$br(),
                                  downloadObjUI("poph3tabl"),downloadObjUI("poph3data"))
           
           poph4.info <- tags$div(boxContent(title= "Comparative Housing Values",
                                             description= "The Comparative Housing Table compares the economic characteristics of  owner-occupied and rental housing in a selected place to the State.",
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
-                                            urlList = list(c("American Community Survey American Fact Finder, Series B25077 and B25092","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
+                                            urlList = list(c("American Community Survey data.census.gov, Series B25077 and B25092","https://data.census.gov/cedsci/")) ),
                                  tags$br(),
                                  downloadObjUI("poph4tabl"),downloadObjUI("poph4data"))
-          
+                
 
           
           
