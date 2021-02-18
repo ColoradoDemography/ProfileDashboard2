@@ -1,6 +1,6 @@
 #' Colorado Demographic Profiles
 #' @author  Adam Bickford, Colorado State Demography Office, November 2017-March 2018
-#' Release Version 3.0 01/21/2020
+#' Release Version 4.0 01/21/2021
 
 rm(list = ls())
 library(tidyverse, quietly=TRUE)
@@ -9,7 +9,7 @@ library(readxl, quietly=TRUE)
 library(scales, quietly=TRUE)
 library(codemogAPI, quietly=TRUE)
 library(codemogProfile, quietly=TRUE)
-library(codemogLib)
+#library(codemogLib)
 library(knitr, quietly=TRUE)
 library(kableExtra, quietly=TRUE)
 library(RPostgreSQL)
@@ -35,16 +35,16 @@ library('DBI')
 library('stringr')
 library('config')
 
-source("R/age_cat.r")
+source("R/age_cat.R")
 source("R/ageForecastPRO.R")
 source("R/agePlotPRO.R")
 source("R/baseIndustries.R")
 source("R/boxContent.R")
 source("R/captionSrc.R")
+source("R/codemog_api.R")
 source("R/chkID.R")
 source("R/cocPlot.R")
 source("R/codemog_cdp.r")
-source("R/codemog_api.r")
 source("R/dashboardMAP.R")
 source("R/downloadObj.R")
 source("R/downloadObjUI.R")
@@ -365,6 +365,7 @@ server <- function(input, output, session) {
   CountyList <- LocList$Counties
   PlaceList <- LocList$Munis
   
+ 
   
   observeEvent(input$level, ({
     shinyjs::hide("outputPDF")
@@ -464,12 +465,12 @@ server <- function(input, output, session) {
           
           img_List1 <- list(src = fileMat[4], contentType = 'image/png', width = 400, height = 300)
           
-          Stats.info <- tags$div(class="dInfo","Individual plots and data may be downloaded by selecting the 'Sources and Downloads' tab in each display box.",tags$br(),
+          Stats.info <- tags$div(class="dInfo","Individual plots and data may be downloaded by selecting the 'Sources and Downloads' tabl in each display box.",tags$br(),
                                  "Note: County data is displayed for municipalities and places with fewer than 200 people.",tags$br(), tags$br(),
                                  "General information is available here:", tags$br(),
                                  tags$ul(
                                    tags$li(tags$a(href="https://demography.dola.colorado.gov/data/","State Demography Office Data",target="_blank")),
-                                   tags$li(tags$a(href="https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml","U.S. Census Bureau American Community Survey",target="_blank"),
+                                   tags$li(tags$a(href="https://data.census.gov/cedsci/","U.S. Census Bureau American Community Survey",target="_blank"),
                                            tags$br(),tags$br(),downloadObjUI("statstabl")
                                    )))
           
@@ -587,7 +588,7 @@ server <- function(input, output, session) {
                               tabPanel("Plot",renderImage({img_List3},deleteFile=FALSE)),
                               tabPanel("Sources and Downloads", popf3.info))
           popf4.box <- tabBox(width=6, height=400,
-                              tabPanel("Plot",renderImage({img_List4},deleteFile=FALSE)),
+                              tabPanel("Plot",renderImage({img_List4}, deleteFile=FALSE)),
                               tabPanel("Sources and Downloads",popf4.info))
           
           
@@ -643,12 +644,11 @@ server <- function(input, output, session) {
                                    downloadObjUI("popa1plot"), downloadObjUI("popa1data"))
             
             popa2.info <- tags$div(boxContent(title= "Age by sex, Median Age Data",
-                                              description = "The Age by Gender Plor and Median Age Table compares the median age by gender for a location to the state.",
+                                              description = "The Age by Sex Plot and Median Age Table compares the median age by sex for a location to the state.",
                                               MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
                                               urlList = list(c("American Community Survey data.census.gov, Series B01002","https://data.census.gov/cedsci/")) ),
                                    tags$br(),
                                    downloadObjUI("popa2plot"),downloadObjUI("popa2tabl"),downloadObjUI("popa2data"))
-
             
             popa3.info <- tags$div(boxContent(title= "Population Forecast by Age",
                                               description = "The Population Forecast by Age Plot displays the age distribution between 2010 and 2025.",
@@ -669,14 +669,14 @@ server <- function(input, output, session) {
             popa1.info <- tags$div(boxContent(title= "Population by Age",
                                               description = "The Population by Age Plot displays age categories for a single year.",
                                               MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
-                                              urlList = list(c("American Community Survey American Fact Finder, Series B01001","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
+                                              urlList = list(c("American Community Survey data.census.gov, Series B01001","https://data.census.gov/cedsci/")) ),
                                    tags$br(),
                                    downloadObjUI("popa1plot"), downloadObjUI("popa1data"))
             
-            popa2.info <- tags$div(boxContent(title= "Age by Gender, Median Age Data",
-                                              description = "The Age by Gender Plor and Median Age Table compares the median age by gender for a location to the state.",
+            popa2.info <- tags$div(boxContent(title= "Age by Sex, Median Age Data",
+                                              description = "The Age by Sex Plot and Median Age Table compares the median age by sex for a location to the state.",
                                               MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
-                                              urlList = list(c("American Community Survey American Fact Finder, Series B01002","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
+                                              urlList = list(c("American Community Survey data.census.gov, Series B01002","https://data.census.gov/cedsci/")) ),
                                    tags$br(),
                                    downloadObjUI("popa2plot"),downloadObjUI("popa2tabl"),downloadObjUI("popa2data"))
             
@@ -754,7 +754,7 @@ server <- function(input, output, session) {
                                             description = "The Household Income Distibution Plot compares the distribution of household income for a selected location to the state.",
                                             MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO American Community Survey API","http://coloradodemography.github.io/CensusAPI/"),
-                                                           c("American Community Survey American Fact Finder, Series B19001","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
+                                                           c("American Community Survey data.census.gov, Series B19001","https://data.census.gov/cedsci/")) ),
                                  tags$br(),
                                  downloadObjUI("popc1plot"),  downloadObjUI("popc1data"))
           
@@ -762,7 +762,7 @@ server <- function(input, output, session) {
                                             description= "The Educational Attainment Plot compares the categories of educational attaiment for adults aged 25 and older for a selected location to the State.",
                                             MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO American Community Survey API","http://coloradodemography.github.io/CensusAPI/"),
-                                                           c("American Community Survey American Fact Finder, Series B15003","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
+                                                           c("American Community Survey data.census.gov, Series B15003","https://data.census.gov/cedsci/")) ),
                                  tags$br(),
                                  downloadObjUI("popc3plot"),  downloadObjUI("popc3data"))
           
@@ -771,7 +771,7 @@ server <- function(input, output, session) {
                                             description= "The Income Source table shows the earning sources for Households and their mean incomes.  A household can have multiple sources of income, these values are not mutually exclusive.",
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO American Community Survey API","http://coloradodemography.github.io/CensusAPI/"),
-                                                           c("American Community Survey American Fact Finder, Series B19051 to B19057 and B19061 to B19069","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
+                                                           c("American Community Survey data.census.gov, Series B19051 to B19057 and B19061 to B19069","https://data.census.gov/cedsci/")) ),
                                  tags$br(),
                                  downloadObjUI("popc2tabl"),downloadObjUI("popc2data"))
           
@@ -779,7 +779,7 @@ server <- function(input, output, session) {
                                             description= "The Race Trend Table shows changes in the distribution of racial idenification since the 2000 Census.",
                                             MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO American Community Survey API","http://coloradodemography.github.io/CensusAPI/"),
-                                                           c("American Community Survey American Fact Finder, series B03002","https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml")) ),
+                                                           c("American Community Survey data.census.gov, series B03002","https://data.census.gov/cedsci/")) ),
                                  tags$br(),
                                  downloadObjUI("popc4tabl"),downloadObjUI("popc4data"))
           
@@ -838,7 +838,7 @@ server <- function(input, output, session) {
          
           
           #Contents of Information Tabs
-                    poph1.info <- tags$div(boxContent(title= "Household Projection",
+          poph1.info <- tags$div(boxContent(title= "Household Projection",
                                             description = "The household projection displays the estimated number of households between 2010 and 2050.",
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO Household Projections --County","https://demography.dola.colorado.gov/housing-and-households/data/household-projections/")) ),
@@ -867,7 +867,7 @@ server <- function(input, output, session) {
                                             urlList = list(c("American Community Survey data.census.gov, Series B25077 and B25092","https://data.census.gov/cedsci/")) ),
                                  tags$br(),
                                  downloadObjUI("poph4tabl"),downloadObjUI("poph4data"))
-                
+          
 
           
           
@@ -1176,6 +1176,8 @@ server <- function(input, output, session) {
     # Output UI...
     
     if(length(outputList) == 0) {
+      
+      #FIX THIS!!
       tabs <- lapply(1:length(input$outChk), function(i) {  # this determines the number of tabs needed
         id <- paste0("tab", i)
         tabPanel(
@@ -1197,10 +1199,12 @@ server <- function(input, output, session) {
       content <- function(file) {
         #Generate Report
         #knitting file and copy to final document
+      
+     # Testing    
+     #   tempRMD <- fixPath(fileMat[88])  
+     #  tempPDF <- fixPath(fileMat[89]) 
         
-    #    tempRMD <- fixPath(fileMat[88])  #Testing
-    #    tempPDF <- fixPath(fileMat[89]) 
-        
+    # Production    
          tempRMD <- fileMat[88]  
          tempPDF <- fileMat[89] 
         
