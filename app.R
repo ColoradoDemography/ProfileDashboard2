@@ -643,7 +643,7 @@ server <- function(input, output, session) {
                                    tags$br(),
                                    downloadObjUI("popa1plot"), downloadObjUI("popa1data"))
             
-            popa2.info <- tags$div(boxContent(title= "Age by sex, Median Age Data",
+            popa2.info <- tags$div(boxContent(title= "Age by Sex, Median Age Data",
                                               description = "The Age by Sex Plot and Median Age Table compares the median age by sex for a location to the state.",
                                               MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
                                               urlList = list(c("American Community Survey data.census.gov, Series B01002","https://data.census.gov/cedsci/")) ),
