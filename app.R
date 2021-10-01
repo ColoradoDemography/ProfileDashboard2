@@ -89,10 +89,10 @@ source("R/unemployment.R")
 # The GLOBAL Variables  Add Additional lists items as sections get defined
 #File Locations ALSO LOOK AT LINE IN THE PDF OUTPUT CODE  LINE 1229
 # Local/Development
-# tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
+ tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
 
 #Production
- tPath <- "/tmp"  
+# tPath <- "/tmp"  
 
 # Locations for Google Analtyics Java Script Files
 # Local/ Development
@@ -237,7 +237,7 @@ ui <-
                    includeScript(tagManJS), #writes GTM connection
                    tags$link(rel = "stylesheet", type = "text/css", href = "dashboard.css"),  #Link to CSS...
                    tags$title("Colorado Demographic Profiles") #,
-                   # includeScript("www/dataL.js") # This is the linkage to the dataLayer Output code
+                    includeScript("www/dataL.js") # This is the linkage to the dataLayer Output code
                  ),
                  tags$body(includeHTML("www/tag_body.js")),  # for non-JS instances
                  tags$style(HTML("
