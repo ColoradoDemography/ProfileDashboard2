@@ -236,8 +236,7 @@ ui <-
                    includeScript(initJS),
                    includeScript(tagManJS), #writes GTM connection
                    tags$link(rel = "stylesheet", type = "text/css", href = "dashboard.css"),  #Link to CSS...
-                   tags$title("Colorado Demographic Profiles") #,
-                   # includeScript("www/dataL.js") # This is the linkage to the dataLayer Output code
+                   tags$title("Colorado Demographic Profiles") 
                  ),
                  tags$body(includeHTML("www/tag_body.js")),  # for non-JS instances
                  tags$style(HTML("
