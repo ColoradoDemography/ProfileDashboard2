@@ -9,4 +9,6 @@ The code for the report has also been changed to prevent the issues of outputtin
 
 3/4/2019 Updated code to reflect changes in reporting and profile content
 
-1/20/2021 Updated code to poutput 2019 data
+1/20/2021 Updated code to output 2019 data
+
+12/28/2021  Updated to use 2020 SDO population estimates and forecasts with 2015-2019 ACS data
