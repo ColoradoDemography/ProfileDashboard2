@@ -1,6 +1,6 @@
 #' Colorado Demographic Profiles
 #' @author  Adam Bickford, Colorado State Demography Office, November 2017-March 2018
-#' Release Version 4.0 01/21/2021
+#' Release Version 5.0 01/01/2022
 
 rm(list = ls())
 library(tidyverse, quietly=TRUE)
@@ -9,7 +9,7 @@ library(readxl, quietly=TRUE)
 library(scales, quietly=TRUE)
 library(codemogAPI, quietly=TRUE)
 library(codemogProfile, quietly=TRUE)
-#library(codemogLib)
+library(codemogLib)
 library(knitr, quietly=TRUE)
 library(kableExtra, quietly=TRUE)
 library(RPostgreSQL)
@@ -27,6 +27,7 @@ library(maptools)
 library(officer)
 library(flextable)
 library(ggplotify)
+library(stringi)
 
 
 # Additions for Database pool
@@ -35,78 +36,79 @@ library('DBI')
 library('stringr')
 library('config')
 
-source("R/age_cat.R")
-source("R/ageForecastPRO.R")
-source("R/agePlotPRO.R")
-source("R/baseIndustries.R")
-source("R/boxContent.R")
-source("R/captionSrc.R")
-source("R/codemog_api.R")
-source("R/chkID.R")
-source("R/cocPlot.R")
-source("R/codemog_cdp.R")
-source("R/dashboardMAP.R")
-source("R/downloadObj.R")
-source("R/downloadObjUI.R")
-source("R/educPRO.R")
-source("R/GenerateVenn.R")
-source("R/houseEstPRO.R")
-source("R/housePRO.R")
-source("R/HouseVal.R")
-source("R/incomePRO.R")
-source("R/incomeSrc.R")
-source("R/jobMigration.R")
-source("R/jobsByIndustry.R")
-source("R/jobsPlot.R")
-source("R/jobsPopForecast.R")
-source("R/listTofips.R")
-source("R/medianAgeTab.R")
-source("R/migbyagePRO.R")
-source("R/HousingUnits.R")
-source("R/percent.R")
-source("R/pop_timeseries.R")
-source("R/popForecast.R")
-source("R/popPlace.R")
-source("R/popTable.R")
-source("R/raceTab1.R")
-source("R/raceTab2.R")
-source("R/residentialLF.R")
-source("R/roundUpNice.R")
-source("R/setAxis.R")
-source("R/setYrRange.R")
-source("R/simpleCap.R")
-source("R/statsTable1.R")
-source("R/submitPush.R")
-source("R/submitReport.R")
-source("R/tabList.R")
-source("R/tabTitle.R")
-source("R/TempFil.R")
-source("R/weeklyWages.R")
-source("R/unemployment.R")
+# source("R/age_cat.R")
+# source("R/ageForecastPRO.R")
+# source("R/agePlotPRO.R")
+# source("R/baseIndustries.R")
+# source("R/boxContent.R")
+# source("R/captionSrc.R")
+# source("R/codemog_api.R")
+# source("R/chkID.R")
+# source("R/cocPlot.R")
+# source("R/codemog_cdp.R")
+# source("R/dashboardMAP.R")
+# source("R/downloadObj.R")
+# source("R/downloadObjUI.R")
+# source("R/educPRO.R")
+# source("R/GenerateVenn.R")
+# source("R/houseEstPRO.R")
+# source("R/housePRO.R")
+# source("R/HouseVal.R")
+# source("R/incomePRO.R")
+# source("R/incomeSrc.R")
+# source("R/jobMigration.R")
+# source("R/jobsByIndustry.R")
+# source("R/jobsPlot.R")
+# source("R/jobsPopForecast.R")
+# source("R/listTofips.R")
+# source("R/medianAgeTab.R")
+# source("R/migbyagePRO.R")
+# source("R/HousingUnits.R")
+# source("R/percent.R")
+# source("R/pop_timeseries.R")
+# source("R/popForecast.R")
+# source("R/popPlace.R")
+# source("R/popTable.R")
+# source("R/raceTab1.R")
+# source("R/raceTab2.R")
+# source("R/residentialLF.R")
+# source("R/roundUpNice.R")
+# source("R/setAxis.R")
+# source("R/setYrRange.R")
+# source("R/simpleCap.R")
+# source("R/statsTable1.R")
+# source("R/submitPush.R")
+# source("R/submitReport.R")
+# source("R/tabList.R")
+# source("R/tabTitle.R")
+# source("R/TempFil.R")
+# source("R/weeklyWages.R")
+# source("R/unemployment.R")
+
 
 
 
 # The GLOBAL Variables  Add Additional lists items as sections get defined
 #File Locations ALSO LOOK AT LINE IN THE PDF OUTPUT CODE  LINE 1229
 # Local/Development
-# tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
+ tPath <- "J:/Community Profiles/Shiny Demos/TempDir"  #Development
 
 #Production
- tPath <- "/tmp"  
+# tPath <- "/tmp"  
 
 # Locations for Google Analtyics Java Script Files
 # Local/ Development
 
-# initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
-# tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
+ initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
+ tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
 
 #Production
- initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
- tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
+# initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
+# tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
 
 # Current ACS database
 curACS <- "acs1519"
-curYr <- 2019
+curYr <- 2020
 fipslist <<- ""
 
 # Set up database pool 1/23/19
@@ -270,7 +272,7 @@ server <- function(input, output, session) {
   infoSrc[3,1] <- "<b>Population Characteristics: Age</b>"
   infoSrc[3,2] <- "Population Estimates and Migration by Age"
   infoSrc[4,1] <- "<b>Population Characteristics: Income, Education and Race</b>"
-  infoSrc[4,2] <- "Population Estimates by Income, Income Source, Educational Attainment and Race"
+  infoSrc[4,2] <- "Population Estimates by Income, Income # source, Educational Attainment and Race"
   infoSrc[5,1] <- "<b>Housing and Households</b>"
   infoSrc[5,2] <- "Housing Units, Costs and Unit Characteristics"
   infoSrc[6,1] <- "<b>Commuting and Job Growth</b>"
@@ -286,7 +288,7 @@ server <- function(input, output, session) {
   infoTab <- gsub("&lt;","<",infoTab)
   infoTab <- gsub("&gt;",">",infoTab)
   
-  #Creating data Source Links Table
+  #Creating data # source Links Table
   linkSrc <- matrix(" ", nrow=6, ncol=5)
   linkSrc[1,1]  <- "<b>Data Dashboard</b>"
   linkSrc[2,1]  <- "<a href='https://gis.dola.colorado.gov/apps/demographic_dashboard/' target='_blank'>Demographic Dashboard</a>"
@@ -332,6 +334,9 @@ server <- function(input, output, session) {
   
   frontPgBox1 <- box(width=11,tags$div(tags$b("Welcome to the State Demography Office (SDO) Colorado Demographic Profiles Website"), tags$br(),
                                        "This tool provides summary plots and data describing Counties and Incorporated Municipalities in Colorado.", tags$br(),
+                                       tags$em(tags$b("Note on Data Sources")), tags$br(),
+                                       "Due to delays in the release of the 2016-2020 American Community Survey (ACS) data, this application combines data from the 2020 State Demography Office estimates and forecasts with 2015-2019 ACS data.", tags$br(),
+                                       "The 2016-2020 ACS data is not expected until March, 2022", tags$p(), tags$p(),
                                        tags$em("Profile Contents:"),
                                        HTML(infoTab),
                                        "To create a profile:",tags$br(),
@@ -352,7 +357,7 @@ server <- function(input, output, session) {
                                          tags$li("Downloaded objects will be saved in the 'Download' location supported by your browser.")
                                          )))
   frontPgBox2 <-  box(width=11, tags$div(
-    tags$b("Links to other SDO Data Sources:"),
+    tags$b("Links to other SDO Data # sources:"),
     HTML(linkTab)))
   
   frontPg <- list(frontPgBox1,frontPgBox2)
@@ -733,7 +738,7 @@ server <- function(input, output, session) {
           ggsave(fileMat[34],popc3$plot, device="png", height = 5 , width = 7, dpi=300)
           ggsave(fileMat[35],popc3$plot, device="png", height = 5 , width = 7, dpi=300)
           
-          #Income Source
+          #Income # source
           dput(popc2$Htable,fileMat[36])
           
           dput(popc2$Ltable, fileMat[37])
@@ -766,8 +771,8 @@ server <- function(input, output, session) {
                                  downloadObjUI("popc3plot"),  downloadObjUI("popc3data"))
           
           
-          popc3.info <- tags$div(boxContent(title= "Income Source",
-                                            description= "The Income Source table shows the earning sources for Households and their mean incomes.  A household can have multiple sources of income, these values are not mutually exclusive.",
+          popc3.info <- tags$div(boxContent(title= "Income # source",
+                                            description= "The Income # source table shows the earning # sources for Households and their mean incomes.  A household can have multiple # sources of income, these values are not mutually exclusive.",
                                             MSA= "F", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO American Community Survey API","http://coloradodemography.github.io/CensusAPI/"),
                                                            c("American Community Survey data.census.gov, Series B19051 to B19057 and B19061 to B19069","https://data.census.gov/cedsci/")) ),
@@ -1200,12 +1205,12 @@ server <- function(input, output, session) {
         #knitting file and copy to final document
       
      # Testing    
-     #   tempRMD <- fixPath(fileMat[88])  
-     #  tempPDF <- fixPath(fileMat[89]) 
+      tempRMD <- fixPath(fileMat[88])  
+      tempPDF <- fixPath(fileMat[89]) 
         
     # Production    
-         tempRMD <- fileMat[88]  
-         tempPDF <- fileMat[89] 
+     #    tempRMD <- fileMat[88]  
+     #    tempPDF <- fileMat[89] 
         
         
         rmarkdown::render(input= tempRMD, output_file = tempPDF,
