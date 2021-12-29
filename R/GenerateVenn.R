@@ -1,5 +1,5 @@
 #' GenerateVenn Generates a Venn diagram using LODES data
-#' V3 revised 12/14/2020 AB
+#' V4 revised 12/28/2021 AB -- Accomodae multi-year data
 #' @param listID Id list with fips and location names
 #' @return ggplot2 graphic, formatted datatables, and datasets
 #' @export
@@ -12,13 +12,16 @@ GenerateVenn <- function(DBPool,listID){
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
+# Update YRValue to reflect the most recent data...
+ 
+  YRValue = 2019
 
 if(nchar(placefips) != 0) {
-  sumSQL <- paste0("SELECT * FROM data.otm_place_summary WHERE fips = '",placefips,"' ;")
+  sumSQL <- paste0("SELECT * FROM data.otm_place_summary WHERE fips = '",placefips,"' AND year = ",YRValue," ;")
   placeSQL <- paste0("SELECT * FROM data.otm_place_place WHERE fips = '",placefips,"' ;")
 } else {
-  sumSQL <- paste0("SELECT * FROM data.otm_county_summary WHERE fips = '",ctyfips,"' ;")
-  placeSQL <- paste0("SELECT * FROM data.otm_county_place WHERE fips = '",ctyfips,"' ;")
+  sumSQL <- paste0("SELECT * FROM data.otm_county_summary WHERE fips = '",ctyfips,"' AND year = ",YRValue," ;")
+  placeSQL <- paste0("SELECT * FROM data.otm_county_place WHERE fips = '",ctyfips,"' AND year = ",YRValue," ;")
 }
   # reading Data 
    f.summary <- dbGetQuery(DBPool, sumSQL)
@@ -28,8 +31,7 @@ if(nchar(placefips) != 0) {
      f.summary$liveout_workin <- as.numeric(f.summary$liveout_workin)
      f.summary$livein_workin <-  as.numeric(f.summary$livein_workin)
      
-  # Extracting Year Value
-     YRValue <- unlist(unique(f.summary$year))
+  
 
   rawVenn <- euler(c("A" = f.summary$liveout_workin, "B" = f.summary$livein_workout, "A&B" = f.summary$livein_workin ))
   cols <- c("lightblue1", "lightyellow1","olivedrab1")
