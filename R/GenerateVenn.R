@@ -18,7 +18,7 @@ GenerateVenn <- function(DBPool,listID){
 
 if(nchar(placefips) != 0) {
   sumSQL <- paste0("SELECT * FROM data.otm_place_summary WHERE fips = '",placefips,"' AND year = ",YRValue," ;")
-  placeSQL <- paste0("SELECT * FROM data.otm_place_place WHERE fips = '",placefips,"' ;")
+  placeSQL <- paste0("SELECT * FROM data.otm_place_place WHERE fips = '",placefips,"' AND year = ",YRValue," ;")
 } else {
   sumSQL <- paste0("SELECT * FROM data.otm_county_summary WHERE fips = '",ctyfips,"' AND year = ",YRValue," ;")
   placeSQL <- paste0("SELECT * FROM data.otm_county_place WHERE fips = '",ctyfips,"' AND year = ",YRValue," ;")
