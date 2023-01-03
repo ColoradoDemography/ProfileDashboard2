@@ -123,7 +123,7 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
       tpop2m <- ifelse(is.na(f.tPopyr2p$totalpopulation),0,f.tPopyr2p$totalpopulation)  # Pop Current Year
       tpopchngm <- tpop2m - tpop1m   # Pop Change value
       
-      jobsValm <-  ifelse(f.Jobsp$jobs == -9,"",f.Jobsp$jobs)  #The  Total Jobs Value
+      jobsValm <-  0  #The  Total Jobs Value
     
       hhincm <- codemog_api(data="b19013",db=ACS, geonum=paste("1", state, placefips, sep=""), meta="no")
       medhhincm <- hhincm$b19013001
@@ -148,8 +148,8 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
       tpop2m <- ifelse(is.na(f.tpop2t$totalpopulation),0,f.tpop2t$totalpopulation)  # Pop Current Year
       tpopchngm <- tpop2m - tpop1m   # Pop Change value
       
-      jobsValm <-  ifelse(f.Jobsp$jobs == -9,"",f.Jobsp$jobs)  #The  Total Jobs Value
-      
+      jobsValm <-  0  #The  Total Jobs Value
+ 
       #Prepping for multiple counties
       hhincm <- codemog_api(data="b19013",db=ACS, geonum=paste("1", state, placefips, sep=""), meta="no")
       medhhincm <- hhincm$b19013001
@@ -231,7 +231,7 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
   if(lvl == "Municipalities"){
     
     # Municipality output
-    
+ 
     outTab[1,nCol] <- format(as.numeric(muniData[1]),nsmall=0, big.mark=",")
     outTab[2,nCol] <- format(as.numeric(muniData[2]),nsmall=0, big.mark=",")
     outTab[3,nCol] <- format(round(as.numeric(muniData[3]),digits=0),nsmall=0, big.mark=",")
