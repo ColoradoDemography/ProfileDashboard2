@@ -494,7 +494,7 @@ server <- function(input, output, session) {
           #Chart/Table Objects
           popf1 <<- popTable(DBPool=DOLAPool,lvl=input$level,listID=idList,sYr=1990,eYr=curYr)
           popf2 <<- pop_timeseries(DBPool=DOLAPool,lvl=input$level,listID=idList,endyear=curYr,base=12)
-          popf3 <<- popForecast(listID=idList)
+          popf3 <<- popForecast(DBPool=DOLAPool,listID=idList)
           popf4 <<- cocPlot(DBPool=DOLAPool,lvl=input$level,listID=idList,lyr=curYr)
           
           # creating output files
