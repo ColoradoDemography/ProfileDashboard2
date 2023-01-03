@@ -354,7 +354,7 @@ server <- function(input, output, session) {
                                          tags$li("Downloaded objects will be saved in the 'Download' location supported by your browser.")
                                          )))
   frontPgBox2 <-  box(width=11, tags$div(
-    tags$b("Links to other SDO Data # sources:"),
+    tags$b("Links to other SDO Data sources:"),
     tags$a(href="https://demography.dola.colorado.gov/", "Find links to SDO data on the main SDO webpage")))
   
   frontPg <- list(frontPgBox1,frontPgBox2)
