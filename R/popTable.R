@@ -11,7 +11,7 @@
 popTable <- function(DBPool,lvl,listID,sYr,eYr) {
 
   # Collecting place ids from  idList, setting default values
-  
+
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
@@ -39,7 +39,8 @@ popTable <- function(DBPool,lvl,listID,sYr,eYr) {
   #County Population and Growth Rate  
   if(lvl == "Counties" || lvl == "Municipalities") {
   ctyPopGrowth <- paste0("SELECT countyfips, year, totalpopulation FROM estimates.county_muni_timeseries WHERE countyfips = ",ctynum," AND placefips = 0;") 
-  mCty <- dbGetQuery(DBPool,ctyPopGrowth) %>%
+  mcty <- dbGetQuery(DBPool,ctyPopGrowth)
+  mCty <- mcty%>%
     filter(year %in% yrs)%>%
     arrange(countyfips,year)%>%
     mutate(year=as.numeric(year),

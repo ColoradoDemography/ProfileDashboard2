@@ -21,7 +21,7 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
   jobsChk <- 0
 
   # Setting up calls etc. 
-  
+
   strCtyProf <- "SELECT * FROM estimates.county_profiles;"
   strJobs <- "SELECT * FROM estimates.jobs_by_sector WHERE sector_id = '0';"
   
@@ -32,7 +32,7 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
     sqlStrJobs <- paste0("SELECT area_code, population_year, total_jobs FROM estimates.jobs_by_sector WHERE area_code = ",as.numeric(ctyfips)," and population_year = ",eYr,
                          " and sector_id = '0';")
     }
-  
+ 
   if(lvl == "Municipalities") {  #Municialities
     #these pull out county
     c_sqlStrPop1 <- paste0("SELECT countyfips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE countyfips = ",as.numeric(ctyfips)," and year = ", sYr," and placefips = 0;")
@@ -118,12 +118,13 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
  
     if(listID$multiCty == "F") {
       #Fixing NA Values
+
       tpop1m <- ifelse(is.na(f.tPopyr1p$totalpopulation),0,f.tPopyr1p$totalpopulation)  # Pop 2010
       tpop2m <- ifelse(is.na(f.tPopyr2p$totalpopulation),0,f.tPopyr2p$totalpopulation)  # Pop Current Year
       tpopchngm <- tpop2m - tpop1m   # Pop Change value
       
       jobsValm <-  ifelse(f.Jobsp$jobs == -9,"",f.Jobsp$jobs)  #The  Total Jobs Value
-      
+    
       hhincm <- codemog_api(data="b19013",db=ACS, geonum=paste("1", state, placefips, sep=""), meta="no")
       medhhincm <- hhincm$b19013001
       
@@ -213,11 +214,13 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
   outTab[1,nCol] <- paste0("Population (",eYr,")",footnote_marker_symbol(1))
   outTab[2,nCol] <- paste0("Population Change (",sYr," to ",eYr, ")",footnote_marker_symbol(1))
   
+
   if(jobsChk == -9) {
     outTab[3,nCol] <- paste0("Total Employment (",jobsPl$year,")",footnote_marker_symbol(1))
   } else {
     outTab[3,nCol] <- paste0("Total Employment (",eYr,")",footnote_marker_symbol(1))
   }
+ 
   
   outTab[4,nCol] <- paste0("Median Household Income",footnote_marker_symbol(2))
   outTab[5,nCol] <- paste0("Median House Value",footnote_marker_symbol(2))
@@ -291,9 +294,12 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
   } else {
     names_spaced <- c(" ",ctyname,"Colorado")
   }
-  
+
   #Generating HTMl File
   if(lvl == "Municipalities") {
+    # Removing jobs line (row 3)
+    outTab[3,1:4] = ""
+    
     outHTML <-  kable(outTab, format='html', table.attr='class="cleanTab"',
                       digits=1,
                       row.names=FALSE,

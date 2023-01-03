@@ -44,8 +44,11 @@ pop_timeseries=function(DBPool,lvl,listID, beginyear=2000,endyear, base=10){
    if(lvl == "Counties") { #fips is a county code
         sqlCtyPop <-  paste0("SELECT countyfips, year, totalpopulation FROM estimates.county_profiles WHERE (countyfips = ",as.numeric(ctyfips),") 
                             and (year >= ",beginyear,") and (year <= ",endyear,");")
-        d=dbGetQuery(DBPool, sqlCtyPop) 
-        d$placename <- ctyname
+        d=dbGetQuery(DBPool, sqlCtyPop) %>%
+          mutate(placefips = 0,
+                 placename = ctyname) %>%
+          select(countyfips, placefips, placename,year, totalpopulation)
+       
    }
   
   
@@ -59,9 +62,9 @@ pop_timeseries=function(DBPool,lvl,listID, beginyear=2000,endyear, base=10){
     xaxs$yBrk[length(xaxs$yBrk)] <- endyear
   }
   
-    d2 <- d
+    d2 <- d 
 
-  names(d2) <- c("Geography","Year","Total Population")
+  names(d2) <- c("County FIPS", "Place FIPS", "Geography","Year","Total Population")
   
   p=d%>%
     ggplot(aes(x=year, y=totalpopulation))+

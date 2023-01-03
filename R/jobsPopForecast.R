@@ -10,7 +10,7 @@
 #' @export
 
 jobsPopForecast <- function(DBPool,listID, curyr, base=10){
-  
+
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
@@ -38,8 +38,12 @@ jobsPopForecast <- function(DBPool,listID, curyr, base=10){
 
   f.totalJobs$type <- "Jobs"
 
+  
+   # Year Sequence
+  yrSeq <- seq(1990,2040, by=1)
+  
   # Gathering population data
-  f.Pop =county_sya(MSAList, 1990:2040,"totalpopulation")
+  f.Pop  <- county_sya(MSAList, yrSeq,"totalpopulation")
   f.Pop$totalpopulation <- as.numeric(f.Pop$totalpopulation)
   f.totalPop <- f.Pop %>%
     group_by(year, datatype) %>%

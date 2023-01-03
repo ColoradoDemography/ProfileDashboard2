@@ -22,6 +22,8 @@ jobMigration <- function(DBPool,listID, maxyr, base=10){
 
   jobsSQL <- paste0("SELECT * FROM estimates.bea_jobs WHERE fips = ",as.numeric(ctyfips), ";")
   jobslyr <- paste0("jobs_",maxyr)
+  # temp code
+ 
 
     f.jobsBea <- dbGetQuery(DBPool, jobsSQL)
 
@@ -88,8 +90,8 @@ jobMigration <- function(DBPool,listID, maxyr, base=10){
   f.ylim <- rbind(f.mig,f.job)
   ymin <- min(f.ylim$val)
   ymax <- max(f.ylim$val)
-  
-  f.pltdata$year5 <- factor(f.pltdata$year5, labels = c(1985,1990,1995,2000,2005,2010,2015,maxYr) )
+
+  f.pltdata$year5 <- factor(f.pltdata$year5, labels = c(1985,1990,1995,2000,2005,2010,2015,2020,maxYr) )
 
   migrPlot <- ggplot(f.pltdata) + 
     geom_bar(aes(x=year5, y=avgjobs,color="Jobs"), stat="identity", fill= "#d8c772") +

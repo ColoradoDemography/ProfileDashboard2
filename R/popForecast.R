@@ -8,7 +8,7 @@
 #' @return ggplot2 graphic and data file
 #' @export
 
-popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
+popForecast <- function(DBPool, listID, byr=2000,eyr=2050, base=10) {
 
   # Collecting place ids from  idList, setting default values
 
@@ -16,13 +16,17 @@ popForecast <- function(listID, byr=2000,eyr=2050, base=10) {
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
- 
+  if(listID$PlFilter == "T") {
+    placefips <- ""
+    placename <- ""
+  }
 
-  fips=as.numeric(ctyfips)
+
   yrs <- seq(byr,eyr, by=2)
   
-  
-    d <- county_sya(fips, yrs)  %>%
+  sqlCtyPop <-  paste0("SELECT county, year, age, datatype, totalpopulation FROM estimates.county_sya WHERE (countyfips = ",as.numeric(ctyfips),") 
+                            and (year >= ",byr,") and (year <= ",eyr,");")
+  d <- dbGetQuery(DBPool, sqlCtyPop) %>%
       group_by(county, datatype, year) %>%
       summarize(Tot_pop = sum(as.numeric(totalpopulation)))
   
