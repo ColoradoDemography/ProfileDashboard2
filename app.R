@@ -1038,7 +1038,7 @@ server <- function(input, output, session) {
                                              generally be more resilient than one that is dominated by one large industry.",
                                              MSA= "T", stats = "F", muni = "F", multiCty = idList$multiCty, PlFilter = idList$PlFilter, 
                                              urlList = list(c("SDO Base Industries Summary","https://drive.google.com/file/d/1Ag0JdOo8XATTBiNuh80BTiuqLV4Kv72T/view"),
-                                                            c("SDO Base industries Anaysis","https://demography.dola.colorado.gov/economy-labor-force/data/base-analysis/#base-industries-analysis"))),
+                                                            c("SDO Base industries Anaysis","https://coloradodemography.github.io/economy-labor-force/data/base-analysis/"))),
                                   tags$br(),
                                   downloadObjUI("popei3plot"), downloadObjUI("popei3data"))
           
