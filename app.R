@@ -99,16 +99,16 @@ library('config')
 # Locations for Google Analtyics Java Script Files
 # Local/ Development
 
- initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
- tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
+# initJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/dL_init.js"
+# tagManJS <- "J:/Community Profiles/Shiny Demos/codemogLib/www/tag_manager.js"
 
 #Production
-# initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
-# tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
+ initJS <- "/srv/shiny-server/ProfileDashboard2/www/dL_init.js"
+ tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
 
 # Current ACS database
-curACS <- "acs1822"
-curYr <- 2022
+curACS <- "acs1721"
+curYr <- 2021
 fipslist <<- ""
 
 # Set up database pool 1/23/19
@@ -1202,12 +1202,12 @@ server <- function(input, output, session) {
         #knitting file and copy to final document
       
      # Devemopment    
-      tempRMD <- fixPath(fileMat[88])  
-      tempPDF <- fixPath(fileMat[89]) 
+    #  tempRMD <- fixPath(fileMat[88])  
+    #  tempPDF <- fixPath(fileMat[89]) 
         
     # Production    
-    #     tempRMD <- fileMat[88]  
-    #     tempPDF <- fileMat[89] 
+         tempRMD <- fileMat[88]  
+         tempPDF <- fileMat[89] 
         
         
         rmarkdown::render(input= tempRMD, output_file = tempPDF,
