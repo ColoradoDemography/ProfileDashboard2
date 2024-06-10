@@ -46,7 +46,7 @@ baseIndustries <- function(DBPool,listID, curyr, oType,base=10){
   
   # Adding Population Age 16 + and total Population for Table
 
-  f.LFPlace <- f.LFPlace[which(f.LFPlace$population_year == curyr),c(1:6,8)]
+  f.LFPlace <- f.LFPlace[which(f.LFPlace$population_year == curyr),c(1:6,9)]
 
   f.LFPlaceSum <- f.LFPlace %>%
     summarize(Pop16P = comma(ceiling(sum(cni_pop_16pl))))
