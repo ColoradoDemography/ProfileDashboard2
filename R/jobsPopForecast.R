@@ -10,7 +10,7 @@
 #' @export
 
 jobsPopForecast <- function(DBPool,listID, curyr, base=10){
-
+browser()
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
@@ -19,7 +19,8 @@ jobsPopForecast <- function(DBPool,listID, curyr, base=10){
     placefips <- ""
     placename <- ""
   }
-  
+  byr = 1990
+  eyr = 2040
   #fips is the 3-digit character string
 
   # creating alternative fips code for Denver MSA
@@ -32,18 +33,16 @@ jobsPopForecast <- function(DBPool,listID, curyr, base=10){
   }
 
   jobsSQL <- paste0("SELECT * FROM estimates.jobs_forecast WHERE countyfips = '",as.numeric(ctyfips), "';")
+  sqlCtyPop <-  paste0("SELECT county, year, age, datatype, totalpopulation FROM estimates.county_sya WHERE (countyfips = ",as.numeric(ctyfips),") 
+                            and (year >= ",byr,") and (year <= ",eyr,");")
   
   f.totalJobs <- dbGetQuery(DBPool, jobsSQL)
-
+  f.Pop  <- dbGetQuery(DBPool,sqlCtyPop)
 
   f.totalJobs$type <- "Jobs"
 
-  
-   # Year Sequence
-  yrSeq <- seq(1990,2040, by=1)
-  
   # Gathering population data
-  f.Pop  <- county_sya(MSAList, yrSeq,"totalpopulation")
+
   f.Pop$totalpopulation <- as.numeric(f.Pop$totalpopulation)
   f.totalPop <- f.Pop %>%
     group_by(year, datatype) %>%
