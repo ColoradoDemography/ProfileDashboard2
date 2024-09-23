@@ -43,25 +43,25 @@ if(nchar(placefips) == 0) {
   # Building county data table
   f.hhP$occupiedhousingunits <- f.hhP$totalhousingunits - f.hhP$vacanthousingunits
   f.hhP <- f.hhP[,c(1,2,7,10,8,9,3:6)]
+
   f.HHPl <- f.hhP %>% gather(housing, count, totalhousingunits:householdsize, factor_key=TRUE)
   f.HHPl <- f.HHPl[,c(3,4)]
 }  else {
     f.hhP <- f.hhP[which(as.numeric(f.hhP$countyfips) != 999),]
+    
     f.hhP$occupiedhousingunits <- f.hhP$totalhousingunits - f.hhP$vacanthousingunits
     
-    f.HHPl <- f.hhP %>% summarize(totalpopulation	 = sum(totalpopulation, na.rm = TRUE),
-                                  householdpopulation	 = sum( householdpopulation, na.rm = TRUE),
-                                  groupquarterspopulation	 = sum( groupquarterspopulation, na.rm=TRUE),
-                                  householdsize	 = sum(  householdsize na.rm=TRUE),
-                                  totalhousingunits	 = sum( totalhousingunits, na.rm = TRUE),
-                                  occupiedhousingunits	 = sum(occupiedhousingunits, na.rm=TRUE),
-                                  vacanthousingunits	 = sum( vacanthousingunits, na.rm=TRUE)) %>%
+    f.HHPl <- f.hhP %>% summarize(totalpopulation	 = sum(totalpopulation, na.rm=TRUE),
+                                  householdpopulation	 = sum( householdpopulation, na.rm=TRUE),
+                                  groupquarterspopulation	 = sum( groupquarterspopulation,  na.rm=TRUE),
+                                  householdsize	 = sum(  householdsize,  na.rm=TRUE),
+                                  totalhousingunits	 = sum( totalhousingunits,  na.rm=TRUE),
+                                  occupiedhousingunits	 = sum(occupiedhousingunits,  na.rm=TRUE),
+                                  vacanthousingunits	 = sum( vacanthousingunits,  na.rm=TRUE)) %>%
                         mutate(vacancyrate = (vacanthousingunits/totalhousingunits) *100) 
     
-     f.HHPl <- f.HHPl[,c(5:8,1:4)] %>%  
-            mutate(across(everything(), ~ replace(.x, is.na(.x), ""))) %>%
+     f.HHPl <- f.HHPl[,c(5:8,1:4)] %>%           
                         gather(housing, count, totalhousingunits:householdsize, factor_key=TRUE)
-    "
   }
   
 
@@ -73,11 +73,11 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
                    ifelse(f.HHPl$housing == "occupiedhousingunits", "Occupied Housing Units",
                    ifelse(f.HHPl$housing == "vacanthousingunits", "Vacant Housing Units","Vacancy Rate")))))))
 
-
- 
+  f.HHPl <- f.HHPl %>% mutate(count = ifelse(count == 0,NA, count))
   f.HHPl[c(1:3,5:7),2] <- comma(as.numeric(f.HHPl[c(1:3,5:7),2]))
   f.HHPl[8,2] <- round(as.numeric(f.HHPl[8,2]), 2)
   f.HHPl[4,2] <- percent(as.numeric(f.HHPl[4,2]))
+  f.HHPl <- f.HHPl %>% mutate(count = str_replace(count,"NA%",""))
 
   m.House <- as.matrix(f.HHPl)
 
@@ -160,8 +160,6 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
   FlexOut <- autofit(FlexOut)
   FlexOut <- width(FlexOut,j=1, width=3)
   FlexOut <- width(FlexOut,j=2, width=1)
-
-   
 
   names(f.HHPl) <- c(tabTitle,"Value")  
 
