@@ -49,17 +49,19 @@ if(nchar(placefips) == 0) {
     f.hhP <- f.hhP[which(as.numeric(f.hhP$countyfips) != 999),]
     f.hhP$occupiedhousingunits <- f.hhP$totalhousingunits - f.hhP$vacanthousingunits
     
-    f.HHPl <- f.hhP %>% summarize(totalpopulation	 = sum(totalpopulation),
-                                  householdpopulation	 = sum( householdpopulation),
-                                  groupquarterspopulation	 = sum( groupquarterspopulation),
-                                  householdsize	 = sum(  householdsize),
-                                  totalhousingunits	 = sum( totalhousingunits),
-                                  occupiedhousingunits	 = sum(occupiedhousingunits),
-                                  vacanthousingunits	 = sum( vacanthousingunits)) %>%
+    f.HHPl <- f.hhP %>% summarize(totalpopulation	 = sum(totalpopulation, na.rm = TRUE),
+                                  householdpopulation	 = sum( householdpopulation, na.rm = TRUE),
+                                  groupquarterspopulation	 = sum( groupquarterspopulation, na.rm=TRUE),
+                                  householdsize	 = sum(  householdsize na.rm=TRUE),
+                                  totalhousingunits	 = sum( totalhousingunits, na.rm = TRUE),
+                                  occupiedhousingunits	 = sum(occupiedhousingunits, na.rm=TRUE),
+                                  vacanthousingunits	 = sum( vacanthousingunits, na.rm=TRUE)) %>%
                         mutate(vacancyrate = (vacanthousingunits/totalhousingunits) *100) 
     
-     f.HHPl <- f.HHPl[,c(5:8,1:4)] %>%           
+     f.HHPl <- f.HHPl[,c(5:8,1:4)] %>%  
+            mutate(across(everything(), ~ replace(.x, is.na(.x), ""))) %>%
                         gather(housing, count, totalhousingunits:householdsize, factor_key=TRUE)
+    "
   }
   
 
