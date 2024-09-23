@@ -78,6 +78,7 @@ f.HHPl$housing  <- ifelse(f.HHPl$housing == "totalpopulation", "Total Population
   f.HHPl[8,2] <- round(as.numeric(f.HHPl[8,2]), 2)
   f.HHPl[4,2] <- percent(as.numeric(f.HHPl[4,2]))
   f.HHPl <- f.HHPl %>% mutate(count = str_replace(count,"NA%",""))
+  f.HHPl <- f.HHPl %>% mutate(count = str_replace(count,"NA",""))
 
   m.House <- as.matrix(f.HHPl)
 
