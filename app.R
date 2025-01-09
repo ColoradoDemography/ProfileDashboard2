@@ -107,8 +107,8 @@ library('config')
  tagManJS <- "/srv/shiny-server/ProfileDashboard2/www/tag_manager.js"
 
 # Current ACS database
-curACS <- "acs1923"
-curYr <- 2023
+curACS <- "acs1822"
+curYr <- 2022
 fipslist <<- ""
 
 # Set up database pool 1/23/19
