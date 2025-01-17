@@ -9,8 +9,9 @@
 #' @export
 
 agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
-  # Collecting place ids from  idList, setting default values
   
+  # Collecting place ids from  idList, setting default values
+
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
@@ -30,11 +31,12 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
       ungroup()%>%
       arrange(countyfips, year) %>%
       mutate(popTot = sum(totalpopulation)) %>%
-      group_by(agecat, add=TRUE) %>%
+      group_by(agecat) %>%
       mutate(age_Pct = percent((totalpopulation/sum(popTot))*100)) %>%
       mutate(age_Prop = (totalpopulation/sum(popTot))*100)
     
     f.place$county <- ctyname
+    f.place$countyfips <- as.numeric(f.place$countyfips)
     
     #Creating State Data file
     f.state =county_sya(state, yrs)%>%
@@ -44,10 +46,10 @@ agePlotPRO  <- function(listID, ACS, state=0, yrs, base=10, agegroup="ten") {
       ungroup()%>%
       arrange(countyfips, year) %>%
       mutate(popTot = sum(totalpopulation)) %>%
-      group_by(agecat, add=TRUE) %>%
+      group_by(agecat) %>%
       mutate(age_Pct = percent((totalpopulation/sum(popTot))*100)) %>%
       mutate(age_Prop = (totalpopulation/sum(popTot))*100)
-    
+
     # Creating Plot data file
     f.AgePlot <- rbind(f.place, f.state)
     f.AgePlot$geoname <- f.AgePlot$county
