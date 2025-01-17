@@ -12,6 +12,7 @@
 
 age_cat= function(data, agevar, groups="census", factor=TRUE){
   require(car, quietly=TRUE)
+  data$age <- as.numeric(data$age)
   gl=list(
     census65=list(
       recode="0:4=1; 5:17=2; 18:24=3;  25:34=4; 35:44=5; 45:54=6; 55:64=7; 65:115=8", 

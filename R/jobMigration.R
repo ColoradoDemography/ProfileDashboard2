@@ -21,9 +21,9 @@ jobMigration <- function(DBPool,listID, maxyr, base=10){
  
 
   jobsSQL <- paste0("SELECT * FROM estimates.bea_jobs WHERE fips = ",as.numeric(ctyfips), ";")
-  jobslyr <- paste0("jobs_",maxyr)
-  # temp code
  
+  # temp code
+  jobslyr <- paste0("jobs_","2022")
 
     f.jobsBea <- dbGetQuery(DBPool, jobsSQL)
 
