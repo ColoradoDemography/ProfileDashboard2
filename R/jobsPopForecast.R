@@ -10,7 +10,7 @@
 #' @export
 
 jobsPopForecast <- function(DBPool,listID, curyr, base=10){
-browser()
+
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
@@ -27,14 +27,17 @@ browser()
   if(ctyfips %in% c("001", "005", "013", "014", "031", "035", "059")) {
     ctyfips = "500"
     MSAList <- c(1,5,13,14,31,35,59)
+    sqlCtyPop <-  paste0("SELECT county, year, age, datatype, totalpopulation FROM estimates.county_sya WHERE countyfips IN (1,5,13,14,31,35,59) 
+                            and (year >= ",byr,") and (year <= ",eyr,");")
     ctyname = "Denver-Boulder MSA"
   } else {
     MSAList <- as.numeric(ctyfips)
+    sqlCtyPop <-  paste0("SELECT county, year, age, datatype, totalpopulation FROM estimates.county_sya WHERE (countyfips = ",MSA,") 
+                            and (year >= ",byr,") and (year <= ",eyr,");")
   }
 
   jobsSQL <- paste0("SELECT * FROM estimates.jobs_forecast WHERE countyfips = '",as.numeric(ctyfips), "';")
-  sqlCtyPop <-  paste0("SELECT county, year, age, datatype, totalpopulation FROM estimates.county_sya WHERE (countyfips = ",as.numeric(ctyfips),") 
-                            and (year >= ",byr,") and (year <= ",eyr,");")
+  
   
   f.totalJobs <- dbGetQuery(DBPool, jobsSQL)
   f.Pop  <- dbGetQuery(DBPool,sqlCtyPop)
