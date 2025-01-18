@@ -18,22 +18,18 @@ jobMigration <- function(DBPool,listID, maxyr, base=10){
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
- 
 
   jobsSQL <- paste0("SELECT * FROM estimates.bea_jobs WHERE fips = ",as.numeric(ctyfips), ";")
  
-  # temp code
-  jobslyr <- paste0("jobs_","2022")
-
-    f.jobsBea <- dbGetQuery(DBPool, jobsSQL)
-
+    f.jobsQCEW <- dbGetQuery(DBPool, jobsSQL)
+    jobslyr <- paste0("jobs_",maxyr)
 
 
 
   #Jobs
-  # convert datasets to wide
+  # convert datasets to long
 
-  f.jobs1yr <- gather(f.jobsBea, year,jobs, jobs_1970:jobslyr)
+  f.jobs1yr <- f.jobsQCEW %>% select(-jobs_1969) %>% gather(year,jobs, jobs_1970:jobslyr)
   f.jobs1yr$year <- as.numeric(gsub("jobs_","",f.jobs1yr$year))
   
   minBea <- min(f.jobs1yr$year)
@@ -95,15 +91,15 @@ jobMigration <- function(DBPool,listID, maxyr, base=10){
 
   migrPlot <- ggplot(f.pltdata) + 
     geom_bar(aes(x=year5, y=avgjobs,color="Jobs"), stat="identity", fill= "#d8c772") +
-    geom_line(aes(x=year5, y=avgmigr, color="Net Migration", group=1), size=1.75) +
-    geom_hline(yintercept=0, size=1.05) +
+    geom_line(aes(x=year5, y=avgmigr, color="Net Migration", group=1), linewidth=1.75) +
+    geom_hline(yintercept=0, linewidth=1.05) +
     scale_x_discrete() +
     scale_y_continuous(labels=scales::comma) +
     scale_colour_manual(" ", values=c("Jobs" = "#d8c772", "Net Migration" = "#00953A")) +
     scale_fill_manual("",values="#00953A") +
     labs(title = "Job Growth and Net Migration",
          subtitle = ctyname,
-         caption = captionSrc("SDOBEA",""),
+         caption = captionSrc("QCEW",""),
          x = "Year",
          y= "Number") +
     theme(plot.title = element_text(hjust = 0.5, size=16),
