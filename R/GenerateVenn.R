@@ -5,7 +5,6 @@
 #' @export
 #'
 GenerateVenn <- function(DBPool,listID){
-
   # Collecting place ids from  idList, setting default values
 
   ctyfips <- listID$ctyNum
@@ -14,7 +13,7 @@ GenerateVenn <- function(DBPool,listID){
   placename <- listID$plName
 # Update YRValue to reflect the most recent data...
  
-  YRValue = 2019
+  YRValue = 2022
 
 if(nchar(placefips) != 0) {
   sumSQL <- paste0("SELECT * FROM data.otm_place_summary WHERE fips = '",placefips,"' AND year = ",YRValue," ;")
