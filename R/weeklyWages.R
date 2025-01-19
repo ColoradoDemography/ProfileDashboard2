@@ -1,6 +1,6 @@
 #' weeklyWages Produces a plot and dataset showing  average weekly wages
 #'  for the period from 2000 to the present
-#'
+#' Pulls data from the BLS API using blascrapeR
 #'
 #' @param listID the list containing place id and Place names
 #' @param base is the base text size for the ggplot2 object and codemog_theme()
@@ -9,7 +9,7 @@
 #'
 
 weeklyWages <- function(DBPool,listID, curyr,base=10){
-  
+
   ctyfips <- listID$ctyNum
   ctyname <- listID$ctyName
   placefips <- listID$plNum
@@ -19,35 +19,44 @@ weeklyWages <- function(DBPool,listID, curyr,base=10){
     placename <- ""
   }
 
-  wagePLSQL <- paste0("SELECT * FROM estimates.weekly_wages WHERE fips = '",as.numeric(ctyfips), "' AND year <= ", curyr,";")
-  wageSTSQL <- paste0("SELECT * FROM estimates.weekly_wages WHERE fips = '0' AND year <= ",curyr,";")
 
-  
   # Read data files
 
-  f.wagePL <- dbGetQuery(DBPool, wagePLSQL)
-  f.wageST <- dbGetQuery(DBPool, wageSTSQL)
-
-
-  # Place data
-  f.wagePL$wages <- as.numeric(f.wagePL$weekly_wage)
+  bls_key <-  "83f30bc393ec476ea29aa55d5bb06cf7"
+  begyr1 <- "2001"
+  endyr1 <- "2019"
   
-  f.wagePL$fmt_wages <- paste0("$", formatC(as.numeric(f.wagePL$wages), format="f", digits=0, big.mark=","))
-  f.wagePL <- f.wagePL[which(f.wagePL$year >= 2001),]
-  f.wagePL <- f.wagePL[which(f.wagePL$wages != 0),]
-  f.wagePL$geoname <- ctyname
+  begyr2 <- "2020"
+  endyr2 <- as.character(curyr)
+  # State level  ENU0800140010
+  wwagest <- "ENU0800040010"
+  wwagecty <- paste0("ENU08",ctyfips,"40010")
+  
+  blsseries <- c(wwagest,wwagecty)
+  
+  f.wwage1 <- bls_api(blsseries,
+                         startyear = begyr1, endyear = endyr1,
+                         registrationKey = bls_key,
+                         calculations = FALSE, annualaverage = TRUE, catalog = TRUE) %>% filter(period == "Q05") %>% arrange(year)
+  
+  f.wwage2 <- bls_api(blsseries,
+                         startyear = begyr2, endyear = endyr2,
+                         registrationKey = bls_key,
+                         calculations = FALSE, annualaverage = TRUE, catalog = FALSE) %>% filter(period == "Q05") %>% arrange(year)
+ 
 
-  # State data
-  f.wageST$wages <- as.numeric(f.wageST$weekly_wage)
-  f.wageST$fmt_wages <- paste0("$", formatC(as.numeric(f.wageST$wages), format="f", digits=0, big.mark=","))
-  f.wageST <- f.wageST[which(f.wageST$year >= 2001),]
-  f.wageST$geoname <- "Colorado"
+  f.wagePL <- bind_rows(f.wwage1, f.wwage2)  %>%
+    mutate(geoname = ifelse(str_sub(seriesID,4,8) == "08000","Colorado",ctyname),
+           fmt_wages = paste0("$", formatC(as.numeric(value), format="f", digits=0, big.mark=",")))  %>%
+      filter(value != 0) %>%
+      select(geoname, year, fmt_wages, value) %>%
+       arrange(geoname, year)
 
   #Preparing the Plot
 
-  f.plot <- rbind(f.wagePL, f.wageST)
+  f.plot <- f.wagePL
 
-  axs <- setAxis(f.plot$wages)
+  axs <- setAxis(f.plot$value)
   axs$maxBrk <- axs$maxBrk + 50
 
   if(max(f.plot$year) %% 2 ==0) {  #even year
@@ -62,12 +71,12 @@ weeklyWages <- function(DBPool,listID, curyr,base=10){
  
 
   pltTitle <- "Average Weekly Wage,\nin Nominal Dollars"
-  
+
   Plot <- f.plot %>%
-    ggplot(aes(x=year, y=wages, colour=geoname, group=geoname))+
-    geom_line(size=1.5) + geom_point(size=2.5) +
+    ggplot(aes(x=year, y=value, colour=geoname, group=geoname))+
+    geom_line(linewidth=1.5) + geom_point(size=2.5) +
     scale_colour_manual("Geography", values=c("#6EC4E8", "#00953A")) +
-    geom_text(mapping=aes(x=year, y=wages, label=fmt_wages),
+    geom_text(mapping=aes(x=year, y=value, label=fmt_wages),
               vjust = -0.75, size = 4,  colour="black",
               position = position_dodge(width = 1),
               inherit.aes = TRUE) +
@@ -88,10 +97,8 @@ weeklyWages <- function(DBPool,listID, curyr,base=10){
           panel.grid.minor.y = element_blank(),
           axis.text = element_text(size=12),
           legend.position= "bottom")
-  
-  f.wages <- left_join(f.wagePL,f.wageST,by="year")
-  f.wages <- f.wages[,c(3,6,11)]
-  names(f.wages) <- c("Year",paste0(" Average Weekly Wage: ",ctyname), "Average Weekly Wage: Colorado")
+ 
+  f.wages <- f.wagePL %>% select(-value) %>% pivot_wider(names_from=geoname, values_from=fmt_wages) 
 
   
   # Text
