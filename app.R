@@ -28,7 +28,7 @@ library(officer)
 library(flextable)
 library(ggplotify)
 library(stringi)
-
+library(blscrapeR)
 
 # Additions for Database pool
 library('pool') 
@@ -272,7 +272,7 @@ server <- function(input, output, session) {
   infoSrc[3,1] <- "<b>Population Characteristics: Age</b>"
   infoSrc[3,2] <- "Population Estimates and Migration by Age"
   infoSrc[4,1] <- "<b>Population Characteristics: Income, Education and Race</b>"
-  infoSrc[4,2] <- "Population Estimates by Income, Income # source, Educational Attainment and Race"
+  infoSrc[4,2] <- "Population Estimates by Income, Income Source, Educational Attainment and Race"
   infoSrc[5,1] <- "<b>Housing and Households</b>"
   infoSrc[5,2] <- "Housing Units, Costs and Unit Characteristics"
   infoSrc[6,1] <- "<b>Commuting and Job Growth</b>"
