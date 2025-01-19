@@ -91,8 +91,8 @@ jobMigration <- function(DBPool,listID, maxyr, base=10){
 
   migrPlot <- ggplot(f.pltdata) + 
     geom_bar(aes(x=year5, y=avgjobs,color="Jobs"), stat="identity", fill= "#d8c772") +
-    geom_line(aes(x=year5, y=avgmigr, color="Net Migration", group=1), linewidth=1.75) +
-    geom_hline(yintercept=0, linewidth=1.05) +
+    geom_line(aes(x=year5, y=avgmigr, color="Net Migration", group=1), size=1.75) +
+    geom_hline(yintercept=0, size=1.05) +
     scale_x_discrete() +
     scale_y_continuous(labels=scales::comma) +
     scale_colour_manual(" ", values=c("Jobs" = "#d8c772", "Net Migration" = "#00953A")) +
