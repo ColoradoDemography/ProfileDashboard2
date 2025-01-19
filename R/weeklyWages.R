@@ -74,7 +74,7 @@ weeklyWages <- function(DBPool,listID, curyr,base=10){
 
   Plot <- f.plot %>%
     ggplot(aes(x=year, y=value, colour=geoname, group=geoname))+
-    geom_line(linewidth=1.5) + geom_point(size=2.5) +
+    geom_line(size=1.5) + geom_point(size=2.5) +
     scale_colour_manual("Geography", values=c("#6EC4E8", "#00953A")) +
     geom_text(mapping=aes(x=year, y=value, label=fmt_wages),
               vjust = -0.75, size = 4,  colour="black",
