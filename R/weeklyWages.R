@@ -81,7 +81,7 @@ weeklyWages <- function(DBPool,listID, curyr,base=10){
               position = position_dodge(width = 1),
               inherit.aes = TRUE) +
     scale_y_continuous(limits=c(axs$minBrk,axs$maxBrk), label=dollar)+
-  #  scale_x_discrete() +
+    scale_x_discrete(limits=yrRng) +
     scale_fill_manual(values=c("#6EC4E8","#00953A"),
                       name="Geography")+
     theme_codemog(base_size=base)+
