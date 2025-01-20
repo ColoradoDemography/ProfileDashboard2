@@ -332,7 +332,7 @@ server <- function(input, output, session) {
   linkTab <- gsub("&lt;","<",linkTab)
   linkTab <- gsub("&gt;",">",linkTab)
   
-  frontPgBox1 <- box(width=11,tags$div(tags$b("Welcome to the State Demography Office (SDO) Colorado Demographic Profiles Website"), tags$br(),
+  frontPgBox1 <- box(width=11,tags$div(tags$b("Welcome to the State Demography Office (SDO) Colorado Demographic Profiles Website Vintage 2023"), tags$br(),
                                        "This tool provides summary plots and data describing Counties and Incorporated Municipalities in Colorado.", tags$br(),
                                        tags$em("Profile Contents:"),
                                        HTML(infoTab),
@@ -348,7 +348,7 @@ server <- function(input, output, session) {
                                        tags$ul(
                                          tags$li("Profiles are available for Counties and Incorporated Municipalites.  
                                                  Please contact SDO for information on other geographies and places."),
-                                         tags$li("Producing the requested outputs may take up to 3 minutes, depending on your request and your connection speed."),
+                                         tags$li("Producing the requested outputs may take up to 3 minutes depending on your request and your connection speed."),
                                          tags$li("Downloading any report, plot or data object will open a new browser window while the 
                                                  object is being processed and downloaded.  This window will close once the object processing is completed."),
                                          tags$li("Downloaded objects will be saved in the 'Download' location supported by your browser.")
