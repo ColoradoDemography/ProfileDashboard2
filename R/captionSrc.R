@@ -11,7 +11,9 @@ captionSrc <- function(type, dataSrc) {
   if(type == "SDO") {
     srcStr <- paste0("Source: State Demography Office", dateStr)
   }
-
+ if(type == "BLS") {
+    srcStr <- paste0("Source: State Demography Office and U.S. Bureau of Labor Statistics", dateStr)
+  }
   if(type == "SDOBEA") {
     srcStr <- paste0("Source: State Demography Office and U.S. Bureau of Economic Analysis", dateStr)
   }
@@ -19,7 +21,7 @@ captionSrc <- function(type, dataSrc) {
     srcStr <- paste0("Source: U.S. Census Bureau On the Map", dateStr)
   }
   if(type == "QCEW") {
-    srcStr <- paste0("Source: Department of Labor and Employment (QCEW)", dateStr)
+    srcStr <- paste0("Source:  Quarterly Census of Employment and Wages (QCEW)", dateStr)
   }
   if(type =="ACS") {
     byr <- paste0("20",substr(dataSrc,4,5))
