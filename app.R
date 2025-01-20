@@ -1260,11 +1260,11 @@ server <- function(input, output, session) {
     callModule(downloadObj, id = "popc1plot", simpleCap(input$unit),"popc1plot", popc1$plot)
     callModule(downloadObj, id = "popc1data", simpleCap(input$unit),"popc1data", popc1$data)
     
-    callModule(downloadObj, id = "popc2plot", simpleCap(input$unit),"popc2plot", popc2$plot)
-    callModule(downloadObj, id = "popc2data", simpleCap(input$unit),"popc2data", popc2$data)
+    callModule(downloadObj, id = "popc3plot", simpleCap(input$unit),"popc3plot", popc3$plot)
+    callModule(downloadObj, id = "popc3data", simpleCap(input$unit),"popc3data", popc3$data)
     
-    callModule(downloadObj, id = "popc3tabl", simpleCap(input$unit), "popc3tabl", popc3$FlexTable)
-    callModule(downloadObj, id = "popc3data", simpleCap(input$unit), "popc3data", popc3$data)
+    callModule(downloadObj, id = "popc2tabl", simpleCap(input$unit), "popc2tabl", popc2$FlexTable)
+    callModule(downloadObj, id = "popc2data", simpleCap(input$unit), "popc2data", popc2$data)
     
     
     callModule(downloadObj, id = "popc4tabl", simpleCap(input$unit), "popc4tabl", popc4$FlexTable)
