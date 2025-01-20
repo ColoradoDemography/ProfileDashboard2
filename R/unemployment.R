@@ -85,7 +85,7 @@ f.unempLF <- f.unemptmp %>% filter(seriesID == unemplf) %>%
          y = "Rate",
          title= paste0("Labor Force Participation and Unemployment Rate\n2000 to ",as.character(curyr)),
          subtitle = ctyname,
-         caption= paste0(captionSrc("SDOBEA","") ,"\nNote: Grey shading represents beginning to bottom of U.S. recessions")) +
+         caption= paste0(captionSrc("BLS","") ,"\nNote: Grey shading represents beginning to bottom of U.S. recessions")) +
     theme(plot.title = element_text(hjust = 0.5, size=16),
           axis.text.x = element_text(angle=45,size=10),
           axis.text.y = element_text(size=11))
