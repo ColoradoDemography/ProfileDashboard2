@@ -461,8 +461,8 @@ server <- function(input, output, session) {
           dput(stat_List$text,fileMat[3])
           
           #Images
-          ggsave(fileMat[4],stat_map, device="png", height = 4 , width = 6, dpi=300)
-          ggsave(fileMat[5],stat_map, device="png", height = 4 , width = 6, dpi=300)
+          ggsave(fileMat[4],stat_map, device="png", height = 4 , width = 6, dpi=300, bg="white")
+          ggsave(fileMat[5],stat_map, device="png", height = 4 , width = 6, dpi=300, bg="white")
           
           img_List1 <- list(src = fileMat[4], contentType = 'image/png', width = 400, height = 300)
           
@@ -508,14 +508,14 @@ server <- function(input, output, session) {
           dput(popf1$text,fileMat[8])
           
           #Images
-          ggsave(fileMat[9],popf2$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[10],popf2$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[11],popf3$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[12],popf3$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[9],popf2$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[10],popf2$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[11],popf3$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[12],popf3$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           
           dput(popf3$text,fileMat[13])
-          ggsave(fileMat[14],popf4$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[15],popf4$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[14],popf4$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[15],popf4$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           dput(popf4$text,fileMat[16])
           
           
@@ -608,24 +608,24 @@ server <- function(input, output, session) {
           popa3 <<- ageForecastPRO(listID=idList,sYr=2010,mYr=2015,eYr=2025,base=12)
           popa4 <<- migbyagePRO(DBPool=DOLAPool,listID=idList)
           
-          ggsave(fileMat[17],popa1$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[18],popa1$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[17],popa1$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[18],popa1$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           dput(popa1$text,fileMat[19])
           
-          ggsave(fileMat[20],popa2$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[21],popa2$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[20],popa2$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[21],popa2$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           
           dput(popa2$Htable,fileMat[22])
           
           dput(popa2$Ltable, fileMat[23])
           dput(popa2$text, fileMat[24])
           
-          ggsave(fileMat[25],popa3$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[26],popa3$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[25],popa3$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[26],popa3$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           dput(popa3$text,fileMat[27])
           
-          ggsave(fileMat[28],popa4$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[29],popa4$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[28],popa4$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[29],popa4$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           dput(popa4$text,fileMat[30])
           
           img_List5 <- list(src = fileMat[17], contentType = 'image/png', width = 500, height = 300)
@@ -727,13 +727,13 @@ server <- function(input, output, session) {
           popc4 <<- raceTab1(listID=idList, ACS=curACS)
           
           #Income
-          ggsave(fileMat[31],popc1$plot, device="png", height = 5 , width = 8, dpi=300)
-          ggsave(fileMat[32],popc1$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[31],popc1$plot, device="png", height = 5 , width = 8, dpi=300, bg="white")
+          ggsave(fileMat[32],popc1$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           dput(popc1$text,fileMat[33])
           
           # Education
-          ggsave(fileMat[34],popc3$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[35],popc3$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[34],popc3$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[35],popc3$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           
           #Income # source
           dput(popc2$Htable,fileMat[36])
@@ -814,8 +814,8 @@ server <- function(input, output, session) {
           poph4 <<- HouseVal(listID=idList,ACS=curACS) # Comparative Value of Housing 
           
           #Housing Estimate
-          ggsave(fileMat[42],poph1$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[43],poph1$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[42],poph1$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[43],poph1$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           dput(poph1$text,fileMat[44])
           
           img_List11 <- list(src = fileMat[42], contentType = 'image/png', width = 500, height = 300)
@@ -902,8 +902,8 @@ server <- function(input, output, session) {
           popt2 <<- jobMigration(DBPool=DOLAPool,listID=idList,maxyr = curYr)
           
           #Venn Diagram
-          ggsave(fileMat[55],popt1$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[56],popt1$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[55],popt1$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[56],popt1$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           img_List12 <- list(src = fileMat[55], contentType = 'image/png', width = 500, height = 300)
           
           
@@ -922,8 +922,8 @@ server <- function(input, output, session) {
           #dput(popt1$workTabL, fileMat[60])
           
           #Jobs and Migration
-          ggsave(fileMat[61],popt2$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[62],popt2$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[61],popt2$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[62],popt2$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           dput(popt2$text, fileMat[63])
           img_List13 <- list(src = fileMat[61], contentType = 'image/png', width = 500, height = 300)
           
@@ -986,22 +986,22 @@ server <- function(input, output, session) {
           popei3 <<- baseIndustries(DBPool=DOLAPool,listID=idList, curyr = curYr)
           
           #JobsPlot
-          ggsave(fileMat[64],popei1$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[65],popei1$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[64],popei1$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[65],popei1$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           dput(popei1$text, fileMat[66])
           img_List14 <- list(src = fileMat[64], contentType = 'image/png', width = 500, height = 300)
           
           #Jobs by Industry
-          ggsave(fileMat[67],popei2$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[68],popei2$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[67],popei2$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[68],popei2$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           dput(popei2$text1, fileMat[69])
           dput(popei2$text2, fileMat[70])
           img_List15 <- list(src = fileMat[67], contentType = 'image/png', width = 500, height = 300)
           
           #base Industries
           #Plot
-          ggsave(fileMat[71],popei3$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[72],popei3$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[71],popei3$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[72],popei3$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           img_List16 <- list(src = fileMat[71], contentType = 'image/png', width = 500, height = 300)
           
           # HTML Table
@@ -1086,8 +1086,8 @@ server <- function(input, output, session) {
           
           
           #weeklyWages
-          ggsave(fileMat[79],popem2$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[80],popem2$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[79],popem2$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[80],popem2$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           dput(popem2$text, fileMat[81])
           img_List18 <- list(src = fileMat[79], contentType = 'image/png', width = 500, height = 300)
           
@@ -1100,10 +1100,10 @@ server <- function(input, output, session) {
           dput(popem3$text, fileMat[84])
          
           
-          #Unemploymenr
+          #Unemployment
           # HTML Table
-          ggsave(fileMat[85],popem4$plot, device="png", height = 5 , width = 7, dpi=300)
-          ggsave(fileMat[86],popem4$plot, device="png", height = 5 , width = 7, dpi=300)
+          ggsave(fileMat[85],popem4$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
+          ggsave(fileMat[86],popem4$plot, device="png", height = 5 , width = 7, dpi=300, bg="white")
           
           img_List19 <- list(src = fileMat[85], contentType = 'image/png', width = 500, height = 300)
           
