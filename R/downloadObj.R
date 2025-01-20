@@ -8,6 +8,7 @@
 #' @export
 
 downloadObj <- function(input, output, session, place, oname, dobj) {
+
   if(nchar(oname) == 9) {
     dname <- substr(oname,1,5)
     dtype <- substr(oname,6,9)
@@ -72,7 +73,7 @@ downloadObj <- function(input, output, session, place, oname, dobj) {
         write_csv(dobj, file)
       }
       if(suffix == " Plot.png") {
-        ggsave(file, plot = dobj, width =8, height=6, units	="in", device = "png")
+        ggsave(file, plot = dobj, width =8, height=6, units	="in", device = "png", bg="white")
       }
       if(suffix == " Table.docx") {
         doc <- read_docx()
