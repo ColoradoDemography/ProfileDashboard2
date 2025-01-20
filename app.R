@@ -747,12 +747,12 @@ server <- function(input, output, session) {
           dput(popc4$Ltable, fileMat[40])
           dput(popc4$text, fileMat[41])
           
-          img_List9 <- list(src = fileMat[31], contentType = 'image/png', width = 600, height = 300)
+          img_List9 <- list(src = fileMat[31], contentType = 'image/png', width = 450, height = 300)
           img_List10 <- list(src = fileMat[34], contentType = 'image/png', width = 500, height = 300)
           
           #Contents of Information Tabs
           popc1.info <- tags$div(boxContent(title= "Household Income",
-                                            description = "The Household Income Distibution Plot compares the distribution of household income for a selected location to the state.",
+                                            description = "The Household Income Distribution Plot compares the distribution of household income for a selected location to the state.",
                                             MSA= "F", stats = "T", muni = "F", multiCty = idList$multiCty, PlFilter = "F", 
                                             urlList = list(c("SDO American Community Survey API","http://coloradodemography.github.io/CensusAPI/"),
                                                            c("American Community Survey data.census.gov, Series B19001","https://data.census.gov/cedsci/")) ),
