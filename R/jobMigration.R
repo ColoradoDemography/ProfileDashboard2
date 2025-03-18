@@ -29,7 +29,7 @@ jobMigration <- function(DBPool,listID, maxyr, base=10){
   #Jobs
   # convert datasets to long
 
-  f.jobs1yr <- f.jobsQCEW %>% select(-jobs_1969) %>% gather(year,jobs, jobs_1970:jobslyr)
+  f.jobs1yr <- f.jobsQCEW %>%  gather(year,jobs, jobs_1975:jobslyr)
   f.jobs1yr$year <- as.numeric(gsub("jobs_","",f.jobs1yr$year))
   
   minBea <- min(f.jobs1yr$year)
