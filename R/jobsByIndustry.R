@@ -16,79 +16,67 @@ jobsByIndustry <- function(DBPool,listID, curyr, base=10){
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
- 
+  if(listID$PlFilter == "T") {
+    placefips <- ""
+    placename <- ""
+  }
   
-  options(warn=-1)  # Suppressing warning messages produced by VennDiagram
-
   # Read data files
   f.jobsPL <- dbGetQuery(DBPool, paste0("SELECT * FROM estimates.jobs_by_sector WHERE (area_code = ", as.character(as.numeric(ctyfips)),
                                      " AND population_year = ", as.character(curyr), ");"))
-  f.jobsST <- dbGetQuery(DBPool, paste0("SELECT * FROM estimates.jobs_by_sector WHERE (area_code = 0 AND population_year = ",
-                                     as.character(curyr), ");"))
-
+ 
   f.jobsPL$total_jobs <- if_else(is.na(f.jobsPL$total_jobs),0,f.jobsPL$total_jobs)
-  f.jobsPL$sector_name <- gsub("&nbsp;","",f.jobsPL$sector_name)
-  f.jobsPL$sector_id <- if_else(nchar(f.jobsPL$sector_id) == 4,paste0("0",f.jobsPL$sector_id), f.jobsPL$sector_id)
+  
+  
 
-  # Assigning and extracginf major Categories
-  f.jobsPL$sector_agg <- if_else(f.jobsPL$sector_id == "01000",1,
-                                 if_else(f.jobsPL$sector_id == "02000",1,
-                                         if_else(f.jobsPL$sector_id == "03000",1,
-                                                 if_else(f.jobsPL$sector_id == "04000",1,
-                                                         if_else(f.jobsPL$sector_id == "05000",1,
-                                                                 if_else(f.jobsPL$sector_id == "06000",1,
-                                                                         if_else(f.jobsPL$sector_id == "07000",1,
-                                                                                 if_else(f.jobsPL$sector_id == "08000",1,
-                                                                                         if_else(f.jobsPL$sector_id == "09000",1,
-                                                                                                 if_else(f.jobsPL$sector_id == "10000",1,
-                                                                                                         if_else(f.jobsPL$sector_id == "10150",1,
-                                                                                                                 if_else(f.jobsPL$sector_id == "11000",1,
-                                                                                                                         if_else(f.jobsPL$sector_id == "11025",1,
-                                                                                                                                 if_else(f.jobsPL$sector_id == "11050",1,
-                                                                                                                                         if_else(f.jobsPL$sector_id == "12000",1,
-                                                                                                                                                 if_else(f.jobsPL$sector_id == "12015",1,
-                                                                                                                                                         if_else(f.jobsPL$sector_id == "13000",1,
-                                                                                                                                                                 if_else(f.jobsPL$sector_id == "13015",1,
-                                                                                                                                                                         if_else(f.jobsPL$sector_id == "14000",1,
-                                                                                                                                                                                 if_else(f.jobsPL$sector_id == "15000",1,0))))))))))))))))))))
-
-
-
-  f.jobsPLMain <- f.jobsPL[which(f.jobsPL$sector_agg == 1),]
-
-  # Updating category names
-  f.jobsPLMain$sector_name <- if_else(f.jobsPLMain$ sector_name == "Accommodation and food","Accomodation and Food Services",
-                                      if_else(f.jobsPLMain$ sector_name == "Admin and waste","Adminstration and Waste Services",
-                                              if_else(f.jobsPLMain$ sector_name == "Arts","Arts, Entertainment and Recreation",
-                                                      if_else(f.jobsPLMain$ sector_name == "Education","Educational Services",
-                                                              if_else(f.jobsPLMain$ sector_name == "Finance activities","Finance and Insurance",
-                                                                      if_else(f.jobsPLMain$ sector_name == "Fince activities","Finance and Insurance",
-                                                                      if_else(f.jobsPLMain$ sector_name == "Health Services","Healthcare and Social Assistance",
-                                                                              if_else(f.jobsPLMain$ sector_name == "Management of companies and enterprise","Management of Companies",
-                                                                                      if_else(f.jobsPLMain$ sector_name == "Other services, except public administration","Other Services",
-                                                                                              if_else(f.jobsPLMain$ sector_name == "Professional and business services","Professional and Technical Services",
-                                                                                                      if_else(f.jobsPLMain$ sector_name == "Real estate","Real Estate and Rental and Leasing",
-                                                                                                              if_else(f.jobsPLMain$ sector_name == "Wholesale trade","Wholesale Trade",
-                                                                                                                      if_else(f.jobsPLMain$ sector_name == "Transportation and warehousing","Transportation and Warehousing",f.jobsPLMain$sector_name
-                                                                                                                      )))))))))))))
-
-
-  f.jobsPLMain <- f.jobsPLMain %>%
-    mutate(PLTotal = sum(total_jobs),
-           total_c = comma(round(total_jobs,digits=0)),
+  # Assigning and extracting major Categories
+  f.jobsPL <- f.jobsPL %>%
+     mutate(sector_id = ifelse(grepl("-",sector_id),str_sub(sector_id,1,2),sector_id),
+            sector_id = str_pad(sector_id,3,pad="0"),
+            sector_id = ifelse(sector_id == "010", "000", sector_id))
+  f.jobsTOT <- f.jobsPL %>% filter(sector_id == "000") %>%
+    mutate(PLTotal = total_jobs) %>% select(PLTotal)
+ 
+ 
+  f.jobsPLMain <- bind_cols(f.jobsPL, f.jobsTOT) %>%
+    mutate(total_c = comma(round(total_jobs,digits=0)),
            prop_jobs = (total_jobs/PLTotal)*100,
            pct_jobs = percent(prop_jobs))
 
 
   f.jobsPLMain$geoname <- ctyname
   f.jobsPLMain <- f.jobsPLMain[which(f.jobsPLMain$prop_jobs > 0),]  # removing blank categoies
-  f.jobsPLMainFin <- f.jobsPLMain[,c(4,5,10,11,12)]
+  f.jobsPLMainFin <- f.jobsPLMain %>% arrange(sector_id) %>%
+        select(geoname, sector_name,total_c,pct_jobs)
 
+  f.jobsChart <- f.jobsPLMain %>% filter(sector_id != "000") %>%
+       mutate(sector_name = ifelse(grepl("Waste",sector_name),"Administrative and Waste Management",sector_name)) %>%
+       arrange(desc(prop_jobs))
 
-
-  f.jobsChart <- f.jobsPLMainFin
-
-  f.jobsChart$sector_name <- factor(f.jobsChart$sector_name, levels=f.jobsChart$sector_name[order(f.jobsChart$prop_jobs)], ordered=TRUE)
+  f.jobsChart$sector_name <- factor(f.jobsChart$sector_name, 
+                                    levels= c("Federal Government",
+                                              "State Government",
+                                              "Local Government",
+                                              "Agriculture, Forestry, Fishing and Hunting",
+                                              "Mining, Quarrying, and Oil and Gas Extraction",
+                                              "Utilities",
+                                              "Construction",
+                                              "Manufacturing",
+                                              "Wholesale Trade",
+                                              "Retail Trade",
+                                              "Transportation and Warehousing",
+                                              "Information",
+                                              "Finance and Insurance",
+                                              "Real Estate and Rental and Leasing",
+                                              "Professional, Scientific, and Technical Services",
+                                              "Management of Companies and Enterprises",
+                                              "Administrative and Waste Management",
+                                              "Educational Services",
+                                              "Health Care and Social Assistance",
+                                              "Arts, Entertainment, and Recreation",
+                                              "Accommodation and Food Services",
+                                              "Other Services (except Public Administration)",
+                                              "Unclassified"))
   
 
   pltTitle <- paste0(as.character(curyr)," Share of Jobs\nby Industry")
@@ -99,9 +87,10 @@ jobsByIndustry <- function(DBPool,listID, curyr, base=10){
   p.jobs <- ggplot(f.jobsChart, aes(x=sector_name, y=prop_jobs)) +
     geom_bar(stat="identity", position="dodge", fill= "#6EC4E8")+
     geom_text(mapping=aes(x=sector_name, y=prop_jobs, label=pct_jobs),
-              hjust = -0.5, size = 4,
+              hjust = -0.5, size = 2,
               position = position_dodge(width = 1),
               inherit.aes = TRUE) +
+    scale_x_discrete(limits=rev) +
     scale_y_continuous(limits=c(axs$minBrk,axs$maxBrk), breaks=axs$yBrk, expand = c(0, 0), label=percent)  +
     theme_codemog(base_size=base) + coord_flip() +
     theme(axis.text.x=element_text(angle=0))+
@@ -114,17 +103,12 @@ jobsByIndustry <- function(DBPool,listID, curyr, base=10){
           panel.background = element_rect(fill = "white", colour = "gray50"),
           panel.grid.major.y = element_blank(),
           panel.grid.minor.y = element_blank(),
-          axis.text = element_text(size=10),
+          axis.text = element_text(size=8),
           panel.grid.major = element_line(colour = "gray80"))
-
-
 
   # Building Output data
   
   f.jobsFin <- f.jobsPLMainFin
-  f.jobsFin$Geography <- ctyname
-  f.jobsFin <- f.jobsFin[order(f.jobsFin$sector_id),]
-  f.jobsFin <- f.jobsFin[,c(6,2,3,5)]
   names(f.jobsFin) <- c("Geography","Job Sector", "Number of Jobs", "Percentage of Jobs")
   
   # Generating text

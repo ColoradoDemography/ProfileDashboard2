@@ -21,9 +21,9 @@ jobsPlot=function(DBPool,listID, maxyr,base=10){
     placefips <- ""
     placename <- ""
   }
-  
+
   # Jobs Data
-  jobsStr <- paste0("SELECT * FROM estimates.jobs_by_sector WHERE area_code = ", as.numeric(ctyfips), " AND sector_id = '0';")
+  jobsStr <- paste0("SELECT * FROM estimates.jobs_by_sector WHERE area_code = ", as.numeric(ctyfips), " AND sector_id = '10';")
   
   jobs_data <-   dbGetQuery(DBPool,jobsStr) %>%
     filter(population_year >= 2001 & population_year <= maxyr) %>%
@@ -40,7 +40,7 @@ jobsPlot=function(DBPool,listID, maxyr,base=10){
   
   f.firms <- subset(f.firms, (!is.na(f.firms[,4])))
   
-  #Preparing Plor Data set
+  #Preparing Plot Data set
   f.jobspl <- jobs_data[,c(9,8)]
   f.jobspl$Series <- "Jobs"
   names(f.jobspl)[2] <- "count"
@@ -57,7 +57,7 @@ jobsPlot=function(DBPool,listID, maxyr,base=10){
     ggplot(aes(x=year, y=count))+
     geom_rect(aes(xmin=2008, xmax=2010, ymin=-Inf, ymax=+Inf), fill=rgb(208, 210, 211, max = 255), alpha=.03)+
     geom_rect(aes(xmin=2001, xmax=2002, ymin=-Inf, ymax=+Inf), fill=rgb(208, 210, 211, max = 255), alpha=.03)+
-    geom_line(color=rgb(0, 168, 58, max = 255), size=1.5)+
+    geom_line(color=rgb(0, 168, 58, max = 255), linewidth=1.5)+
     scale_x_continuous(breaks=c(2001:maxyr))+
     scale_y_continuous(labels=comma)+
     theme_codemog(base_size=base)+

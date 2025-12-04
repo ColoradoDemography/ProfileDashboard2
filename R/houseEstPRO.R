@@ -16,15 +16,18 @@ houseEstPRO <- function(DBPool,listID,curYr, base=10) {
   ctyname <- listID$ctyName
   placefips <- listID$plNum
   placename <- listID$plName
-
+#  if(listID$PlFilter == "T") {
+#    placefips <- ""
+#    placename <- ""
+#  }
   fipsN <- as.numeric(ctyfips)
   state= 0
-
-
+  
   sqlPlace <- paste0("SELECT * FROM estimates.household_projections WHERE area_code = ",fipsN,";")
   f.hhP <- dbGetQuery(DBPool, sqlPlace)
 
-  f.hhPlace <-  f.hhP[which(f.hhP$household_type_id == 0 & f.hhP$age_group_id == 0),]
+  f.hhPlace <-  f.hhP%>% filter(household_type_id == 0) %>% filter(age_group_id == 0)
+  
 
 
   # Preparing Plot
@@ -39,7 +42,7 @@ houseEstPRO <- function(DBPool,listID,curYr, base=10) {
 
   p <- f.hhPlace%>%
     ggplot(aes(x=year, y=total_households, group=datatype))+
-    geom_line(aes(linetype=datatype), color="#00953A", size=1.75) +
+    geom_line(aes(linetype=datatype), color="#00953A", linewidth=1.75) +
     labs(x="Year", y="Housing Units", title=pltTitle,
          subtitle = ctyname,
          caption = captionSrc("SDO",""))+
@@ -52,11 +55,11 @@ houseEstPRO <- function(DBPool,listID,curYr, base=10) {
           axis.text = element_text(size=12),
           legend.position= "bottom",legend.title=element_blank())
 
-
+  
   f.hhPlace$place <- ctyname
-  f.hhPlaceFin <- f.hhPlace[,c(10,3,9,8)]
-  f.hhPlaceFin[4] <- format(round(f.hhPlaceFin[4],digits = 0),big.mark=",",scientific=FALSE)
-  names(f.hhPlaceFin) <- c("Geography","Year", "Data Type", "Total Households")
+  f.hhPlaceFin <- f.hhPlace %>% select(area_code, area_name,year, datatype, total_households)
+  f.hhPlaceFin[5] <- format(round(f.hhPlaceFin[5],digits = 0),big.mark=",",scientific=FALSE)
+  names(f.hhPlaceFin) <- c("FIPS Code", "Geography","Year", "Data Type", "Total Households")
   
   #Text
   OutText <- paste0("The Household Estimates plot shows the current and projected number of households in ", ctyname, " between 2010 and 2050.")
