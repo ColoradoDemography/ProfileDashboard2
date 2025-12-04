@@ -19,18 +19,20 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
   
   state <- "08"
   jobsChk <- 0
-
+ countyData <- my_list <- vector(mode = "list", length = 7)
+ muniData <- my_list <- vector(mode = "list", length = 7)
+ stateData <- my_list <- vector(mode = "list", length = 7)
   # Setting up calls etc. 
 
   strCtyProf <- "SELECT * FROM estimates.county_profiles;"
-  strJobs <- "SELECT * FROM estimates.jobs_by_sector WHERE sector_id = '0';"
+  strJobs <- "SELECT * FROM estimates.jobs_by_sector WHERE sector_id = '10';"
   
   
   if(lvl == "Counties") {  #Counties
     sqlStrPop1 <- paste0("SELECT countyfips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE countyfips = ",as.numeric(ctyfips)," and year = ", sYr," and placefips = 0;")
     sqlStrPop2 <- paste0("SELECT countyfips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE countyfips = ",as.numeric(ctyfips)," and year = ", eYr," and placefips = 0;")
     sqlStrJobs <- paste0("SELECT area_code, population_year, total_jobs FROM estimates.jobs_by_sector WHERE area_code = ",as.numeric(ctyfips)," and population_year = ",eYr,
-                         " and sector_id = '0';")
+                         " and sector_id = '10';")
     }
  
   if(lvl == "Municipalities") {  #Municialities
@@ -38,12 +40,12 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
     c_sqlStrPop1 <- paste0("SELECT countyfips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE countyfips = ",as.numeric(ctyfips)," and year = ", sYr," and placefips = 0;")
     c_sqlStrPop2 <- paste0("SELECT countyfips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE countyfips = ",as.numeric(ctyfips)," and year = ", eYr," and placefips = 0;")
     c_sqlStrJobs <- paste0("SELECT area_code, population_year, total_jobs FROM estimates.jobs_by_sector WHERE area_code = ",as.numeric(ctyfips)," and population_year = ",eYr,
-                         " and sector_id = '0';")
+                         " and sector_id = '10';")
     
     #these pull out the municipalities
     sqlStrPop1 <- paste0("SELECT countyfips, placefips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE placefips = ",as.numeric(placefips)," and year = ", sYr,";")
     sqlStrPop2 <- paste0("SELECT countyfips, placefips, municipalityname, year, totalpopulation FROM estimates.county_muni_timeseries WHERE placefips = ",as.numeric(placefips)," and year = ", eYr,";")
-    sqlStrJobs <- paste0("SELECT ctyfips, placefips, geoname, year, jobs FROM estimates.muni_jobs_long WHERE placefips = ",as.numeric(placefips)," and year = ", eYr, ";")
+    sqlStrJobs <- paste0("SELECT ctyfips, placefips, geoname, year, jobs FROM estimates.muni_jobs_long WHERE area_code = ",as.numeric(ctyfips)," and year = ", eYr, ";")
   }
   
 
@@ -84,8 +86,14 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
     
     Nativec <- codemog_api(data="b05002",db=ACS, geonum=paste("1", state, ctyfips, sep=""), meta="no")
     nativec <- percent(as.numeric(Nativec$b05002003)/as.numeric(Nativec$b05002001)*100)
-    
-    countyData <- c(tpop2c,tpopchngc,jobsValc,medhhincc,medhhvalc,povertyc,nativec)
+  
+    countyData[[1]] <- tpop2c
+    countyData[[2]] <- tpopchngc
+    countyData[[3]] <- jobsValc
+    countyData[[4]] <- medhhincc
+    countyData[[5]] <- medhhvalc
+    countyData[[6]] <- povertyc
+    countyData[[7]] <- nativec
   }
 
   # Municipalities
@@ -96,8 +104,8 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
     tpop2c <- ifelse(is.na(f.tPopyr2c$totalpopulation),0,f.tPopyr2c$totalpopulation)  # Pop Current Year
     tpopchngc <- tpop2c - tpop1c   # Pop Change value
     
-    jobsVal <-  f.Jobsc %>% summarize(totalJobs = sum(total_jobs)) #County
-    jobsValc <- jobsVal$totalJobs   
+    jobsVal <-  cty_jobs %>%  filter(area_code == as.numeric(ctyfips) & population_year == eYr)
+    jobsValc <- jobsVal$total_jobs
     
     
     hhincc <- codemog_api(data="b19013",db=ACS, geonum=paste("1", state, ctyfips, sep=""), meta="no")
@@ -111,8 +119,14 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
     
     Nativec <- codemog_api(data="b05002",db=ACS, geonum=paste("1", state, ctyfips, sep=""), meta="no")
     nativec <- percent(as.numeric(Nativec$b05002003)/as.numeric(Nativec$b05002001)*100)
-    
-    countyData <- c(tpop2c,tpopchngc,jobsValc,medhhincc,medhhvalc,povertyc,nativec)
+   
+    countyData[[1]] <- tpop2c
+    countyData[[2]] <- tpopchngc
+    countyData[[3]] <- jobsValc
+    countyData[[4]] <- medhhincc
+    countyData[[5]] <- medhhvalc
+    countyData[[6]] <- povertyc
+    countyData[[7]] <- nativec
     
     # Building Municipal Data
  
@@ -137,7 +151,13 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
       Nativem <- codemog_api(data="b05002",db=ACS, geonum=paste("1", state, placefips, sep=""), meta="no")
       nativem <- percent(as.numeric(Nativem$b05002003)/as.numeric(Nativem$b05002001)*100)
       
-      muniData <- c(tpop2m,tpopchngm,jobsValm,medhhincm,medhhvalm,povertym,nativem)
+      muniData[[1]] <- tpop2m
+      muniData[[2]] <- tpopchngm
+      muniData[[3]] <- jobsValm
+      muniData[[4]] <- medhhincm
+      muniData[[5]] <- medhhvalm
+      muniData[[6]] <- povertym
+      muniData[[7]] <- nativem
     } else {  #This for multiple county cities
       
       #Selecting total
@@ -163,7 +183,13 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
       Nativem <- codemog_api(data="b05002",db=ACS, geonum=paste("1", state, placefips, sep=""), meta="no")
       nativem <- percent(as.numeric(Nativem$b05002003)/as.numeric(Nativem$b05002001)*100)
       
-      muniData <- c(tpop2m,tpopchngm,jobsValm,medhhincm,medhhvalm,povertym,nativem)
+      muniData[[1]] <- tpop2m
+      muniData[[2]] <- tpopchngm
+      muniData[[3]] <- jobsValm
+      muniData[[4]] <- medhhincm
+      muniData[[5]] <- medhhvalm
+      muniData[[6]] <- povertym
+      muniData[[7]] <- nativem
     }  
      
   }
@@ -197,8 +223,13 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
   nativeST <- percent(as.numeric(NativeST$b05002003)/as.numeric(NativeST$b05002001)*100)
   
   
-  stateData <- c(tpop2ST,tpopchngST,jobsValST,medhhincST,medhhvalST,povertyST,nativeST)
-  
+  stateData[[1]] <- tpop2ST
+  stateData[[2]] <- tpopchngST
+  stateData[[3]] <- jobsValST
+  stateData[[4]] <- medhhincST
+  stateData[[5]] <- medhhvalST
+  stateData[[6]] <- povertyST
+  stateData[[7]] <- nativeST
   
   
   #Preparing table
@@ -232,56 +263,58 @@ statsTable1 <- function(DBPool,lvl,listID,sYr,eYr,ACS){
     
     # Municipality output
  
-    outTab[1,nCol] <- format(as.numeric(muniData[1]),nsmall=0, big.mark=",")
-    outTab[2,nCol] <- format(as.numeric(muniData[2]),nsmall=0, big.mark=",")
-    outTab[3,nCol] <- format(round(as.numeric(muniData[3]),digits=0),nsmall=0, big.mark=",")
-    outTab[4,nCol] <- paste0("$",format(as.numeric(muniData[4]),nsmall=0, big.mark=","))
-    outTab[5,nCol] <- paste0("$",format(as.numeric(muniData[5]),nsmall=0, big.mark=","))
-    outTab[6,nCol] <- muniData[6]
-    outTab[7,nCol] <- muniData[7]
+    outTab[1,nCol] <- format(as.numeric(unlist(muniData[[1]])),nsmall=0, big.mark=",")
+    outTab[2,nCol] <- format(as.numeric(unlist(muniData[[2]])),nsmall=0, big.mark=",")
+    outTab[3,nCol] <- format(round(as.numeric(unlist(muniData[[3]])),digits=0),nsmall=0, big.mark=",")
+    outTab[4,nCol] <- paste0("$",format(as.numeric(unlist(muniData[[4]])),nsmall=0, big.mark=","))
+    outTab[5,nCol] <- paste0("$",format(as.numeric(unlist(muniData[[5]])),nsmall=0, big.mark=","))
+    outTab[6,nCol] <- unlist(muniData[[6]])
+    outTab[7,nCol] <- unlist(muniData[[7]])
     outTab[3,nCol] <- ifelse(outTab[3,nCol] == "NA","",outTab[3,nCol])
     nCol <- nCol + 1
     
     #County
-    outTab[1,nCol] <- format(as.numeric(countyData[1]),nsmall=0, big.mark=",")
-    outTab[2,nCol] <- format(as.numeric(countyData[2]),nsmall=0, big.mark=",")
-    outTab[3,nCol] <- format(round(as.numeric(countyData[3]),digits=0),nsmall=0, big.mark=",")
-    outTab[4,nCol] <- paste0("$",format(as.numeric(countyData[4]),nsmall=0, big.mark=","))
-    outTab[5,nCol] <- paste0("$",format(as.numeric(countyData[5]),nsmall=0, big.mark=","))
-    outTab[6,nCol] <- countyData[6]
-    outTab[7,nCol] <- countyData[7]
+    outTab[1,nCol] <- format(as.numeric(unlist(countyData[[1]])),nsmall=0, big.mark=",")
+    outTab[2,nCol] <- format(as.numeric(unlist(countyData[[2]])),nsmall=0, big.mark=",")
+    outTab[3,nCol] <- format(round(as.numeric(unlist(countyData[[3]])),digits=0),nsmall=0, big.mark=",")
+    outTab[4,nCol] <- paste0("$",format(as.numeric(unlist(countyData[[4]])),nsmall=0, big.mark=","))
+    outTab[5,nCol] <- paste0("$",format(as.numeric(unlist(countyData[[5]])),nsmall=0, big.mark=","))
+    outTab[6,nCol] <- unlist(countyData[[6]])
+    outTab[7,nCol] <- unlist(countyData[[7]])
     nCol <- nCol + 1
     
     
     #State
-    outTab[1,nCol] <- format(as.numeric(stateData[1]),nsmall=0, big.mark=",")
-    outTab[2,nCol] <- format(as.numeric(stateData[2]),nsmall=0, big.mark=",")
-    outTab[3,nCol] <- format(round(as.numeric(stateData[3]),digits=0),nsmall=0, big.mark=",")
-    outTab[4,nCol] <- paste0("$",format(as.numeric(stateData[4]),nsmall=0, big.mark=","))
-    outTab[5,nCol] <- paste0("$",format(as.numeric(stateData[5]),nsmall=0, big.mark=","))
-    outTab[6,nCol] <- stateData[6]
-    outTab[7,nCol] <- stateData[7]
+    outTab[1,nCol] <- format(as.numeric(unlist(stateData[[1]])),nsmall=0, big.mark=",")
+    outTab[2,nCol] <- format(as.numeric(unlist(stateData[[2]])),nsmall=0, big.mark=",")
+    outTab[3,nCol] <- format(round(as.numeric(unlist(stateData[[3]])),digits=0),nsmall=0, big.mark=",")
+    outTab[4,nCol] <- paste0("$",format(as.numeric(unlist(stateData[[4]])),nsmall=0, big.mark=","))
+    outTab[5,nCol] <- paste0("$",format(as.numeric(unlist(stateData[[5]])),nsmall=0, big.mark=","))
+    outTab[6,nCol] <- unlist(stateData[[6]])
+    outTab[7,nCol] <- unlist(stateData[[7]])
   }   
   
   if(lvl == "Counties"){
+
     #County
-    outTab[1,nCol] <- format(as.numeric(countyData[1]),nsmall=0, big.mark=",")
-    outTab[2,nCol] <- format(as.numeric(countyData[2]),nsmall=0, big.mark=",")
-    outTab[3,nCol] <- format(round(as.numeric(countyData[3]),digits=0),nsmall=0, big.mark=",")
-    outTab[4,nCol] <- paste0("$",format(as.numeric(countyData[4]),nsmall=0, big.mark=","))
-    outTab[5,nCol] <- paste0("$",format(as.numeric(countyData[5]),nsmall=0, big.mark=","))
-    outTab[6,nCol] <- countyData[6]
-    outTab[7,nCol] <- countyData[7]
+    outTab[1,nCol] <- format(as.numeric(unlist(countyData[[1]])),nsmall=0, big.mark=",")
+    outTab[2,nCol] <- format(as.numeric(unlist(countyData[[2]])),nsmall=0, big.mark=",")
+    outTab[3,nCol] <- format(round(as.numeric(unlist(countyData[[3]])),digits=0),nsmall=0, big.mark=",")
+    outTab[4,nCol] <- paste0("$",format(as.numeric(unlist(countyData[[4]])),nsmall=0, big.mark=","))
+    outTab[5,nCol] <- paste0("$",format(as.numeric(unlist(countyData[[5]])),nsmall=0, big.mark=","))
+    outTab[6,nCol] <- unlist(countyData[[6]])
+    outTab[7,nCol] <- unlist(countyData[[7]])
     nCol <- nCol + 1
     
+    
     #State
-    outTab[1,nCol] <- format(as.numeric(stateData[1]),nsmall=0, big.mark=",")
-    outTab[2,nCol] <- format(as.numeric(stateData[2]),nsmall=0, big.mark=",")
-    outTab[3,nCol] <- format(round(as.numeric(stateData[3]),digits=0),nsmall=0, big.mark=",")
-    outTab[4,nCol] <- paste0("$",format(as.numeric(stateData[4]),nsmall=0, big.mark=","))
-    outTab[5,nCol] <- paste0("$",format(as.numeric(stateData[5]),nsmall=0, big.mark=","))
-    outTab[6,nCol] <- stateData[6]
-    outTab[7,nCol] <- stateData[7]
+    outTab[1,nCol] <- format(as.numeric(unlist(stateData[[1]])),nsmall=0, big.mark=",")
+    outTab[2,nCol] <- format(as.numeric(unlist(stateData[[2]])),nsmall=0, big.mark=",")
+    outTab[3,nCol] <- format(round(as.numeric(unlist(stateData[[3]])),digits=0),nsmall=0, big.mark=",")
+    outTab[4,nCol] <- paste0("$",format(as.numeric(unlist(stateData[[4]])),nsmall=0, big.mark=","))
+    outTab[5,nCol] <- paste0("$",format(as.numeric(unlist(stateData[[5]])),nsmall=0, big.mark=","))
+    outTab[6,nCol] <- unlist(stateData[[6]])
+    outTab[7,nCol] <- unlist(stateData[[7]])
   }   
   
   

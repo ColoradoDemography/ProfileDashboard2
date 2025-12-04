@@ -51,34 +51,12 @@ jobsByIndustry <- function(DBPool,listID, curyr, base=10){
 
   f.jobsChart <- f.jobsPLMain %>% filter(sector_id != "000") %>%
        mutate(sector_name = ifelse(grepl("Waste",sector_name),"Administrative and Waste Management",sector_name)) %>%
-       arrange(desc(prop_jobs))
-
-  f.jobsChart$sector_name <- factor(f.jobsChart$sector_name, 
-                                    levels= c("Federal Government",
-                                              "State Government",
-                                              "Local Government",
-                                              "Agriculture, Forestry, Fishing and Hunting",
-                                              "Mining, Quarrying, and Oil and Gas Extraction",
-                                              "Utilities",
-                                              "Construction",
-                                              "Manufacturing",
-                                              "Wholesale Trade",
-                                              "Retail Trade",
-                                              "Transportation and Warehousing",
-                                              "Information",
-                                              "Finance and Insurance",
-                                              "Real Estate and Rental and Leasing",
-                                              "Professional, Scientific, and Technical Services",
-                                              "Management of Companies and Enterprises",
-                                              "Administrative and Waste Management",
-                                              "Educational Services",
-                                              "Health Care and Social Assistance",
-                                              "Arts, Entertainment, and Recreation",
-                                              "Accommodation and Food Services",
-                                              "Other Services (except Public Administration)",
-                                              "Unclassified"))
+       arrange(prop_jobs)
   
-
+  jobs_lab <- unlist(f.jobsChart$sector_name)
+  
+   f.jobsChart$sector_name <- factor(f.jobsChart$sector_name, levels = jobs_lab)
+ 
   pltTitle <- paste0(as.character(curyr)," Share of Jobs\nby Industry")
   subTitle <- ctyname  #The is the county Name...
   axs <- setAxis(f.jobsChart$prop_jobs)
@@ -90,7 +68,6 @@ jobsByIndustry <- function(DBPool,listID, curyr, base=10){
               hjust = -0.5, size = 2,
               position = position_dodge(width = 1),
               inherit.aes = TRUE) +
-    scale_x_discrete(limits=rev) +
     scale_y_continuous(limits=c(axs$minBrk,axs$maxBrk), breaks=axs$yBrk, expand = c(0, 0), label=percent)  +
     theme_codemog(base_size=base) + coord_flip() +
     theme(axis.text.x=element_text(angle=0))+
