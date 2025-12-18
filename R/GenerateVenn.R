@@ -36,12 +36,12 @@ if(nchar(placefips) != 0) {
   cols <- c("lightblue1", "lightyellow1","olivedrab1")
   
   
-  # Vdiag <- plot(rawVenn,
-  #            #   quantities = format(rawVenn$original.values, big.mark = ",",scientific = FALSE),
-  #               fill = cols,
-  #               fill_opacity = 0.5, border = "black",
-  #               labels=FALSE,
-  #               counts = TRUE)
+  Vdiag <- plot(rawVenn,
+             #   quantities = format(rawVenn$original.values, big.mark = ",",scientific = FALSE),
+                fill = cols,
+                fill_opacity = 0.5, border = "black",
+                labels=FALSE,
+                counts = TRUE)
   
   #Building Legend
     legstr1 <- paste0("Employed in Selected Area, Live Outside: ", format(f.summary$liveout_workin, big.mark = ",",scientific = FALSE) )
