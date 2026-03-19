@@ -332,7 +332,7 @@ server <- function(input, output, session) {
   linkTab <- gsub("&lt;","<",linkTab)
   linkTab <- gsub("&gt;",">",linkTab)
   
-  frontPgBox1 <- box(width=11,tags$div(tags$b("Welcome to the State Demography Office (SDO) Colorado Demographic Profiles Website Vintage 2023"), tags$br(),
+  frontPgBox1 <- box(width=11,tags$div(tags$b("Welcome to the State Demography Office (SDO) Colorado Demographic Profiles Website Vintage 2024"), tags$br(),
                                        "This tool provides summary plots and data describing Counties and Incorporated Municipalities in Colorado.", tags$br(),
                                        tags$em("Profile Contents:"),
                                        HTML(infoTab),
